@@ -65,7 +65,7 @@ class MelSpectrogram(tf.keras.layers.Layer):
 
     def get_config(self):
         config = {
-            'fft_size': self.fft_size,
+            'fft_size': self.fft_size, 
             'hop_size': self.hop_size,
             'win_size': self.win_size,
             'n_filters': self.n_filters,
