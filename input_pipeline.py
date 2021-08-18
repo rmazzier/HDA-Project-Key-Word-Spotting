@@ -15,6 +15,7 @@ _CROP_WIDTH_ = -1  # width in samples of the crop derived from the whole wavefor
 _NOISE_DIR_ = pathlib.Path('data/speech_commands_v0.02/_background_noise_')
 _DATA_DIR_ = pathlib.Path('data/speech_commands_v0.02')
 _BINARIES_DIR_ = pathlib.Path('data/binaries')
+_MODELS_DIR_ = pathlib.Path('models')
 
 
 def get_noise_samples_names():
@@ -222,6 +223,25 @@ def generate_noise_crop(sample_rate=16000, duration=1):
     w = randomly_crop_wave(w, n_samples)
     return w
 
+def randomly_shift_waveform(waveform):
+    """Given a waveform, it randomly shifts it left or right at most by 0.1 seconds.
+    The remaining part gets zero padded"""
+    amt = tf.random.uniform(shape=[], minval=-0.1, maxval=0.1)
+    amt_samples = tf.cast(tf.math.round(16000 * amt), dtype=tf.int32)
+
+    new_w = tf.roll(waveform, amt_samples, axis=0)
+    zeros = tf.zeros(tf.abs(amt_samples))
+    
+    if amt_samples > 0:
+        new_w = new_w[amt_samples:]
+        new_w = tf.concat([zeros, new_w], axis=0)
+    elif amt_samples < 0:
+        new_w = new_w[:amt_samples]
+        new_w = tf.concat([new_w, zeros], axis=0)
+    else:
+        pass
+
+    return new_w
 
 def generate_sample(sample_name, noise_prob=0.8):
     """Generates audio wave from file name, and with probability p the sample is mixed with noise.
@@ -232,10 +252,11 @@ def generate_sample(sample_name, noise_prob=0.8):
     if sample_name == "silence":
         return generate_noise_crop()
     w = decode_audio(sample_name)
-    if np.random.uniform(low=0., high=1.) <= noise_prob:
-        coeff = np.random.uniform(low=0., high=0.1)
+    if tf.random.uniform(shape=[], minval=0., maxval=1.) <= noise_prob:
+        coeff = tf.random.uniform(shape=[], minval=0., maxval=0.1)
         noise = generate_noise_crop() * coeff
         w = noise + w
+    w = randomly_shift_waveform(w)
     return w
 
 
@@ -245,16 +266,17 @@ def create_dataset(files_ds,
                    shuffle=False,
                    cache_file=None):
     dataset = tf.data.Dataset.from_tensor_slices((files_ds, labels))
-    dataset = dataset.map(lambda file_name, label: (generate_sample(
-        file_name), label), num_parallel_calls=tf.data.AUTOTUNE)
 
-    # Cache dataset
+    dataset = dataset.map(lambda file_name, label: (generate_sample(
+    file_name), label), num_parallel_calls=tf.data.AUTOTUNE)
+
+    # # Cache dataset
     if cache_file:
         dataset.cache(cache_file)
 
     # randomly crop
-    dataset = dataset.map(lambda waveform, label: (randomly_crop_wave(
-        waveform), label), num_parallel_calls=tf.data.AUTOTUNE)
+    # dataset = dataset.map(lambda waveform, label: (randomly_shift_waveform(
+    #     waveform), label), num_parallel_calls=tf.data.AUTOTUNE)
 
     # Shuffle dataset
     if shuffle:
@@ -272,43 +294,47 @@ def create_dataset(files_ds,
 
     return dataset
 
-def get_tf_datasets(X_train, y_train, X_valid, y_valid, X_test, y_test, batch_size, smoke_size=0, shuffle=False):
-
-    if smoke_size > 0:
-        names_train = X_train[:smoke_size]
-        labels_train = y_train[:smoke_size]
-        names_valid = X_valid[:int(smoke_size/10)]
-        labels_valid = y_valid[:int(smoke_size/10)]
-    else:
-        names_train = X_train
-        labels_train = y_train
-        names_valid = X_valid
-        labels_valid = y_valid
-        names_test = X_test
-        labels_test= y_test
+def get_smoke_sized(X_train, y_train, X_valid, y_valid, X_test, y_test, smoke_size=0):
+        if smoke_size > 0:
+            names_train = X_train[:smoke_size]
+            labels_train = y_train[:smoke_size]
+            names_valid = X_valid[:int(smoke_size/10)]
+            labels_valid = y_valid[:int(smoke_size/10)]
+            names_test = X_test[:int(smoke_size/10)]
+            labels_test= y_test[:int(smoke_size/10)]
+        else:
+            names_train = X_train
+            labels_train = y_train
+            names_valid = X_valid
+            labels_valid = y_valid
+            names_test = X_test
+            labels_test= y_test
         
+        return names_train, labels_train, names_valid, labels_valid, names_test, labels_test
+        
+def get_tf_datasets(X_train, y_train, X_valid, y_valid, X_test, y_test, batch_size, shuffle=False):     
 
-    train_dataset = create_dataset(names_train,
-                                labels_train, 
+    train_dataset = create_dataset(X_train,
+                                y_train, 
                                 batch_size=batch_size, 
                                 shuffle=shuffle,
-                                cache_file='./cache_training')
+                                cache_file='cache_training')
 
-    valid_dataset = create_dataset(names_valid,
-                                labels_valid,
+    valid_dataset = create_dataset(X_valid,
+                                y_valid,
                                 batch_size=batch_size, 
                                 shuffle=shuffle,
-                                cache_file='./cache_valid')
+                                cache_file='cache_valid')
 
-    test_dataset = create_dataset(names_test,
-                                labels_test,
+    test_dataset = create_dataset(X_test,
+                                y_test,
                                 batch_size=batch_size, 
                                 shuffle=shuffle,
-                                cache_file='./cache_test')
+                                cache_file='cache_test')
 
-    train_steps = int(np.ceil(len(names_train)/batch_size))
-    valid_steps = int(np.ceil(len(names_valid)/batch_size))
-    test_steps = int(np.ceil(len(names_test)/batch_size))
+    train_steps = int(np.ceil(len(X_train)/batch_size))
+    valid_steps = int(np.ceil(len(X_valid)/batch_size))
+    test_steps = int(np.ceil(len(X_test)/batch_size))
     print(f"Train steps: {train_steps}")
     print(f"Validations steps: {valid_steps}")
     print(f"Test steps: {test_steps}")
