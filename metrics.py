@@ -1,5 +1,4 @@
 import numpy as np
-from scipy import interp
 from itertools import cycle
 from sklearn.metrics import roc_curve, auc
 from sklearn.preprocessing import label_binarize
