@@ -3,20 +3,8 @@ import pathlib
 import numpy as np
 import tensorflow as tf
 from sklearn.model_selection import StratifiedShuffleSplit
-from tensorflow.tools.docs.doc_controls import set_deprecated
 from custom_layers import *
-
-_UNKNOWN_CLASS_ = 'filler'
-_SILENCE_CLASS_ = 'silence'
-_CROP_WIDTH_ = -1  # width in samples of the crop derived from the whole waveform, which is then given in input to the NN
-
-_NOISE_DIR_ = pathlib.Path('data/speech_commands_v0.02/_background_noise_')
-_DATA_DIR_ = pathlib.Path('data/speech_commands_v0.02')
-_BINARIES_DIR_ = pathlib.Path('data/binaries')
-_MODELS_DIR_ = pathlib.Path('models')
-
-_TASKS_ = ['10kws+U+S', '20kws+U', '35kws']
-
+from hyperparams import _TASKS_,_DATA_DIR_, _BINARIES_DIR_, _NOISE_DIR_, _SILENCE_CLASS_, _UNKNOWN_CLASS_
 
 def get_noise_samples_names():
     noise_samples_names = tf.io.gfile.glob(str(_NOISE_DIR_)+'/*')
@@ -230,7 +218,7 @@ def get_original_splits(task):
     return X_train, y_train, X_valid, y_valid,X_test, y_test
 
 
-def load_original_splits(task):
+def load_original_splits(task, smoke_size=-1):
     """Load training/validation/test splits from disk"""
     X_train = np.load(_BINARIES_DIR_/f"{task}/X_train.npy")
     y_train = np.load(_BINARIES_DIR_/f"{task}/y_train.npy")
@@ -238,6 +226,15 @@ def load_original_splits(task):
     y_valid = np.load(_BINARIES_DIR_/f"{task}/y_test.npy")
     X_test = np.load(_BINARIES_DIR_/f"{task}/X_valid.npy")
     y_test = np.load(_BINARIES_DIR_/f"{task}/y_valid.npy")
+
+    X_train, y_train, X_valid, y_valid, X_test, y_test = get_smoke_sized(X_train, 
+                                                                     y_train, 
+                                                                     X_valid, 
+                                                                     y_valid, 
+                                                                     X_test, 
+                                                                     y_test, 
+                                                                     smoke_size=smoke_size)
+
     return X_train, y_train, X_valid, y_valid, X_test, y_test
 
 
@@ -258,17 +255,17 @@ def decode_audio(audio_file_path, zero_pad=True):
     return audio_tensor
 
 
-def randomly_crop_wave(waveform, crop_width=_CROP_WIDTH_):
-    """Given an audio wave, returns a random crop of the wave of width `crop_width` samples"""
-    if crop_width == -1:
-        return waveform
-    else:
-        # add dimension to pass it to image.random_crop function
-        waveform = tf.expand_dims(waveform, 0)
-        waveform = tf.image.random_crop(value=waveform, size=(1, crop_width))
-        # remove the extra dimension and normalize
-        waveform = waveform[0, :] / tf.reduce_max(waveform[0, :])
-        return waveform
+# def randomly_crop_wave(waveform, crop_width=_CROP_WIDTH_):
+#     """Given an audio wave, returns a random crop of the wave of width `crop_width` samples"""
+#     if crop_width == -1:
+#         return waveform
+#     else:
+#         # add dimension to pass it to image.random_crop function
+#         waveform = tf.expand_dims(waveform, 0)
+#         waveform = tf.image.random_crop(value=waveform, size=(1, crop_width))
+#         # remove the extra dimension and normalize
+#         waveform = waveform[0, :] / tf.reduce_max(waveform[0, :])
+#         return waveform
 
 
 def generate_noise_crop(sample_rate=16000, duration=1):
@@ -384,19 +381,19 @@ def get_smoke_sized(X_train, y_train, X_valid, y_valid, X_test, y_test, smoke_si
     
     return names_train, labels_train, names_valid, labels_valid, names_test, labels_test
         
-def get_tf_datasets(X_train, y_train, X_valid, y_valid, X_test, y_test, batch_size, shuffle=False):     
+def get_tf_datasets(X_train, y_train, X_valid, y_valid, X_test, y_test, batch_size, task, shuffle=False):     
 
     train_dataset = create_dataset(X_train,
                                 y_train, 
                                 batch_size=batch_size, 
                                 shuffle=shuffle,
-                                cache_file='cache_training')
+                                cache_file=f'cache_training_{task}')
 
     valid_dataset = create_dataset(X_valid,
                                 y_valid,
                                 batch_size=batch_size, 
                                 shuffle=shuffle,
-                                cache_file='cache_valid')
+                                cache_file=f'cache_valid_{task}')
 
     test_dataset = create_dataset(X_test,
                                 y_test,
@@ -406,16 +403,15 @@ def get_tf_datasets(X_train, y_train, X_valid, y_valid, X_test, y_test, batch_si
 
     train_steps = int(np.ceil(len(X_train)/batch_size))
     valid_steps = int(np.ceil(len(X_valid)/batch_size))
-    test_steps = int(np.ceil(len(X_test)/batch_size))
+
     print(f"Train steps: {train_steps}")
     print(f"Validations steps: {valid_steps}")
-    print(f"Test steps: {test_steps}")
 
     for i in train_dataset.take(1):
         print("Example of dataset element:")
         print(i)
     
-    return train_dataset, train_steps, valid_dataset, valid_steps, test_dataset, test_steps
+    return train_dataset, train_steps, valid_dataset, valid_steps, test_dataset
 
 
 

@@ -1,13 +1,19 @@
 import tensorflow as tf
-from tensorflow.keras import layers 
+from tensorflow.keras import layers
 from tensorflow.keras.initializers import glorot_uniform
 import math
+import hyperparams
+
 
 class Spectrogram(tf.keras.layers.Layer):
     """Compute spectrogram from waveform."""
 
-    def __init__(self, sample_rate, fft_size, win_size, hop_size,
-                 f_min=0.0, f_max=None, **kwargs):
+    def __init__(self, 
+        sample_rate=hyperparams.SAMPLE_RATE, 
+        fft_size=hyperparams.FFT_SIZE, 
+        win_size=hyperparams.WIN_SIZE, 
+        hop_size=hyperparams.HOP_SIZE, **kwargs):
+
         super(Spectrogram, self).__init__(**kwargs)
         self.sample_rate = sample_rate
         self.fft_size = fft_size
@@ -34,7 +40,7 @@ class Spectrogram(tf.keras.layers.Layer):
                                       frame_length=self.win_size,
                                       frame_step=self.hop_size,
                                       fft_length=self.fft_size)
-        # get absolute value 
+        # get absolute value
         spectrograms = tf.abs(spectrograms)
         return tf.expand_dims(spectrograms, -1)
 
@@ -49,11 +55,18 @@ class Spectrogram(tf.keras.layers.Layer):
 
         return config
 
+
 class LogMelSpectrogram(tf.keras.layers.Layer):
     """Compute log_mel_spectrogram from waveform."""
 
-    def __init__(self, sample_rate, fft_size, win_size, hop_size, n_filters,
-                 f_min=0.0, f_max=None, **kwargs):
+    def __init__(self, sample_rate = hyperparams.SAMPLE_RATE, 
+        fft_size=hyperparams.FFT_SIZE, 
+        win_size=hyperparams.WIN_SIZE, 
+        hop_size=hyperparams.HOP_SIZE, 
+        n_filters=hyperparams.N_FILTERS,
+        f_min=0.0, 
+        f_max=None, **kwargs):
+
         super(LogMelSpectrogram, self).__init__(**kwargs)
         self.sample_rate = sample_rate
         self.fft_size = fft_size
@@ -90,38 +103,25 @@ class LogMelSpectrogram(tf.keras.layers.Layer):
         #                               frame_length=self.win_size,
         #                               frame_step=self.hop_size,
         #                               fft_length=self.fft_size)
-        # # get absolute value 
+        # # get absolute value
         # spectrograms = tf.abs(spectrograms)
 
-        spectrograms = Spectrogram(sample_rate=self.sample_rate, 
-            fft_size=self.fft_size, 
-            win_size=self.win_size, 
-            hop_size=self.hop_size,
-            f_min=self.f_min,
-            f_max=self.f_max)(waveforms)[...,0] #remove last dimension 
+        spectrograms = Spectrogram(sample_rate=self.sample_rate,
+                                   fft_size=self.fft_size,
+                                   win_size=self.win_size,
+                                   hop_size=self.hop_size)(waveforms)[..., 0]  # remove last dimension
 
-        # for some reason this passage gives a strange result...
-        #spectrogram=tf.multiply(tf.math.square(spectrogram), 1/_FFT_SIZE)
-
-        #compute energy for each frame; energy will be of shape (batch_size, n_frames)
-        energy = tf.reduce_sum(tf.multiply(tf.math.square(spectrograms), 1/self.fft_size), axis=2)
+        # compute energy for each frame; energy will be of shape (batch_size, n_frames)
+        energy = tf.reduce_sum(tf.multiply(
+            tf.math.square(spectrograms), 1/self.fft_size), axis=2)
         energy = tf.expand_dims(energy, -1)
-
-        # map from linear frequency scale to mel scale
-
-        # linear_to_mel_weight_matrix = tf.signal.linear_to_mel_weight_matrix(
-        #     num_mel_bins=self.n_filters,
-        #     num_spectrogram_bins=self.fft_size//2 + 1,
-        #     sample_rate=self.sample_rate,
-        #     lower_edge_hertz=self.f_min,
-        #     upper_edge_hertz=self.f_max)
 
         mel_spectrograms = tf.tensordot(
             spectrograms, self.mel_filterbank, 1)
 
         log_mel_spectrograms = tf.math.log(mel_spectrograms + 1e-6)
         # concatenate vector of energies to the log_spectrogram
-        log_mel_spectrograms_e = tf.concat([energy, log_mel_spectrograms],2)
+        log_mel_spectrograms_e = tf.concat([energy, log_mel_spectrograms], 2)
         return tf.expand_dims(log_mel_spectrograms_e, -1)
 
     def get_config(self):
@@ -138,12 +138,22 @@ class LogMelSpectrogram(tf.keras.layers.Layer):
 
         return config
 
+
 class MFCC(tf.keras.layers.Layer):
     """Compute mfcc from waveform.
     if `return_deltas` is true, delta MFCCs will be stacked on top of the regular MFCCs."""
 
-    def __init__(self, sample_rate, fft_size, win_size, hop_size, n_filters, n_cepstral,
-                 f_min=0.0, f_max=None, return_deltas=True, **kwargs):
+    def __init__(self, 
+        sample_rate = hyperparams.SAMPLE_RATE, 
+        fft_size = hyperparams.FFT_SIZE, 
+        win_size = hyperparams.WIN_SIZE, 
+        hop_size = hyperparams.HOP_SIZE,
+        n_filters = hyperparams.N_FILTERS, 
+        n_cepstral = hyperparams.N_CEPSTRAL,
+        f_min=0.0, 
+        f_max=None, 
+        return_deltas=True, **kwargs):
+
         super(MFCC, self).__init__(**kwargs)
         self.sample_rate = sample_rate
         self.fft_size = fft_size
@@ -189,7 +199,8 @@ class MFCC(tf.keras.layers.Layer):
             ss = tf.multiply(r, sl)
             return tf.reduce_sum(ss, 1)
 
-        delta_0 = tf.map_fn(fn=lambda t: delta_t(t), elems=tf.range(NUMFRAMES), parallel_iterations=10, fn_output_signature=tf.float32) / denominator
+        delta_0 = tf.map_fn(fn=lambda t: delta_t(t), elems=tf.range(
+            NUMFRAMES), parallel_iterations=10, fn_output_signature=tf.float32) / denominator
         return tf.transpose(delta_0, perm=(1, 0, 2))
 
     def tf_lift(self, mfccs, L=22):
@@ -212,9 +223,9 @@ class MFCC(tf.keras.layers.Layer):
 
         # Remember: first column o each sample is the vector of energies for each frame
         log_mel_spectrograms = LogMelSpectrogram(sample_rate=self.sample_rate, fft_size=self.fft_size,
-                                              win_size=self.win_size, hop_size=self.hop_size, n_filters=self.n_filters)(waveforms)
-                                            
-        log_energies = tf.math.log(log_mel_spectrograms[:,:,0,:] + 1e-6)
+                                                 win_size=self.win_size, hop_size=self.hop_size, n_filters=self.n_filters)(waveforms)
+
+        log_energies = tf.math.log(log_mel_spectrograms[:, :, 0, :] + 1e-6)
 
         # Now compute MFCCs from log-magnitude mel scaled spectrogram
         # NB: from TF documentation:
@@ -225,12 +236,13 @@ class MFCC(tf.keras.layers.Layer):
         # I then take the Cepstral Coefficients from the 2nd to the n_cepstral-th. Later will stack the vector of energies
         # in place of the first CC.
         mfccs = tf.signal.mfccs_from_log_mel_spectrograms(
-            log_mel_spectrograms[:,:,1:, 0])[..., 1:self.n_cepstral]
+            log_mel_spectrograms[:, :, 1:, 0])[..., 1:self.n_cepstral]
         mfccs = self.tf_lift(mfccs)
 
         mfccs = tf.concat([log_energies, mfccs], 2)
         if self.return_deltas:
-            mfccs = tf.concat([mfccs, self.delta_tf(mfccs,2), self.delta_tf(self.delta_tf(mfccs,2), 2) ], axis=2)
+            mfccs = tf.concat([mfccs, self.delta_tf(mfccs, 2), self.delta_tf(
+                self.delta_tf(mfccs, 2), 2)], axis=2)
         return tf.expand_dims(mfccs, -1)
 
     def get_config(self):
@@ -248,75 +260,156 @@ class MFCC(tf.keras.layers.Layer):
         config.update(super(MFCC, self).get_config())
 
         return config
+    
+class PosAndClassEmbed(tf.keras.layers.Layer):
+    def __init__(self, num_patches, d_model, **kwargs):
+        super(PosAndClassEmbed, self).__init__(**kwargs)
+        self.num_patches = num_patches
+        self.d_model = d_model
+        
+    def build(self, input_shape):
+        self.pos_emb = self.add_weight(
+            "pos_emb", 
+            shape=(1, self.num_patches + 1, self.d_model), 
+            initializer=tf.keras.initializers.TruncatedNormal(mean=0., stddev=0.02))
 
-## RESNET BLOCKS ###
+        self.class_emb = self.add_weight(
+            "class_emb", 
+            shape=(1, 1, self.d_model), 
+            initializer=tf.keras.initializers.TruncatedNormal(mean=0., stddev=0.02))
+        
+    def call(self, x):
+        batch_size = tf.shape(x)[0]
+
+        class_emb = tf.broadcast_to(
+            self.class_emb, [batch_size, 1, self.d_model]
+        )
+ 
+        tokens = [class_emb, x]
+
+        x = tf.concat(tokens, axis=1)
+        return x + self.pos_emb
+    
+    def get_config(self):
+        config = {
+            'pos_emb' : self.pos_emb,
+            'class_emb' : self.class_emb
+        }
+        config.update(super(PosAndClassEmbed, self).get_config())
+
+        return config
+
+
+class TransformerBlock(tf.keras.layers.Layer):
+    """Implementation of the Transformer Block
+        - embed_dim: dimension of the embedding for the Multi Head Attention layer;
+        - num_heads: number of heads for the Multi Head Attention layer"""
+
+    def __init__(self, embed_dim, num_heads, ff_dim, dropout=0.1):
+        super(TransformerBlock, self).__init__()
+        self.att = layers.MultiHeadAttention(num_heads, embed_dim)
+        self.ffn = tf.keras.Sequential(
+            [
+                layers.Dense(ff_dim, activation=tf.keras.activations.gelu, kernel_initializer=tf.keras.initializers.TruncatedNormal(
+                    mean=0., stddev=0.02), bias_initializer=tf.keras.initializers.Zeros()),
+                layers.Dense(embed_dim, kernel_initializer=tf.keras.initializers.TruncatedNormal(
+                    mean=0., stddev=0.02), bias_initializer=tf.keras.initializers.Zeros()),
+            ]
+        )
+
+        self.layernorm1 = layers.LayerNormalization(epsilon=1e-6)
+        self.layernorm2 = layers.LayerNormalization(epsilon=1e-6)
+
+        self.dropout1 = layers.Dropout(dropout)
+        self.dropout2 = layers.Dropout(dropout)
+
+    def call(self, inputs, training=False):
+        attn_output, weights = self.att(
+            inputs, inputs, return_attention_scores=True)
+        attn_output = self.dropout1(attn_output, training=training)
+        out1 = self.layernorm1(inputs + attn_output)
+        ffn_output = self.ffn(out1)
+        ffn_output = self.dropout2(ffn_output, training=training)
+        output = self.layernorm2(out1 + ffn_output)
+        return output, weights
+
+
+## -------- RESNET BLOCKS ---------- ###
 
 def identity_block(X_input, f, filters, stage, block):
     # defining name basis
     conv_name_base = 'res' + str(stage) + block + '_branch'
     bn_name_base = 'bn' + str(stage) + block + '_branch'
-    
+
     # Retrieve Filters
     F1, F2, F3 = filters
 
     # First component of main path
-    X = layers.Conv2D(filters = F1, kernel_size = (1, 1), strides = (1, 1), 
-               padding = 'valid', name = conv_name_base + '1th', 
-               kernel_initializer = glorot_uniform(seed=0))(X_input)
-    X = layers.BatchNormalization(axis = -1, name = bn_name_base + '1th')(X)
+    X = layers.Conv2D(filters=F1, kernel_size=(1, 1), strides=(1, 1),
+                      padding='valid', name=conv_name_base + '1th',
+                      kernel_initializer=glorot_uniform(seed=0))(X_input)
+    X = layers.BatchNormalization(axis=-1, name=bn_name_base + '1th')(X)
     X = layers.Activation('relu')(X)
-    
+
     # Second component of main path
-    X = layers.Conv2D(filters = F2, kernel_size = (f, f), strides = (1, 1), 
-               padding = 'same', name = conv_name_base + '2nd', 
-               kernel_initializer = glorot_uniform(seed=0))(X)
-    X = layers.BatchNormalization(axis =-1, name = bn_name_base + '2nd')(X)
+    X = layers.Conv2D(filters=F2, kernel_size=(f, f), strides=(1, 1),
+                      padding='same', name=conv_name_base + '2nd',
+                      kernel_initializer=glorot_uniform(seed=0))(X)
+    X = layers.BatchNormalization(axis=-1, name=bn_name_base + '2nd')(X)
     X = layers.Activation('relu')(X)
 
     # Third component of main path
-    X = layers.Conv2D(filters = F3, kernel_size = (1, 1), strides = (1, 1), 
-               padding = 'valid', name = conv_name_base + '3rd', 
-               kernel_initializer = glorot_uniform(seed=0))(X)
-    X = layers.BatchNormalization(axis = -1, name = bn_name_base + '3rd')(X)
+    X = layers.Conv2D(filters=F3, kernel_size=(1, 1), strides=(1, 1),
+                      padding='valid', name=conv_name_base + '3rd',
+                      kernel_initializer=glorot_uniform(seed=0))(X)
+    X = layers.BatchNormalization(axis=-1, name=bn_name_base + '3rd')(X)
     X = layers.Add()([X_input, X])
-    X = layers.Activation('relu')(X)    
+    X = layers.Activation('relu')(X)
     return X
 
-def convolutional_block(X_input, f, filters, stage, block, s = 2):
-    
+
+def convolutional_block(X_input, f, filters, stage, block, s=2):
+
     # defining name basis
     conv_name_base = 'res' + str(stage) + block + '_branch'
     bn_name_base = 'bn' + str(stage) + block + '_branch'
-    
+
     # Retrieve Filters
     F1, F2, F3 = filters
 
-    ##### MAIN PATH ##### 
+    ##### MAIN PATH #####
     # First component of main path
-    X = layers.Conv2D(F1, (1, 1), strides = (s, s), padding = 'valid', name = conv_name_base + '1st', 
-               kernel_initializer = glorot_uniform(seed=0))(X_input)
-    X = layers.BatchNormalization(axis = -1, name = bn_name_base + '1st')(X)
+    X = layers.Conv2D(F1, (1, 1), strides=(s, s), padding='valid', name=conv_name_base + '1st',
+                      kernel_initializer=glorot_uniform(seed=0))(X_input)
+    X = layers.BatchNormalization(axis=-1, name=bn_name_base + '1st')(X)
     X = layers.Activation('relu')(X)
-    
+
     # Second component of main path
-    X = layers.Conv2D(F2, (f, f), strides = (1, 1), padding = 'same', name = conv_name_base + '2nd', 
-               kernel_initializer = glorot_uniform(seed=0))(X)
-    X = layers.BatchNormalization(axis = -1, name = bn_name_base + '2nd')(X)
+    X = layers.Conv2D(F2, (f, f), strides=(1, 1), padding='same', name=conv_name_base + '2nd',
+                      kernel_initializer=glorot_uniform(seed=0))(X)
+    X = layers.BatchNormalization(axis=-1, name=bn_name_base + '2nd')(X)
     X = layers.Activation('relu')(X)
 
-    # Third component of main path 
-    X = layers.Conv2D(F3, (1, 1), strides = (1, 1), padding = 'valid', name = conv_name_base + '3rd', 
-               kernel_initializer = glorot_uniform(seed=0))(X)
-    X = layers.BatchNormalization(axis = -1, name = bn_name_base + '3rd')(X)
+    # Third component of main path
+    X = layers.Conv2D(F3, (1, 1), strides=(1, 1), padding='valid', name=conv_name_base + '3rd',
+                      kernel_initializer=glorot_uniform(seed=0))(X)
+    X = layers.BatchNormalization(axis=-1, name=bn_name_base + '3rd')(X)
 
-    ##### SHORTCUT PATH #### 
-    X_shortcut = layers.Conv2D(F3, (1, 1), strides = (s, s), padding = 'valid', name = conv_name_base + '1', 
-               kernel_initializer = glorot_uniform(seed=0))(X_input)
-    X_shortcut = layers.BatchNormalization(axis = -1, name = bn_name_base + '1')(X_shortcut)
+    ##### SHORTCUT PATH ####
+    X_shortcut = layers.Conv2D(F3, (1, 1), strides=(s, s), padding='valid', name=conv_name_base + '1',
+                               kernel_initializer=glorot_uniform(seed=0))(X_input)
+    X_shortcut = layers.BatchNormalization(
+        axis=-1, name=bn_name_base + '1')(X_shortcut)
 
     # Final step: Add shortcut value to main path, and pass it through a RELU activation (≈2 lines)
     X = layers.Add()([X_shortcut, X])
     X = layers.Activation('relu')(X)
 
-    
     return X
+
+# if __name__=="__main__":
+#     l = TransformerBlock(embed_dim=128, num_heads=3, ff_dim=768)
+
+#     q = tf.random.uniform((2,98,128))
+
+#     l(q,True)
