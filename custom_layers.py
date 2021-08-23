@@ -1,8 +1,63 @@
 import tensorflow as tf
 from tensorflow.keras import layers
 from tensorflow.keras.initializers import glorot_uniform
+import tensorflow_addons as tfa
 import math
 import hyperparams
+from input_pipeline import get_noises_tf_dataset
+
+
+class RandomNoiseAugment(tf.keras.layers.Layer):
+    def __init__(self, sample_rate=16000, **kwargs):
+        super(RandomNoiseAugment, self).__init__(**kwargs)
+        # self.ds_noise = ds_noise
+        self.ds_noise = get_noises_tf_dataset()
+        self.sample_rate = sample_rate
+        for i in iter(self.ds_noise):
+            self.noises = i
+        #normalize
+        self.noises = self.noises / tf.expand_dims(tf.reduce_max(self.noises, axis=1),1)
+
+    def build(self, input_shape):
+        super(RandomNoiseAugment, self).build(input_shape)
+    
+    @tf.function
+    def choose(self,i,noises):
+        return noises[i]
+
+    def call(self, waveforms, training):
+        if training:
+            b_size = tf.shape(waveforms)[0]
+
+            ## Randomly translate the batch of noises before cropping?
+            # this would misalign the noise files so that when making a random 16000 crop
+            # it would be like taking random 1 second crops from the files
+            
+            #crop 1second width
+            noises = tf.image.random_crop(self.noises, size=(6,self.sample_rate))
+            
+            # tensor of indexes for noise waves
+            z = tf.cast(tf.random.uniform([b_size],0,6), dtype=tf.int32)
+        
+            ## batch of random noises of shape [batch_size, sample_rate]
+            noises_batch = tf.vectorized_map(lambda i : self.choose(i,noises), z)
+            
+            # each sample is mixed with noise with probability 0.8
+            ps = tf.expand_dims(tf.cast(tf.random.uniform([b_size])<0.8, tf.float32),-1)
+            noises_batch = ps * noises_batch * tf.random.uniform(shape=[], minval=0., maxval=0.1)
+            return waveforms + noises_batch
+        else:
+            return waveforms
+
+    def get_config(self):
+        config = {
+            'ds_noise': self.ds_noise,
+            'noises':self.ds_noise,
+            'sample_rate': self.sample_rate
+        }
+        config.update(super(RandomNoiseAugment, self).get_config())
+
+        return config
 
 
 class Spectrogram(tf.keras.layers.Layer):
@@ -55,6 +110,75 @@ class Spectrogram(tf.keras.layers.Layer):
 
         return config
 
+class SpecAugment(tf.keras.layers.Layer):
+    """Custom layer that applies data aumentation according to the SpecAugment policy from: https://arxiv.org/pdf/1904.08779.pdf """
+    def __init__(self, F=hyperparams.F, T=hyperparams.T, **kwargs):
+        super(SpecAugment, self).__init__(**kwargs)
+        self.F = F
+        self.T = T
+
+    def build(self, input_shape):
+        self.non_trainable_weights.append(self.F)
+        self.non_trainable_weights.append(self.T)
+        super(SpecAugment, self).build(input_shape)
+    
+    @tf.function
+    def cutout_single(self, i, inputs,t,f):
+            X = inputs[i,...]
+            ti = t[i]
+            fi = f[i]
+            # if tf.random.uniform([]) < self.p:
+            # f = tf.random.uniform([], minval=0, maxval=self.F, dtype=tf.int32)
+            # t = tf.random.uniform([], minval=0, maxval=self.T, dtype=tf.int32)
+            # X = tf.expand_dims(X,0)
+            n_channels = X.shape[1]
+            n_time_steps = X.shape[0]
+            f0 =  tf.random.uniform([], minval=0, maxval=n_channels-fi, dtype=tf.int32)
+            t0 =  tf.random.uniform([],minval=0, maxval=n_time_steps-ti, dtype=tf.int32)
+            # apply masks in the time and frequency domains
+            # X2 = tfa.image.random_cutout(X, (t, n_channels+2))
+            # X3 = tfa.image.random_cutout(X2, (n_time_steps+2, f))
+
+            ## time mask
+            ones1t = tf.ones((n_channels, t0,1))
+            zerost = tf.zeros((n_channels, ti,1))
+            ones2t = tf.ones((n_channels, n_time_steps - t0 -ti,1))
+            tmask = tf.concat([ones1t, zerost, ones2t], axis=1)
+            tmask = tf.transpose(tmask, [1,0,2])
+            # tmask = tf.expand_dims(tmask,-1)b
+
+            ## frequency mask
+            ones1f = tf.ones((f0, n_time_steps,1))
+            zerosf = tf.zeros((fi, n_time_steps,1))
+            ones2f = tf.ones((n_channels - f0 -fi, n_time_steps,1))
+            fmask = tf.concat([ones1f, zerosf, ones2f], axis=0)
+            fmask = tf.transpose(fmask, [1,0,2])
+            # fmask = tf.expand_dims(fmask,-1)
+
+            # multiply mask
+            X_masked = X * tmask * fmask
+            return X_masked
+            # else:
+            #     return X
+
+    def call(self, inputs, training):
+        if training:
+            f = tf.random.uniform([tf.shape(inputs)[0]], minval=0, maxval=self.F, dtype=tf.int32)
+            t = tf.random.uniform([tf.shape(inputs)[0]], minval=0, maxval=self.T, dtype=tf.int32)
+
+            X4 = tf.map_fn(lambda i: self.cutout_single(i, inputs,t,f), tf.range(tf.shape(inputs)[0]), parallel_iterations=500, fn_output_signature=tf.float32)
+
+            return X4
+        else:
+            return inputs
+
+    def get_config(self):
+        config = {
+            'F': self.F,
+            'T' : self.T
+        }
+        config.update(super(SpecAugment, self).get_config())
+        return config
 
 class LogMelSpectrogram(tf.keras.layers.Layer):
     """Compute log_mel_spectrogram from waveform."""
@@ -64,7 +188,7 @@ class LogMelSpectrogram(tf.keras.layers.Layer):
         win_size=hyperparams.WIN_SIZE, 
         hop_size=hyperparams.HOP_SIZE, 
         n_filters=hyperparams.N_FILTERS,
-        f_min=0.0, 
+        f_min=300.0, 
         f_max=None, **kwargs):
 
         super(LogMelSpectrogram, self).__init__(**kwargs)
@@ -150,9 +274,9 @@ class MFCC(tf.keras.layers.Layer):
         hop_size = hyperparams.HOP_SIZE,
         n_filters = hyperparams.N_FILTERS, 
         n_cepstral = hyperparams.N_CEPSTRAL,
-        f_min=0.0, 
+        f_min=300.0, 
         f_max=None, 
-        return_deltas=True, **kwargs):
+        return_deltas=hyperparams.DELTAS, **kwargs):
 
         super(MFCC, self).__init__(**kwargs)
         self.sample_rate = sample_rate
@@ -336,8 +460,7 @@ class TransformerBlock(tf.keras.layers.Layer):
 
 ## -------- RESNET BLOCKS ---------- ###
 
-def identity_block(X_input, f, filters, stage, block):
-    # defining name basis
+def identity_block(X_input, f1, f2, filters, stage, block):
     conv_name_base = 'res' + str(stage) + block + '_branch'
     bn_name_base = 'bn' + str(stage) + block + '_branch'
 
@@ -352,7 +475,7 @@ def identity_block(X_input, f, filters, stage, block):
     X = layers.Activation('relu')(X)
 
     # Second component of main path
-    X = layers.Conv2D(filters=F2, kernel_size=(f, f), strides=(1, 1),
+    X = layers.Conv2D(filters=F2, kernel_size=(f1, f2), strides=(1, 1),
                       padding='same', name=conv_name_base + '2nd',
                       kernel_initializer=glorot_uniform(seed=0))(X)
     X = layers.BatchNormalization(axis=-1, name=bn_name_base + '2nd')(X)
@@ -368,7 +491,7 @@ def identity_block(X_input, f, filters, stage, block):
     return X
 
 
-def convolutional_block(X_input, f, filters, stage, block, s=2):
+def convolutional_block(X_input, f1, f2, filters, stage, block, s=2):
 
     # defining name basis
     conv_name_base = 'res' + str(stage) + block + '_branch'
@@ -385,7 +508,7 @@ def convolutional_block(X_input, f, filters, stage, block, s=2):
     X = layers.Activation('relu')(X)
 
     # Second component of main path
-    X = layers.Conv2D(F2, (f, f), strides=(1, 1), padding='same', name=conv_name_base + '2nd',
+    X = layers.Conv2D(F2, (f1, f2), strides=(1, 1), padding='same', name=conv_name_base + '2nd',
                       kernel_initializer=glorot_uniform(seed=0))(X)
     X = layers.BatchNormalization(axis=-1, name=bn_name_base + '2nd')(X)
     X = layers.Activation('relu')(X)

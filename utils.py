@@ -1,7 +1,7 @@
 import os
 import librosa.display
 import librosa as lr
-from input_pipeline import _MODELS_DIR_
+from hyperparams import _MODELS_DIR_
 import tensorflow as tf
 from tensorflow.keras.models import load_model
 import pickle
@@ -71,10 +71,9 @@ def visualize_class_balance(y_train, y_test, output_classes):
     fig, axes = plt.subplots(2, figsize=(22,10))
     axes[0].bar([output_classes[i] for i in  unique_tr], counts_tr, alpha=0.6)
     axes[1].bar([output_classes[i] for i in  unique_te], counts_te, alpha=0.6)
-    axes[0].set_ylabel("Class Percentage")
-    axes[1].set_ylabel("Class Percentage")
+    axes[0].set_ylabel("Amount of samples")
+    axes[1].set_ylabel("Amount of samples")
     axes[0].set_title("Training set class percentage")
     axes[1].set_title("Test set class percentage")
     plt.xticks(rotation=45)
     plt.show()
-

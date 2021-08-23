@@ -15,20 +15,15 @@ from metrics import *
 from custom_layers import *
 
 
-def cnn_trad_fpool3(ds, output_classes, n_mfcc, mfcc_deltas, model_name, fft_size=512, win_size=400, hop_size=160, n_filters=40):
+def cnn_trad_fpool3(ds, output_classes, model_suffix):
     for s, _ in ds.take(1):
         input_shape = s.shape[1:]
         print('Input shape:', input_shape)
 
     X_input = tf.keras.Input(input_shape)
-    X = MFCC(sample_rate=16000,
-             fft_size=fft_size,
-             win_size=win_size,
-             hop_size=hop_size,
-             n_filters=n_filters,
-             n_cepstral=n_mfcc,
-             return_deltas=mfcc_deltas)(X_input)
+    X = MFCC()(X_input)
     X = layers.BatchNormalization(axis=-1)(X)
+    X = SpecAugment()(X)
     X = layers.Conv2D(64, (20, 8), activation='relu')(X)
     X = layers.MaxPool2D(pool_size=(1, 3))(X)
     X = layers.Conv2D(64, (10, 4), activation='relu')(X)
@@ -37,22 +32,16 @@ def cnn_trad_fpool3(ds, output_classes, n_mfcc, mfcc_deltas, model_name, fft_siz
     X = layers.Dense(128, activation='relu')(X)
     X = layers.Dense(len(output_classes))(X)
 
-    model = tf.keras.Model(inputs=X_input, outputs=X, name=model_name)
+    model = tf.keras.Model(inputs=X_input, outputs=X, name='cnn_trad_fpool3_'+model_suffix)
     return model
 
-def cnn_one_fstride4(ds, output_classes, n_mfcc, mfcc_deltas, model_name, fft_size=512, win_size=400, hop_size=160, n_filters=40):
+def cnn_one_fstride4(ds, output_classes, model_suffix):
     for s, _ in ds.take(1):
         input_shape = s.shape[1:]
         print('Input shape:', input_shape)
 
     X_input = tf.keras.Input(input_shape)
-    X = MFCC(sample_rate = 16000, 
-             fft_size=fft_size, 
-             win_size=win_size, 
-             hop_size=hop_size, 
-             n_filters=n_filters, 
-             n_cepstral=n_mfcc,
-            return_deltas=mfcc_deltas)(X_input)
+    X = MFCC()(X_input)
     X = layers.BatchNormalization(axis=-1)(X)
 
     X = layers.Conv2D(186, (32, 8), strides=(1, 4), activation='relu')(X)
@@ -62,18 +51,19 @@ def cnn_one_fstride4(ds, output_classes, n_mfcc, mfcc_deltas, model_name, fft_si
     X = layers.Dense(128, activation='relu')(X)
     X = layers.Dense(len(output_classes))(X)
 
-    model = tf.keras.Model(inputs=X_input, outputs=X, name=model_name)
+    model = tf.keras.Model(inputs=X_input, outputs=X, name="cnn_one_fstride4_"+model_suffix)
     return model
 
-def kws_res_net(ds):
+def kws_res_net(ds, output_classes, model_suffix):
     for s, _ in ds.take(1):
         input_shape = s.shape[1:]
         print('Input shape:', input_shape)
     
-    X_input0 = tf.keras.Input(input_shape)
+    X_input = tf.keras.Input(input_shape)
     #X = MelSpectrogram(sample_rate = 16000, fft_size=512, win_size=400, hop_size=160, n_filters=40)(X_input)
-    X_input = MFCC(sample_rate = 16000, fft_size=512, win_size=400, hop_size=160, n_filters=40, n_cepstral=40)(X_input0)
-    X = layers.BatchNormalization(axis=-1)(X_input)
+    X = MFCC()(X_input)
+    X = SpecAugment()(X)
+    X = layers.BatchNormalization(axis=-1)(X)
     
     # Stage 1 (4 lines)
     X = layers.Conv2D(64, (20,8), name = 'conv1', kernel_initializer = glorot_uniform(seed=0))(X)
@@ -96,119 +86,106 @@ def kws_res_net(ds):
     ### END CODE HERE ###
     
     # Create model
-    model = tf.keras.Model(inputs = X_input0, outputs = X, name='ResNetKWS')
+    model = tf.keras.Model(inputs = X_input, outputs = X, name="kws_res_net"+model_suffix)
 
     return model
 
-def simple_rnn(ds, 
-               output_classes, 
-               n_mfcc, 
-               mfcc_deltas, 
-               fft_size=512, 
-               win_size=400, 
-               hop_size=160, 
-               n_filters=40):
+def simple_rnn(ds, output_classes, model_suffix, mfccs=True):
     
     for s, _ in ds.take(1):
         input_shape = s.shape[1:]
         print('Input shape:', input_shape)
 
     X_input = tf.keras.Input(input_shape)
-    X = MFCC(sample_rate = 16000, 
-             fft_size=fft_size, 
-             win_size=win_size, 
-             hop_size=hop_size, 
-             n_filters=n_filters, 
-             n_cepstral=n_mfcc,
-            return_deltas=mfcc_deltas)(X_input)
+    X = RandomNoiseAugment()(X_input)
+    if mfccs:
+        X = MFCC()(X)
+    else:
+        X = LogMelSpectrogram()(X)
+        X = layers.Lambda(lambda x : x[:,:,1:,:], name="remove_energies")(X)
+        
+    X = SpecAugment()(X)
     X = layers.BatchNormalization(axis=-1)(X)
     
     X = layers.Lambda(lambda w: tf.keras.backend.squeeze(w, -1))(X)
     X = layers.Bidirectional(layers.GRU(units=128))(X)
     X = layers.Dense(len(output_classes))(X)
 
-    model = tf.keras.Model(inputs=X_input, outputs=X, name="SimpleRNN")
+    model = tf.keras.Model(inputs=X_input, outputs=X, name="simple_rnn_"+model_suffix)
     return model
 
-def cnn_rnn(ds, 
-               output_classes, 
-               n_mfcc, 
-               mfcc_deltas, 
-               fft_size=512, 
-               win_size=400, 
-               hop_size=160, 
-               n_filters=40):
+# def cnn_rnn(ds, output_classes, model_suffix):
     
+#     for s, _ in ds.take(1):
+#         input_shape = s.shape[1:]
+#         print('Input shape:', input_shape)
+
+#     X_input = tf.keras.Input(input_shape)
+#     X = MFCC()(X_input)
+#     X = layers.BatchNormalization(axis=-1)(X)
+    
+#     X = layers.Conv2D(64, (20,1))(X)
+#     X = layers.BatchNormalization(axis =-1)(X)
+#     X = layers.Activation('relu')(X)
+    
+#     X = layers.Conv2D(1, (10,1))(X)
+#     X = layers.BatchNormalization(axis =-1)(X)
+#     X = layers.Activation('relu')(X)
+
+    
+#     X = layers.Lambda(lambda w: tf.keras.backend.squeeze(w, -1))(X)
+#     X = layers.Bidirectional(layers.GRU(units=128))(X)
+#     X = layers.Dense(len(output_classes))(X)
+
+#     model = tf.keras.Model(inputs=X_input, outputs=X, name="cnn_rnn_"+model_suffix)
+#     return model
+
+def simple_attention_rnn(ds, output_classes, model_suffix, mfccs=True):
     for s, _ in ds.take(1):
         input_shape = s.shape[1:]
         print('Input shape:', input_shape)
 
     X_input = tf.keras.Input(input_shape)
-    X = MFCC(sample_rate = 16000, 
-             fft_size=fft_size, 
-             win_size=win_size, 
-             hop_size=hop_size, 
-             n_filters=n_filters, 
-             n_cepstral=n_mfcc,
-            return_deltas=mfcc_deltas)(X_input)
-    X = layers.BatchNormalization(axis=-1)(X)
+    X = RandomNoiseAugment()(X_input)
+    if mfccs:
+        X = MFCC()(X)
+    else:
+        X = LogMelSpectrogram()(X)
+        X = layers.Lambda(lambda x : x[:,:,1:,:], name="remove_energies")(X)
     
-    X = layers.Conv2D(64, (20,1))(X)
-    X = layers.BatchNormalization(axis =-1)(X)
-    X = layers.Activation('relu')(X)
-    
-    X = layers.Conv2D(1, (10,1))(X)
-    X = layers.BatchNormalization(axis =-1)(X)
-    X = layers.Activation('relu')(X)
+    X = SpecAugment()(X)
 
-    
-    X = layers.Lambda(lambda w: tf.keras.backend.squeeze(w, -1))(X)
-    X = layers.Bidirectional(layers.GRU(units=128))(X)
-    X = layers.Dense(len(output_classes))(X)
-
-    model = tf.keras.Model(inputs=X_input, outputs=X, name="SimpleRNN")
-    return model
-
-def simple_attention_rnn(ds):
-    for s, _ in ds.take(1):
-        input_shape = s.shape[1:]
-        print('Input shape:', input_shape)
-
-    X_input = tf.keras.Input(input_shape)
-    X = MFCC(sample_rate = 16000, 
-                 fft_size=512, 
-                 win_size=400, 
-                 hop_size=160, 
-                 n_filters=40, 
-                 n_cepstral=13,
-                return_deltas=True)(X_input)
     X = layers.Lambda(lambda x : x[...,-1], name="squeeze_channel_dimension")(X)
     X = layers.Bidirectional(layers.GRU(units=64, return_sequences=True), name="BidirectionalGRU")(X)
     last_out = layers.Lambda(lambda x: x[:,-1,:])(X)
     Q = layers.Dense(128)(last_out)
     Q = layers.Lambda(lambda x: tf.expand_dims(x, 1))(Q)
     weighted_seq, att_ws = layers.Attention()([Q, X], return_attention_scores=True)
+    weighted_seq = layers.Lambda(lambda x: x[:,0,:])(weighted_seq)
 
     O = layers.Dense(128, activation='relu')(weighted_seq)
     O = layers.Dense(64, activation='relu')(O)
     O = layers.Dense(len(output_classes), name="out_layer")(O)
 
-    att_model = tf.keras.Model(inputs = [X_input], outputs=[O,att_ws])
+    att_model = tf.keras.Model(inputs = [X_input], outputs=[O,att_ws], name="simple_attention_rnn_"+model_suffix)
     return att_model
 
-def attention_rnn_andreade(ds):
+def attention_rnn_andreade(ds, output_classes, model_suffix, mfccs=True):
     """Neural attention model proposed in de Andreade et al. 2018"""
     for s, _ in ds.take(1):
         input_shape = s.shape[1:]
         print('Input shape:', input_shape)
 
     X_input = tf.keras.Input(input_shape)
-    X = LogMelSpectrogram(sample_rate = 16000, 
-                 fft_size=1024, 
-                 win_size=400, 
-                 hop_size=160, 
-                 n_filters=80)(X_input)
+    X = RandomNoiseAugment()(X_input)
+    if mfccs:
+        X = MFCC()(X)
+    else:
+        X = LogMelSpectrogram()(X)
+        X = layers.Lambda(lambda x : x[:,:,1:,:], name="remove_energies")(X)
     
+    X = SpecAugment()(X)
+    X = layers.BatchNormalization()(X)
     # CNN part
     X = layers.Conv2D(10, (5, 1), activation='relu', padding='same')(X)
     X = layers.BatchNormalization()(X)
@@ -217,7 +194,8 @@ def attention_rnn_andreade(ds):
     
     # Recurrent Part
     X = layers.Lambda(lambda x : x[...,-1], name="squeeze_channel_dimension")(X)
-    X = layers.Bidirectional(layers.GRU(units=64, return_sequences=True), name="BidirectionalGRU")(X)
+    X = layers.Bidirectional(layers.LSTM(units=64, return_sequences=True), name="BidirectionalLSTM")(X)
+    X = layers.Bidirectional(layers.LSTM(units=64, return_sequences=True), name="BidirectionalLSTM2")(X)
     last_out = layers.Lambda(lambda x: x[:,-1,:])(X)
     
     # Self-Attention
@@ -225,45 +203,95 @@ def attention_rnn_andreade(ds):
     Q = layers.Lambda(lambda x: tf.expand_dims(x, 1))(Q)
     weighted_seq, att_ws = layers.Attention()([Q, X], return_attention_scores=True)
 
+    weighted_seq = layers.Lambda(lambda x: x[:,0,:])(weighted_seq)
     O = layers.Dense(64, activation='relu')(weighted_seq)
     O = layers.Dense(len(output_classes), name="out_layer")(O)
 
-    att_model = tf.keras.Model(inputs = [X_input], outputs=[O,att_ws])
+    att_model = tf.keras.Model(inputs = [X_input], outputs=[O,att_ws], name="andreade_original_"+model_suffix)
     return att_model
 
-def mha_andreade(ds):
+def attention_rnn_andreade_seq_query(ds, output_classes, model_suffix, mfccs=True, filter_w=5, filter_h=1):
+    """Neural attention model proposed in de Andreade et al. 2018 with more queries. Also using GRU units
+    Motivation: we know that in encoder/decoder models for machine translation, relying only on the last state
+    of the encoder """
     for s, _ in ds.take(1):
         input_shape = s.shape[1:]
         print('Input shape:', input_shape)
 
     X_input = tf.keras.Input(input_shape)
-    X =  LogMelSpectrogram(sample_rate = 16000, 
-                 fft_size=1024, 
-                 win_size=400, 
-                 hop_size=160, 
-                 n_filters=80)(X_input)
-    X = layers.Lambda(lambda x : x[:,:,1:,:], name="remove_energies")(X)
+    X = RandomNoiseAugment()(X_input)
+    if mfccs:
+        X = MFCC()(X)
+    else:
+        X = LogMelSpectrogram()(X)
+        X = layers.Lambda(lambda x : x[:,:,1:,:], name="remove_energies")(X)
     
+    X = SpecAugment()(X)
     # CNN part
-    X = layers.Conv2D(10, (5, 1), activation='relu', padding='same')(X)
+    X = layers.Conv2D(10, (filter_w, filter_h), activation='relu', padding='same')(X)
     X = layers.BatchNormalization()(X)
-    X = layers.Conv2D(1, (5, 1), activation='relu', padding='same')(X)
+    X = layers.Conv2D(1, (filter_w, filter_h), activation='relu', padding='same')(X)
     X = layers.BatchNormalization()(X)
     
     # Recurrent Part
     X = layers.Lambda(lambda x : x[...,-1], name="squeeze_channel_dimension")(X)
     X = layers.Bidirectional(layers.GRU(units=64, return_sequences=True), name="BidirectionalGRU")(X)
-    last_out = layers.Lambda(lambda x: x[:,-1,:])(X)
-    
-    # Self-Multi-Headed Attention
-    Q = layers.Dense(128)(last_out)
-    Q = layers.Lambda(lambda x: tf.expand_dims(x, 1))(Q)
-    weighted_seq, att_ws = layers.MultiHeadAttention(num_heads=7, key_dim=64)(Q, X, return_attention_scores=True)
+    X = layers.Bidirectional(layers.GRU(units=64, return_sequences=True), name="BidirectionalGRU2")(X)
 
-    O = layers.Dense(64, activation='relu')(weighted_seq)
+    # Self-Attention
+#     Q = layers.Dense(128)(last_out)
+    Q = layers.Dense(128)(X)
+#     Q = layers.Lambda(lambda x: tf.expand_dims(x, 1))(Q)
+    weighted_seq, att_ws = layers.Attention()([Q, X], return_attention_scores=True)
+    
+    X = layers.Bidirectional(layers.GRU(units=32), name="BidirectionalGRU3")(weighted_seq)
+
+    O = layers.Dense(64, activation='relu')(X)
     O = layers.Dense(len(output_classes), name="out_layer")(O)
 
-    att_model = tf.keras.Model(inputs = [X_input], outputs=[O,att_ws])
+    att_model = tf.keras.Model(inputs = [X_input], outputs=[O,att_ws], name = "andreade_seq_query_"+model_suffix)
+    return att_model
+
+
+def mha_andreade(ds, output_classes, model_suffix, mfccs=True, n_heads=7, mha_encoding_dim=64, filter_w=5, filter_h=1):
+    for s, _ in ds.take(1):
+        input_shape = s.shape[1:]
+        print('Input shape:', input_shape)
+
+    X_input = tf.keras.Input(input_shape)
+
+    X = RandomNoiseAugment()(X_input)
+    if mfccs:
+        X = MFCC()(X)
+    else:
+        X = LogMelSpectrogram()(X)
+        X = layers.Lambda(lambda x : x[:,:,1:,:], name="remove_energies")(X)
+    
+    X = SpecAugment()(X)
+    
+    # CNN part
+    X = layers.Conv2D(10, (filter_w, filter_h), activation='relu', padding='same')(X)
+    X = layers.BatchNormalization()(X)
+    X = layers.Conv2D(1, (filter_w, filter_h), activation='relu', padding='same')(X)
+    X = layers.BatchNormalization()(X)
+    
+    # Recurrent Part
+    X = layers.Lambda(lambda x : x[...,-1], name="squeeze_channel_dimension")(X)
+    X = layers.Bidirectional(layers.GRU(units=64, return_sequences=True), name="BidirectionalGRU")(X)
+    X = layers.Bidirectional(layers.GRU(units=64, return_sequences=True), name="BidirectionalGRU2")(X)
+    # last_out = layers.Lambda(lambda x: x[:,-1,:])(X)
+    
+    # Self-Multi-Headed Attention
+    Q = layers.Dense(128)(X)
+    # Q = layers.Lambda(lambda x: tf.expand_dims(x, 1))(Q)
+    weighted_seq, att_ws = layers.MultiHeadAttention(num_heads=n_heads, key_dim=mha_encoding_dim)(Q, X, return_attention_scores=True)
+
+    X = layers.Bidirectional(layers.GRU(units=32), name="BidirectionalGRU3")(weighted_seq)
+
+    O = layers.Dense(64, activation='relu')(X)
+    O = layers.Dense(len(output_classes), name="out_layer")(O)
+
+    att_model = tf.keras.Model(inputs = [X_input], outputs=[O,att_ws], name = "mha_andreade_"+model_suffix)
     return att_model
 
 def KWT(ds, 
@@ -273,21 +301,24 @@ def KWT(ds,
         num_heads,
         mlp_dim,
         output_classes,
-        dropout=0.1):
+        model_suffix,
+        dropout=0.1,
+        mfccs=True):
     for s, _ in ds.take(1):
         input_shape = s.shape[1:]
         print('Input shape:', input_shape)
 
     X_input = tf.keras.Input(input_shape)
-    X = MFCC(sample_rate = 16000, 
-                 fft_size=512, 
-                 win_size=400, 
-                 hop_size=160, 
-                 n_filters=40, 
-                 n_cepstral=40,
-                return_deltas=False)(X_input)
+    X = RandomNoiseAugment()(X_input)
+    if mfccs:
+        X = MFCC()(X)
+    else:
+        X = LogMelSpectrogram()(X)
+        X = layers.Lambda(lambda x : x[:,:,1:,:], name="remove_energies")(X)
     
-    #remove last dim
+    X = SpecAugment()(X)
+    
+    #remove channel dimension
     X = layers.Lambda(lambda x : x[...,0], name="removeChannelDimension")(X)
     
     # projection of patches
@@ -308,6 +339,10 @@ def KWT(ds,
     class_output = layers.Lambda(lambda x : x[:,0], name="getClassToken")(X)
     O = layers.Dense(len(output_classes), name="out_layer")(class_output)
 
-    model = tf.keras.Model(inputs = [X_input], outputs=[O], name="KeyWordTransformer")
+    model = tf.keras.Model(inputs = [X_input], outputs=[O], name="KWT_"+model_suffix)
     return model
+
+
+if __name__ == "__main__":
+    pass
 
