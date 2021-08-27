@@ -77,3 +77,25 @@ def visualize_class_balance(y_train, y_test, output_classes):
     axes[1].set_title("Test set class percentage")
     plt.xticks(rotation=45)
     plt.show()
+
+def save_weights_and_results(model, history, current_task):
+    #save model weights
+    model.save_weights(hyperparams._MODELS_DIR_/current_task/model.name/"weights")
+    results={}
+    #save attention scores and predictions
+    # y_scores, att_scores = model.predict(test_dataset.batch(len(X_test)))
+    # y_pred = np.array(np.argmax(y_scores, axis=1))
+    # y_true = np.array(y_test)
+    # compute test accuracy
+    # test_acc = sum(np.equal(y_pred, y_true)) / len(y_true)
+    # print(f'Test set accuracy: {test_acc:.3%}')
+    
+    # results["test_acc"] = test_acc
+    # results["attention_scores"] = att_scores
+    # results["prediction_scores"] = y_scores
+    results["train_history"] = history.history
+    with open(hyperparams._MODELS_DIR_/current_task/model.name/f'train_history.pkl', 'wb') as outp:
+        pickle.dump(results, outp)
+    
+def get_n_of_trainable_variables(model):
+    return np.sum([np.prod(v.get_shape().as_list()) for v in model.trainable_variables])

@@ -3,50 +3,10 @@
 \section{Related Work}
 \label{sec:related_work}
 
-\noindent \textbf{Some hints:} 
-\begin{itemize}
-\item \textbf{Goal:} The goal of this section is to describe what has been done so far in {\it the} literature. You should focus on and briefly describe the work done in the best papers that you have read. 
-\item \textbf{Length:} One full column is fine but often this takes one column and a half. It is very easy to use a full page, although this may just due to your sloppiness... if you carefully go through the one page long version, you often find it possible to compact it in one column and a half. In any event, I would make this section no longer than one page, this leads to an overall {\it two pages} including abstract, introduction and related work. I believe this is a fair amount of space in most cases.
-\item \textbf{Approach:} For each you should comment on the paper's contribution, on the good and important findings of such paper and also, \textbf{1)} on why these findings are not enough and \textbf{2)} how these findings are improved upon/extended by the work that you present here. At the end of the section, you may recap the main paper contributions (maybe one or two, the most important ones) and how these extend/improve upon previous work.
-\end{itemize}
-\begin{itemize}
-\item \textbf{References:} please follow this {\it religiously}. It will help you a lot. Use the Latex \texttt{Bibtex} tool to manage the bibliography. A \texttt{Bibtex} example file, named \texttt{biblio.bib} is provided with this template.\\
+\subsection{Foundations and state of the art}
 
-\item \textbf{Citing conference/workshop papers:} I recommend to always include the following information into the corresponding \texttt{bibitem} entry: 
-\begin{enumerate}
-\item author names, 
-\item paper title, 
-\item conference / workshop name, 
-\item conference / workshop address, 
-\item month, 
-\item year.
-\end{enumerate}
-Examples of this are: \cite{Zargham-2011}\cite{Sadler-2006}.\\
+In recent years, machine learning techniques have proven to be the de-facto standard for approaching the KWS problem. Such models typically perform segmentation of the audio sequence on the time domain and extract log-mel scale spectrograms or mel-frequency cepstral coefficients (MFCC) \cite{mfccs1980davis} from each frame. Those are then used as input feature vectors for the models.
+One of the first works exploring deep neural networks for the KWS task is from Chen et al \cite{dnns2014chen}: the authors explore small footprint fully connected architectures and show how they improved performances with respect to the baseline HMM models. This kind of architecture accounted for the sequentiality of audio data by stacking feature vectors of adjacent audio frames: while this gives good results compared to the baseline, it is a very simplistic way to model sequential data. Sainath and Parada~\cite{convnns2015sainath} approached the problem by using CNNs, a more fitting class of models which are able, by design, to capture several essential features of speech data (like input topology or translational invariance) and at the same time having a much smaller memory footprint due to parameter sharing. Indeed, CNNs have proven to be very successful for KWS: the current state of the art has recently been achieved in \cite{kim2021broadcasted}, where the authors introduce Broadcasted Residual Networks (BC-ResNets), a particular class of ResNets that are able to capture both 1D and 2D features thanks to the introduction of a new kind of residual block.
 
-\item \textbf{Citing journal papers:} I recommend to always include the following information into the corresponding \texttt{bibitem} entry: 
-\begin{enumerate}
- \item author names, 
- \item paper title, 
- \item full journal name, 
- \item volume (if available), 
- \item number (if available), 
- \item month, 
- \item pages (if available), 
- \item year. 
- \end{enumerate}
- Examples of this are: \cite{Shannon-1948}\cite{Boyd-2011}\cite{Zordan-2014}.\\
-
-\item \textbf{Citing books:} I recommend to always include the following information into the corresponding \texttt{bibitem} entry: 
-\begin{enumerate}
-\item author names, 
-\item book title, 
-\item editor, 
-\item edition, 
-\item year.
-\end{enumerate}
-\end{itemize}
-%
-
-\begin{remark}
-Note that some of the above fields may not be shown when you compile the Latex file, but this depends on the bibliography settings (dictated by the specific Latex style that you load at the beginning of the document). You may decide to include additional pieces of information in a given bibliographic entry, but please, \textbf{be consistent} across all the entries, i.e., use the same fields for the same publication type. Note that some of the fields may not be available (e.g., the paper {\it volume}, {\it number} or the {\it pages}).
-\end{remark}
+\subsection{Models based on Attention}
+In \cite{attention2018andreade}, De Andreade et al. propose an attention based convolutional recurrent neural network (Att-RNN), which takes as input a mel-scale spectrogram and extracts features in the frequency dimension with two convolutional layers. Then, such features are given as input to two bidirectional LSTM \cite{hochreiter1997long} layers, in order to extract long range dependencies from the inherently sequential audio data. The last\footnote{In the paper, the authors report to use the middle output, but looking at their implementation, they use the last one. Either way, as they point out, any output of the LSTM layer should work well as a query vector, since the bidirectional LSTM layer should be able to summarize the whole sequence in any of its outputs.} output feature from the LSTM layer is then transformed with a linear dense layer and used as a query vector for the attention mechanism. Finally, the sum of the LSTM outputs, weighted with respect to the attention scores, are given as input to a final dense MLP, which performs the classification. An immediate drawback of this approach is its impossibility to function in a streaming fashion (at least without introducing delay), since bidirectional recurrent layers require the whole sequence of data to work. Nevertheless, the introduction of the attention mechanisms allows us to inspect the sections of audio which were responsible for the classification, increasing model transparency. In \cite{streamingkws2020Rybakov} the authors propose a more modern variant of the same architecture (referred as MHAtt-RNN): LSTM is substitued by GRU \cite{Cho2014gru}, and the attention mechanism is replaced by the ~\mbox{multi-head} attention layer introduced in \cite{attentionisall2017vaswani} (using 4 heads). The latest contribution in attention based models for KWS comes from \cite{kwtransformer2021berg}, where the authors, inspired by the success of the newly introduced Vision Transformer (ViT) \cite{vit2020Dosovitskiy} for computer vision tasks, propose an adaptation of such architecture for keyword spotting, called the Keyword Transformer (KWT). The results were suprising: despite ViT proved to be competitive only when supported by pre-training on large datasets, KWT outperformed more complex models based on mixes between CNN, RNN and attention, even when trained on relatively small datasets, like the Google Speech Commands dataset \cite{speechdataset2018warden}.

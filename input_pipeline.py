@@ -4,7 +4,7 @@ import numpy as np
 import tensorflow as tf
 from sklearn.model_selection import StratifiedShuffleSplit
 # from custom_layers import *
-from hyperparams import _TASKS_,_DATA_DIR_, _BINARIES_DIR_, _NOISE_DIR_, _SILENCE_CLASS_, _UNKNOWN_CLASS_, CROP_WIDTH, SAMPLE_RATE
+from hyperparams import _TASKS_,_DATA_DIR_, _BINARIES_DIR_, _NOISE_DIR_, _SILENCE_CLASS_, _UNKNOWN_CLASS_, CROP_WIDTH, SAMPLE_RATE, _TEST_DATA_DIR_
 
 # # Set seed for experiment reproducibility
 # seed = 42
@@ -44,7 +44,7 @@ def get_kws(data_dir, task):
         output_classes = core_kws+[_UNKNOWN_CLASS_]
 
     else:
-        core_kws = commands
+        core_kws = commands.tolist()
         aux_kws = []
         output_classes = core_kws
     
@@ -142,7 +142,7 @@ def get_train_valid_test_split(filenames, labels, train_percentage, valid_percen
     return X_train, y_train, X_valid, y_valid, X_test, y_test
 
 
-def get_original_splits(task):
+def make_and_save_original_splits(task, return_canonical_test_set=True):
     """Get the Train Validation Test splits provided by the dataset."""
     assert(task in _TASKS_)
     filenames = get_filenames(_DATA_DIR_)
@@ -170,7 +170,7 @@ def get_original_splits(task):
         y_valid.append(get_label_int(audio_file_path=file, task=task))
     f.close()
 
-    X_train = list(set(filenames) - set(X_test))
+    X_train = list(set(filenames) - set(X_test) - set(X_valid))
     y_train = [get_label_int(file, task=task) for file in X_train]
 
     _,_,output_classes = get_kws(_DATA_DIR_, task)
@@ -185,9 +185,10 @@ def get_original_splits(task):
 
     #IF the current task has "silence" as one possible output class, add the silence samples
     if _SILENCE_CLASS_ in output_classes:
-        n_sil_train = len(y_train[y_train==0])
-        n_sil_valid = len(y_valid[y_valid==0])
-        n_sil_test = len(y_test[y_test==0])
+        n_sil_train = np.unique(y_train, return_counts=True)[1][:10].mean(dtype=int)
+        n_sil_valid = np.unique(y_valid, return_counts=True)[1][:10].mean(dtype=int)
+        n_sil_test = np.unique(y_test, return_counts=True)[1][:10].mean(dtype=int)
+
         X_train, y_train, X_valid, y_valid, X_test, y_test = add_silence_samples(X_train, 
                                                                                 y_train, 
                                                                                 X_valid, 
@@ -198,8 +199,40 @@ def get_original_splits(task):
                                                                                 n_sil_valid,
                                                                                 n_sil_test,
                                                                                 task)
+    
+
+    ## decide how many _unknown_ samples to include:
+    if _UNKNOWN_CLASS_ in output_classes:
+        
+        n_unk_tr = np.unique(y_train, return_counts=True)[1][:10].mean(dtype=int)
+        n_unk_val = np.unique(y_valid, return_counts=True)[1][:10].mean(dtype=int)
+        n_unk_test = np.unique(y_test, return_counts=True)[1][:10].mean(dtype=int)
+
+        indexes_tr = np.where(y_train==output_classes.index(_UNKNOWN_CLASS_))[0]
+        tot_unkn_tr = len(indexes_tr)
+        todel_tr = np.random.choice(indexes_tr, tot_unkn_tr - n_unk_tr, replace=False)
+
+        indexes_val = np.where(y_valid==output_classes.index(_UNKNOWN_CLASS_))[0]
+        tot_unkn_val = len(indexes_val)
+        todel_val = np.random.choice(indexes_val, tot_unkn_val - n_unk_val, replace=False)
+
+        indexes_test = np.where(y_test==output_classes.index(_UNKNOWN_CLASS_))[0]
+        tot_unkn_test = len(indexes_test)
+        todel_test = np.random.choice(indexes_test, tot_unkn_test - n_unk_test, replace=False)
+
+        X_train = np.delete(X_train, todel_tr)
+        y_train = np.delete(y_train, todel_tr)
+
+        X_valid = np.delete(X_valid, todel_val)
+        y_valid = np.delete(y_valid, todel_val)
+
+        X_test = np.delete(X_test, todel_test)
+        y_test = np.delete(y_test, todel_test)
+
+    if return_canonical_test_set and task == "10kws+U+S":
+        X_test, y_test = get_canonical_10kwstask_test_set()
+
     # shuffle
-    print("Shuffling dataset...")
     train_indexes = np.random.permutation(range(len(X_train)))
     valid_indexes = np.random.permutation(range(len(X_valid)))
     test_indexes = np.random.permutation(range(len(X_test)))
@@ -219,17 +252,15 @@ def get_original_splits(task):
     np.save(_BINARIES_DIR_/f"{task}/X_valid", X_valid)
     np.save(_BINARIES_DIR_/f"{task}/y_valid", y_valid)
 
-    return X_train, y_train, X_valid, y_valid,X_test, y_test
-
 
 def load_original_splits(task, smoke_size=-1):
     """Load training/validation/test splits from disk"""
     X_train = np.load(_BINARIES_DIR_/f"{task}/X_train.npy")
     y_train = np.load(_BINARIES_DIR_/f"{task}/y_train.npy")
-    X_valid = np.load(_BINARIES_DIR_/f"{task}/X_test.npy")
-    y_valid = np.load(_BINARIES_DIR_/f"{task}/y_test.npy")
-    X_test = np.load(_BINARIES_DIR_/f"{task}/X_valid.npy")
-    y_test = np.load(_BINARIES_DIR_/f"{task}/y_valid.npy")
+    X_valid = np.load(_BINARIES_DIR_/f"{task}/X_valid.npy")
+    y_valid = np.load(_BINARIES_DIR_/f"{task}/y_valid.npy")
+    X_test = np.load(_BINARIES_DIR_/f"{task}/X_test.npy")
+    y_test = np.load(_BINARIES_DIR_/f"{task}/y_test.npy")
 
     X_train, y_train, X_valid, y_valid, X_test, y_test = get_smoke_sized(X_train, 
                                                                      y_train, 
@@ -240,6 +271,30 @@ def load_original_splits(task, smoke_size=-1):
                                                                      smoke_size=smoke_size)
 
     return X_train, y_train, X_valid, y_valid, X_test, y_test
+
+def get_test_label_int(audio_file_path):
+        data_dir = pathlib.Path(os.path.sep.join(
+            audio_file_path.split(os.path.sep)[:2]))
+        _, _, output_classes = get_kws(data_dir, "10kws+U+S")
+        file_path_names = audio_file_path.split(os.path.sep)
+        kw = file_path_names[2]
+        if kw == '_silence_':
+            return np.argmax(_SILENCE_CLASS_ == np.array(output_classes))
+        elif kw == '_unknown_':
+            return np.argmax(_UNKNOWN_CLASS_ == np.array(output_classes))
+        return np.argmax(kw == np.array(output_classes))
+def get_canonical_10kwstask_test_set():
+    """Returns the test set provided by the creators of the Google Speech Commands dataset,
+    used for easier reproducibility and comparability of results.
+    It is available at http://download.tensorflow.org/data/speech_commands_test_set_v0.02.tar.gz"""
+
+    X_test = get_filenames(_TEST_DATA_DIR_)
+    y_test = [get_test_label_int(file) for file in X_test]
+
+    X_test = np.array(X_test)
+    y_test = np.array(y_test)
+    return X_test, y_test
+
 
 
 def decode_audio(audio_file_path, zero_pad=True):
@@ -268,14 +323,24 @@ def randomly_crop_wave(waveform, crop_width=CROP_WIDTH):
         # remove the extra dimension and normalize
         waveform = waveform[0, :] / tf.reduce_max(waveform[0, :])
         return waveform
+        # return waveform[0]
 
 
-def generate_noise_crop(sample_rate=16000, duration=1):
+def generate_noise_crop(sample_rate=16000, for_training=True, duration=1):
     n_samples = sample_rate*duration
     choice = tf.cast(tf.random.uniform([],0,len(get_noise_samples_names())), dtype=tf.int32)
     noise_file = tf.gather(get_noise_samples_names(), choice)
-    # noise_file = np.random.choice(get_noise_samples_names())
     w = decode_audio(noise_file, zero_pad=False)
+
+    ##choose which half of the file from where to extract the random crop;
+    # if we are generating noise for training, choose from the first half,
+    # otherwise choose from the second half
+    w_len = tf.shape(w)[0]
+    if for_training:
+        w = w[:w_len//2]
+    else:
+        w = w[w_len//2:]
+
     w = randomly_crop_wave(w, n_samples)
     return w
 
@@ -300,23 +365,19 @@ def randomly_shift_waveform(waveform):
     return new_w
 
 def augment_sample(waveform):
-    """Augments the current sample, only for training. With probability p the sample is mixed with noise,
-    and randomly shifted left or right of a quantity picked from U(-0.1,0.1)
+    """Augments the current sample, only for training. The sample is randomly shifted left or right of a 
+    quantity picked from U(-0.1,0.1).
     Input:
         - `waveform`: sample waveform; if it's a tensor of zeros, it means that it must return a random noise sample """
     if tf.reduce_sum(tf.cast(waveform == tf.zeros(SAMPLE_RATE), tf.int32))==SAMPLE_RATE:
-        waveform =  generate_noise_crop()
-    # if tf.random.uniform(shape=[], minval=0., maxval=1.) <= noise_prob:
-    #     coeff = tf.random.uniform(shape=[], minval=0., maxval=0.1)
-    #     noise = generate_noise_crop() * coeff
-    #     waveform = noise + waveform
+        waveform =  generate_noise_crop(for_training=True)
     else:
         waveform = randomly_shift_waveform(waveform)
     return waveform
 
-def gen_sample_2(waveform):
+def gen_sample_valtest(waveform):
     if tf.reduce_sum(tf.cast(waveform == tf.zeros(SAMPLE_RATE), tf.int32))==SAMPLE_RATE:
-        return generate_noise_crop()
+        return generate_noise_crop(for_training=False)
     else:
         return waveform
 
@@ -337,6 +398,7 @@ def generate_sample(sample_name, preemph=0.97):
     # normalize so that every waveform is between 1 and -1
     audio_tensor = tf_emph[0] / tf.reduce_max(tf_emph[0])
     return audio_tensor
+    # return tf_emph[0]
 
 def create_dataset(files_ds,
                    labels,
@@ -347,13 +409,13 @@ def create_dataset(files_ds,
     dataset = tf.data.Dataset.from_tensor_slices((files_ds, labels))
     dataset = dataset.map(lambda file_name, label: (generate_sample(file_name), label), num_parallel_calls=tf.data.AUTOTUNE)
 
-    # will cache only training and validation sets
+    # will cache only training set
     if cache_file and is_training:
         dataset = dataset.cache(cache_file)
     
-    if not is_training: # i.e. only for train and validation
+    if not is_training: # i.e. only for test and validation
         #convert tensors of zeros to random noise crops which will be cached
-        dataset = dataset.map(lambda file_name, label: (gen_sample_2(file_name), label), num_parallel_calls=tf.data.AUTOTUNE)
+        dataset = dataset.map(lambda file_name, label: (gen_sample_valtest(file_name), label), num_parallel_calls=tf.data.AUTOTUNE)
         if cache_file:
             dataset = dataset.cache(cache_file)
 
@@ -361,7 +423,8 @@ def create_dataset(files_ds,
     if not is_test:
         dataset = dataset.repeat()
 
-    # After caching, apply data augmentation (random shift and addition of random noise), ONLY to training samples
+    # After caching, apply data augmentation (random shift and generation of random silence samples), 
+    # ONLY to training samples
     if is_training:
         dataset = dataset.map(lambda waveform, label: (augment_sample(waveform), label), num_parallel_calls=tf.data.AUTOTUNE)
 
@@ -410,29 +473,33 @@ def get_tf_datasets(X_train, y_train, X_valid, y_valid, X_test, y_test, batch_si
     test_dataset = create_dataset(X_test,
                                 y_test,
                                 batch_size=batch_size, 
-                                is_test=True)
+                                is_test=True,
+                                cache_file=f'cache_test_{task}')
 
     train_steps = int(np.ceil(len(X_train)/batch_size))
     valid_steps = int(np.ceil(len(X_valid)/batch_size))
-    test_steps = int(np.ceil(len(X_test)/batch_size))
+    # test_steps = int(np.ceil(len(X_test)/batch_size))
     if verbose:
         print(f"Train steps: {train_steps}")
         print(f"Validations steps: {valid_steps}")
-        print(f"Test steps: {test_steps}")
+        # print(f"Test steps: {test_steps}")
 
         for i in train_dataset.take(1):
             print("Example of dataset element:")
             print(i)
     
-    return train_dataset, train_steps, valid_dataset, valid_steps, test_dataset, test_steps
+    return train_dataset, train_steps, valid_dataset, valid_steps, test_dataset
 
 def get_noises_tf_dataset():
     names = get_noise_samples_names().numpy()
     names = [n.decode() for n in names]
     noises_ds = tf.data.Dataset.from_tensor_slices(names)
     noises_ds = noises_ds.map(lambda f: decode_audio(f, zero_pad=False))
-    noises_ds = noises_ds.map(lambda x: x[:100000])
+    noises_ds = noises_ds.map(lambda x: x[:800000])
     noises_ds = noises_ds.batch(6).cache().prefetch(tf.data.experimental.AUTOTUNE)
     return noises_ds
 
 
+if __name__ == "__main__":
+    ex = 'data/speech_commands_v0.02/up/c7aaad67_nohash_2.wav'
+    generate_noise_crop()

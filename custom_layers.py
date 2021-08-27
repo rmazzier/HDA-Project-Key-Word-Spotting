@@ -14,6 +14,7 @@ class RandomNoiseAugment(tf.keras.layers.Layer):
         self.ds_noise = get_noises_tf_dataset()
         self.sample_rate = sample_rate
         for i in iter(self.ds_noise):
+            #single batch containing all the noise files names
             self.noises = i
         #normalize
         self.noises = self.noises / tf.expand_dims(tf.reduce_max(self.noises, axis=1),1)
@@ -28,6 +29,8 @@ class RandomNoiseAugment(tf.keras.layers.Layer):
     def call(self, waveforms, training):
         if training:
             b_size = tf.shape(waveforms)[0]
+
+            ## TODO: Right now, i am adding noise over noise... this can be harmful?? or not?
 
             ## Randomly translate the batch of noises before cropping?
             # this would misalign the noise files so that when making a random 16000 crop
@@ -44,7 +47,7 @@ class RandomNoiseAugment(tf.keras.layers.Layer):
             
             # each sample is mixed with noise with probability 0.8
             ps = tf.expand_dims(tf.cast(tf.random.uniform([b_size])<0.8, tf.float32),-1)
-            noises_batch = ps * noises_batch * tf.random.uniform(shape=[], minval=0., maxval=0.1)
+            noises_batch = ps * noises_batch * tf.random.uniform(shape=[], minval=0., maxval=0.2)
             return waveforms + noises_batch
         else:
             return waveforms
@@ -274,6 +277,7 @@ class MFCC(tf.keras.layers.Layer):
         hop_size = hyperparams.HOP_SIZE,
         n_filters = hyperparams.N_FILTERS, 
         n_cepstral = hyperparams.N_CEPSTRAL,
+        lift_constant = hyperparams.L,
         f_min=300.0, 
         f_max=None, 
         return_deltas=hyperparams.DELTAS, **kwargs):
@@ -285,6 +289,7 @@ class MFCC(tf.keras.layers.Layer):
         self.hop_size = hop_size
         self.n_filters = n_filters
         self.n_cepstral = n_cepstral
+        self.lift_constant = lift_constant
         self.return_deltas = return_deltas
         self.f_min = f_min
         self.f_max = f_max if f_max else sample_rate / 2
@@ -296,6 +301,7 @@ class MFCC(tf.keras.layers.Layer):
         self.non_trainable_weights.append(self.hop_size)
         self.non_trainable_weights.append(self.n_filters)
         self.non_trainable_weights.append(self.n_cepstral)
+        self.non_trainable_weights.append(self.lift_constant)
         self.non_trainable_weights.append(self.return_deltas)
         self.non_trainable_weights.append(self.f_min)
         self.non_trainable_weights.append(self.f_max)
@@ -327,10 +333,10 @@ class MFCC(tf.keras.layers.Layer):
             NUMFRAMES), parallel_iterations=10, fn_output_signature=tf.float32) / denominator
         return tf.transpose(delta_0, perm=(1, 0, 2))
 
-    def tf_lift(self, mfccs, L=22):
+    def tf_lift(self, mfccs):
         """Applies liftering to the mfccs matrix."""
         n = tf.range(mfccs.shape[2], dtype=tf.float32)
-        lift = 1.0 + (L/2.0)*tf.math.sin(math.pi*n/L)
+        lift = 1.0 + (self.lift_constant/2.0)*tf.math.sin(math.pi*n/self.lift_constant)
         return mfccs * lift
 
     def call(self, waveforms):
@@ -376,6 +382,7 @@ class MFCC(tf.keras.layers.Layer):
             'win_size': self.win_size,
             'n_filters': self.n_filters,
             'n_cepstral': self.n_cepstral,
+            'lift_constant': self.lift_constant,
             'return_deltas': self.return_deltas,
             'sample_rate': self.sample_rate,
             'f_min': self.f_min,

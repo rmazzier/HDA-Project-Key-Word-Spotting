@@ -13,7 +13,7 @@ CROP_WIDTH = -1
 # SpecAugment hyperparameters
 F = 10
 T = 20
-AUG_P = 0.8
+L = 40
 
 # Extra Class names
 _UNKNOWN_CLASS_ = 'filler'
@@ -22,6 +22,7 @@ _SILENCE_CLASS_ = 'silence'
 # Directories
 _NOISE_DIR_ = pathlib.Path('data/speech_commands_v0.02/_background_noise_')
 _DATA_DIR_ = pathlib.Path('data/speech_commands_v0.02')
+_TEST_DATA_DIR_ = pathlib.Path('data/speech_commands_test_set_v0.02')
 _BINARIES_DIR_ = pathlib.Path('data/binaries')
 _MODELS_DIR_ = pathlib.Path('models')
 

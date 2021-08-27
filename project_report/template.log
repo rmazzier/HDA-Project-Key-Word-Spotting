@@ -1,4 +1,4 @@
-This is pdfTeX, Version 3.14159265-2.6-1.40.20 (TeX Live 2019/Debian) (preloaded format=pdflatex 2021.7.28)  22 AUG 2021 21:07
+This is pdfTeX, Version 3.14159265-2.6-1.40.20 (TeX Live 2019/Debian) (preloaded format=pdflatex 2021.7.28)  27 AUG 2021 21:05
 entering extended mode
  restricted \write18 enabled.
  %&-line parsing enabled.
@@ -653,25 +653,25 @@ File: lstlang3.sty 2019/09/10 1.8c listings language file
 (/usr/share/texlive/texmf-dist/tex/latex/listings/lstmisc.sty
 File: lstmisc.sty 2019/09/10 1.8c (Carsten Heinz)
 )
-** ATTENTION: Overriding command lockouts (line 106).
+** ATTENTION: Overriding command lockouts (line 105).
 \c@remark=\count313
 (./template.aux)
 \openout1 = `template.aux'.
 
-LaTeX Font Info:    Checking defaults for OML/cmm/m/it on input line 112.
-LaTeX Font Info:    ... okay on input line 112.
-LaTeX Font Info:    Checking defaults for OMS/cmsy/m/n on input line 112.
-LaTeX Font Info:    ... okay on input line 112.
-LaTeX Font Info:    Checking defaults for OT1/cmr/m/n on input line 112.
-LaTeX Font Info:    ... okay on input line 112.
-LaTeX Font Info:    Checking defaults for T1/cmr/m/n on input line 112.
-LaTeX Font Info:    ... okay on input line 112.
-LaTeX Font Info:    Checking defaults for TS1/cmr/m/n on input line 112.
-LaTeX Font Info:    ... okay on input line 112.
-LaTeX Font Info:    Checking defaults for OMX/cmex/m/n on input line 112.
-LaTeX Font Info:    ... okay on input line 112.
-LaTeX Font Info:    Checking defaults for U/cmr/m/n on input line 112.
-LaTeX Font Info:    ... okay on input line 112.
+LaTeX Font Info:    Checking defaults for OML/cmm/m/it on input line 111.
+LaTeX Font Info:    ... okay on input line 111.
+LaTeX Font Info:    Checking defaults for OMS/cmsy/m/n on input line 111.
+LaTeX Font Info:    ... okay on input line 111.
+LaTeX Font Info:    Checking defaults for OT1/cmr/m/n on input line 111.
+LaTeX Font Info:    ... okay on input line 111.
+LaTeX Font Info:    Checking defaults for T1/cmr/m/n on input line 111.
+LaTeX Font Info:    ... okay on input line 111.
+LaTeX Font Info:    Checking defaults for TS1/cmr/m/n on input line 111.
+LaTeX Font Info:    ... okay on input line 111.
+LaTeX Font Info:    Checking defaults for OMX/cmex/m/n on input line 111.
+LaTeX Font Info:    ... okay on input line 111.
+LaTeX Font Info:    Checking defaults for U/cmr/m/n on input line 111.
+LaTeX Font Info:    ... okay on input line 111.
 
 -- Lines per column: 56 (exact).
 (/usr/share/texlive/texmf-dist/tex/context/base/mkii/supp-pdf.mkii
@@ -701,129 +701,50 @@ Package caption Info: listings package is loaded.
 Package caption Info: End \AtBeginDocument code.
 \c@lstlisting=\count320
 
+Underfull \hbox (badness 1642) in paragraph at lines 120--123
+\OT1/ptm/b/n/9 works, Re-cur-rent Neu-ral Net-works, At-ten-tion Mech-a-nism,
+ []
+
 (./intro.tex) (./related.tex
-LaTeX Font Info:    Trying to load font information for U+msa on input line 8.
+LaTeX Font Info:    Trying to load font information for U+msa on input line 12.
+
 
 (/usr/share/texlive/texmf-dist/tex/latex/amsfonts/umsa.fd
 File: umsa.fd 2013/01/14 v3.01 AMS symbols A
 )
-LaTeX Font Info:    Trying to load font information for U+msb on input line 8.
+LaTeX Font Info:    Trying to load font information for U+msb on input line 12.
+
 
 (/usr/share/texlive/texmf-dist/tex/latex/amsfonts/umsb.fd
 File: umsb.fd 2013/01/14 v3.01 AMS symbols B
 )
-LaTeX Font Info:    Trying to load font information for U+rsfs on input line 8.
-
+LaTeX Font Info:    Trying to load font information for U+rsfs on input line 12
+.
 
 (/usr/share/texlive/texmf-dist/tex/latex/jknapltx/ursfs.fd
 File: ursfs.fd 1998/03/24 rsfs font definition file (jk)
-)
-LaTeX Font Info:    Trying to load font information for OT1+pcr on input line 1
-3.
-
-(/usr/share/texlive/texmf-dist/tex/latex/psnfss/ot1pcr.fd
-File: ot1pcr.fd 2001/06/04 font definitions for OT1/pcr.
-)
-Underfull \hbox (badness 2310) in paragraph at lines 13--14
-\OT1/ptm/m/n/10 the bib-li-og-ra-phy. A \OT1/pcr/m/n/10 Bibtex \OT1/ptm/m/n/10 
-ex-am-ple file, named
- []
-
-
-Underfull \hbox (badness 10000) in paragraph at lines 13--14
-
- []
-
-
-LaTeX Warning: Citation `Zargham-2011' on page 1 undefined on input line 24.
-
-
-LaTeX Warning: Citation `Sadler-2006' on page 1 undefined on input line 24.
-
-
-Underfull \hbox (badness 10000) in paragraph at lines 24--25
-
- []
-
-
-LaTeX Warning: Citation `Shannon-1948' on page 1 undefined on input line 37.
-
-
-LaTeX Warning: Citation `Boyd-2011' on page 1 undefined on input line 37.
-
-
-LaTeX Warning: Citation `Zordan-2014' on page 1 undefined on input line 37.
-
-
-Underfull \hbox (badness 10000) in paragraph at lines 37--38
-
- []
-
-) [1{/var/lib/texmf/fonts/map/pdftex/updmap/pdftex.map}
+)) [1{/var/lib/texmf/fonts/map/pdftex/updmap/pdftex.map}
 
 
 ] (./model.tex
-LaTeX Font Info:    Trying to load font information for OMS+pcr on input line 1
-6.
+LaTeX Font Info:    Trying to load font information for OT1+pcr on input line 9
+.
 
-(/usr/share/texlive/texmf-dist/tex/latex/psnfss/omspcr.fd
-File: omspcr.fd 
-)
-LaTeX Font Info:    Font shape `OMS/pcr/m/n' in size <10> not available
-(Font)              Font shape `OMS/cmsy/m/n' tried instead on input line 16.
-
-Underfull \hbox (badness 2521) in paragraph at lines 16--17
-[]\OT1/ptm/b/n/10 Cross ref-er-enc-ing: \OT1/ptm/m/n/10 In La-tex, cross ref-er
--enc-ing is
+(/usr/share/texlive/texmf-dist/tex/latex/psnfss/ot1pcr.fd
+File: ot1pcr.fd 2001/06/04 font definitions for OT1/pcr.
+) [2]
+<imgs/input_pipeline_v3.pdf, id=17, 646.33469pt x 724.62718pt>
+File: imgs/input_pipeline_v3.pdf Graphic file (type pdf)
+<use imgs/input_pipeline_v3.pdf>
+Package pdftex.def Info: imgs/input_pipeline_v3.pdf  used on input line 51.
+(pdftex.def)             Requested size: 248.26675pt x 278.3355pt.
+) (./results.tex) (./conclusions.tex) (./template.bbl
+Underfull \hbox (badness 6236) in paragraph at lines 76--78
+\OT1/ptm/m/n/8 A self-attention model for key-word spot-ting,'' \OT1/ptm/m/it/8
+ arXiv preprint
  []
 
-
-Underfull \hbox (badness 4792) in paragraph at lines 16--17
-\OT1/ptm/m/n/10 easy. You need to la-bel an ob-ject through the
- []
-
-
-Underfull \hbox (badness 1521) in paragraph at lines 18--19
-[]\OT1/ptm/b/n/10 But what about the tilde? \OT1/ptm/m/n/10 This is a nice tric
-k
- []
-
-
-Underfull \hbox (badness 4492) in paragraph at lines 18--19
-\OT1/ptm/m/n/10 I have learned from a friend (many years ago
- []
-
-
-Underfull \hbox (badness 5316) in paragraph at lines 18--19
-\OT1/ptm/m/n/10 from Prof. Frank Fitzek, now at TU Dres-den).
- []
-
-
-Underfull \hbox (badness 1789) in paragraph at lines 19--20
-\OT1/ptm/m/n/10 you have com-posed words, in line equa-tions, etc.
- []
-
-[2]) (./results.tex) (./conclusions.tex
-Underfull \hbox (badness 10000) in paragraph at lines 6--7
-
- []
-
-
-Underfull \hbox (badness 10000) in paragraph at lines 8--9
-
- []
-
-
-Underfull \hbox (badness 10000) in paragraph at lines 16--16
-
- []
-
-
-Underfull \hbox (badness 10000) in paragraph at lines 16--17
-
- []
-
-) (./template.bbl [3])
+[3 <./imgs/input_pipeline_v3.pdf>])
 
 ** Conference Paper **
 Before submitting the final camera ready copy, remember to:
@@ -837,35 +758,28 @@ Before submitting the final camera ready copy, remember to:
 
 [4
 
-] (./template.aux)
-
-LaTeX Warning: There were undefined references.
-
- ) 
+] (./template.aux) ) 
 Here is how much of TeX's memory you used:
- 10879 strings out of 483065
- 163247 string characters out of 5963550
- 647210 words of memory out of 5000000
- 25669 multiletter control sequences out of 15000+600000
- 572132 words of font info for 101 fonts, out of 8000000 for 9000
+ 10920 strings out of 483065
+ 163885 string characters out of 5963550
+ 649210 words of memory out of 5000000
+ 25700 multiletter control sequences out of 15000+600000
+ 577355 words of font info for 119 fonts, out of 8000000 for 9000
  81 hyphenation exceptions out of 8191
- 59i,8n,122p,1135b,252s stack positions out of 5000i,500n,10000p,200000b,80000s
-{/usr/share/texlive/texmf-dist/fonts/enc/dvips/base/8r.enc}</usr/share/texliv
-e/texmf-dist/fonts/type1/public/amsfonts/cm/cmex10.pfb></usr/share/texlive/texm
-f-dist/fonts/type1/public/amsfonts/cm/cmmi10.pfb></usr/share/texlive/texmf-dist
-/fonts/type1/public/amsfonts/cm/cmmi7.pfb></usr/share/texlive/texmf-dist/fonts/
-type1/public/amsfonts/cm/cmmib10.pfb></usr/share/texlive/texmf-dist/fonts/type1
-/public/amsfonts/cm/cmr10.pfb></usr/share/texlive/texmf-dist/fonts/type1/public
-/amsfonts/cm/cmsy10.pfb></usr/share/texlive/texmf-dist/fonts/type1/public/amsfo
-nts/cm/cmsy7.pfb></usr/share/texlive/texmf-dist/fonts/type1/urw/courier/ucrr8a.
-pfb></usr/share/texlive/texmf-dist/fonts/type1/urw/times/utmb8a.pfb></usr/share
-/texlive/texmf-dist/fonts/type1/urw/times/utmbi8a.pfb></usr/share/texlive/texmf
--dist/fonts/type1/urw/times/utmr8a.pfb></usr/share/texlive/texmf-dist/fonts/typ
-e1/urw/times/utmri8a.pfb>
-Output written on template.pdf (4 pages, 144782 bytes).
+ 59i,12n,122p,2569b,349s stack positions out of 5000i,500n,10000p,200000b,80000s
+{/usr/share/texlive/texmf-dist/fonts/enc/dvips/base/8r.enc}
+</usr/share/texlive/texmf-dist/fonts/type1/public/amsfonts/cm/cmbx10.pfb></usr/
+share/texlive/texmf-dist/fonts/type1/public/amsfonts/cm/cmmi10.pfb></usr/share/
+texlive/texmf-dist/fonts/type1/public/amsfonts/cm/cmr10.pfb></usr/share/texlive
+/texmf-dist/fonts/type1/public/amsfonts/cm/cmsy7.pfb></usr/share/texlive/texmf-
+dist/fonts/type1/urw/courier/ucrr8a.pfb></usr/share/texlive/texmf-dist/fonts/ty
+pe1/urw/times/utmb8a.pfb></usr/share/texlive/texmf-dist/fonts/type1/urw/times/u
+tmbi8a.pfb></usr/share/texlive/texmf-dist/fonts/type1/urw/times/utmr8a.pfb></us
+r/share/texlive/texmf-dist/fonts/type1/urw/times/utmri8a.pfb>
+Output written on template.pdf (4 pages, 583998 bytes).
 PDF statistics:
- 66 PDF objects out of 1000 (max. 8388607)
- 47 compressed objects within 1 object stream
+ 136 PDF objects out of 1000 (max. 8388607)
+ 88 compressed objects within 1 object stream
  0 named destinations out of 1000 (max. 500000)
- 1 words of extra memory for PDF output out of 10000 (max. 10000000)
+ 6 words of extra memory for PDF output out of 10000 (max. 10000000)
 

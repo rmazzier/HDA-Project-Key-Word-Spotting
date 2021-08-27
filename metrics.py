@@ -18,7 +18,7 @@ def one_class_accuracy(target_class_int, y_pred, y_test):
     return test_acc_one_class
 
 def get_fpr_fnr_aucs(y_true, y_scores, output_classes):
-    binarized = label_binarize(y_true,classes=range(12))
+    binarized = label_binarize(y_true,classes=range(len(output_classes)))
     # SEPARATE ROC CURVE FOR EACH CLASS
     # in my case, i want false negative rate instead of true positive rate!
     # FNR = 1 - TPR

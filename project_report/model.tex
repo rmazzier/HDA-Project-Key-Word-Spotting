@@ -1,64 +1,76 @@
 % !TEX root = template.tex
+\section{Experimental Setup}
 
-\section{Processing Pipeline}
-\label{sec:processing_architecture}
+\subsection{Signals and Features}
+\label{sec:sig&features}
 
-\begin{remark}
-\textbf{On tailoring the paper structure to your needs:} The structure recommended for the previous sections is rather standard and could work for different papers with differing technical content, the structure and the paper content from here on highly depends on the type of paper, possibilities are: mostly based on theoretical analysis, showing experimental design/activity, proposing a new technique and analyzing its performance via experiments or simulation. For the HDA course we deal with machine learning and, in detail, with training and testing neural network architectures to perform some specific inference or classification task. The following structure and comments are specifically addressing this type of technical content.
-\end{remark}
+%Com'è , il dataset, che tipo di features uso, spiegare come sono estratte, spiegare augmentation strategies, spiegare come genero gli split del dataset per ogni task.
 
-\begin{remark}
-\textbf{Why having this section:} With this section, we start the technical description with a {\it high level} introduction of your work (e.g., processing pipeline). Here, you do not have to necessarily go into the technical details of every block/algorithm of your design, this will be done later as the paper develops. What I would like to see here is a high level description of the approach, i.e., which processing blocks you used, what they do (in words) and how these were combined, etc. This section should introduce the reader to your design, explain the different parts/blocks, how they interact and why. You should not delve into technical details for each block, but you should rather explain the big picture. \MR{Besides a well written explanation, I often use a nice diagram containing the various blocks and detailing their interrelations.}
-\end{remark} 
-
-\noindent \textbf{Writing tips:} Sections, Figures and Tables are usually shortened as Sec., Fig., Tab. 
+Each model was trained on the Google Speech Commands dataset V2 \cite{speechdataset2018warden}, which consists on a total of $105829$ user utterances of a total of $35$ keywords. Each utterance is stored as a one second long\footnote{Some clips are a bit shorter than one second: in those cases, the clips are zero padded towards the end.} \verb|WAVE| file, sampled at a 16KHz rate. From each signal, $80$ log-mel spectrogram features are computed, %TODO: non ancora sicuro se uso i mfcc o logmel spec...
+using a window size of $25$\textit{ms} ($400$ samples) and a hop size of $10$\textit{ms} ($160$ samples). Following the approach from past literature, the models are trained for two different tasks, which are the following:
 \begin{itemize}
-\item \textbf{Cross referencing:} In Latex, cross referencing is easy. You need to label an object through the \texttt{\textbackslash label\{labelid\}} command and referencing it where you need it through the \texttt{\textbackslash ref\{labelid\}} command. 
-\item \textbf{Suggestion:} I suggest to cross reference a table using \texttt{Tab.\mytexttilde\textbackslash ref\{tab:tableid\}}, the same holds for figures and sections, by just replacing ``\texttt{Tab.}'' with ``\texttt{Fig.}'' and ``\texttt{Sec.}''. Of course when defining the table, you need to add a Latex command \texttt{\textbackslash label\{tab:tableid\}} in the right place inside the table Latex environment to \mbox{cross-link} it. The tag \texttt{tab:tableid} is user defined and is the identifier that you associate with the table in question. You could call it \texttt{pippo} of you wish, but I recommend to use something like ``\texttt{tab:tableid}'' for tables, ``\texttt{eq:eqid}'' for equations, ``\texttt{sec:secid}'' for sections and so forth, where \texttt{tableid} has to be unique for each table in the document. The same applies to figures and all other objects. I guess you got the idea. This will lead to a neat Latex code and will facilitate cross referencing while avoiding duplicate labels, especially in large Latex documents (think of a book for example). 
-\item \textbf{But what about the tilde?} This is a nice trick I have learned from a friend (many years ago from Prof. Frank Fitzek, now at TU Dresden). When you write \texttt{Tab.\mytexttilde\textbackslash ref\{tab:tableid\}} Latex knows that \texttt{Tab.} and the corresponding table number \texttt{\textbackslash ref\{tab:tableid\}} must be displayed within the same line, i.e., they can never be broken across lines. This is nice and desirable I believe. I always use it for all referenced material, including citations; example: ``As done in\texttt{\mytexttilde\textbackslash cite\{suppa-wu-2019\}}.''
-\item \textbf{More about breaking stuff across lines} often times you have composed words, in line equations, etc. and for some reason you would like Latex to never break them across lines. Example: the Latex command \texttt{\textbackslash mbox\{Neural Networks (NN)\}} is processed by Latex so that ``\mbox{Neural Networks (NN)}'' is never broken across lines. I use this very often, also for inline equations that I do not want Latex to split across subsequent lines.
+	\item \textbf{12kws} task: the model must discriminate among 12 different keywords: \say{yes}, \say{no}, \say{up}, \say{down}, \say{left}, \say{right}, \say{on}, \say{off}, \say{stop}, \say{go}, unknown or silence. The unknown keywords are randomly chosen from the set of remaining keywords and the silence samples consist in one second long crops, randomly extracted from the noise files provided by the dataset\footnote{Those consist in 6 files containing noisy background sounds, both artificially generated and recorded from real environments.}. Since the total amount of words belonging to the \say{unknown} class was much more than number of representatives for each of the other keywords, we decided to randomly extract them to create a balanced dataset. In this way, we have 36921 samples for training, 4443 for validation and 4888 for testing.
+	\item \textbf{35kws} task: the model must discriminate among all the 35 keywords present in the dataset. No unknown class or silence class is introduced, therefore, for this task, the entire dataset is used. The training set consists in 84843 samples, the validation in 9981 and the test in 11005. 
 \end{itemize}
 
-\section{Signals and Features}
-\label{sec:model}
+Following Google's suggestions from \cite{speechdataset2018warden}, the dataset is split in 80\% for training set, 10\% for validation set and 10\% for test set, in such a way that the same speakers are never present in two different splits. 
 
-Being a machine learning paper, I would have here a section describing the signals you have been working on. If possible, you should describe, in order, 
+For each task, the training set is augmented, following existing approaches from the literature. Specifically, the augmentation process follows this order:
 \begin{enumerate}
-\item the measurement setup (if relevant), how input data is formatted (e.g., vectors of fixed size measured at regular sampling times), 
-\item how the signals were \mbox{pre-processed}, e.g., to remove noise, artifacts, fill gaps (missing points) or to re-interpolate the signals to represent them through a constant sampling rate, etc.
-\item after this, you should describe how {\it feature vectors} were obtained from the \mbox{pre-processed} signals. If signals are {\it time series} this also implies stating the segmentation / windowing strategy that you adopted, to then describe how you obtained a feature vector for each time window. Also, if you use existing feature extraction approaches, you may want to briefly describe them as well, in addition to (and before) your own (possibly new) feature extraction method.
+	\item Each signal is randomly shifted left or right (zero padding the remaining portion), by $x$ samples, where $x$ is drawn from a uniform distirbution $U(0,100)$;
+	\item Samples belonging to the \say{silence} class do not remain the same across epochs, but are randomly generated each time with the same process described above;
+	\item With a probability of $0.8$, each signal is mixed with a randomly generated background noise, multiplied by a factor drawn from $U(0,0.2)$; 
+	\item After the conversion in MFCC/log-mel %TODO stessa roba di sopra
+		the features are augmented using SpecAugment \cite{park2019specaugment}, a simple data augmentation method which consists in adding randomly sized frequency and time masks to the feature matrix: this is done in order to render the model more robust to partial loss of frequency information or of small sections of speech.
 \end{enumerate}
 
-\MR{Last but not least, this section should also contain information on how you have split the dataset into training, validation and test sets. This will be briefly recalled within the ``Results'' section.}
+The image resulting from the last step constitutes the actual input for the model. We remark that validation and test sets are not touched by this process.
 
-\section{Learning Framework}
+All the project was carried out using an NVIDIA GeForce GTX 1060 6GB GPU and an Intel i5-64000 CPU, on a Linux machine. All models were built and trained using TensorFlow~\cite{Abadi2016TensorFlowAS}. All source code is available on Github\footnote{Link here.}. %TODO mettere link github
+
+\subsection{Input Pipeline}
+\label{sec:processing_architecture}
+%\textbf{Why having this section:} With this section, we start the technical description with a {\it high level} introduction of your work (e.g., processing pipeline). Here, you do not have to necessarily go into the technical details of every block/algorithm of your design, this will be done later as the paper develops. What I would like to see here is a high level description of the approach, i.e., which processing blocks you used, what they do (in words) and how these were combined, etc. This section should introduce the reader to your design, explain the different parts/blocks, how they interact and why. You should not delve into technical details for each block, but you should rather explain the big picture. \MR{Besides a well written explanation, I often use a nice diagram containing the various blocks and detailing their interrelations.}
+Since data augmentation is applied, storing the entire dataset in memory would not be possible: this would result in the same data being reused across epochs. For this reason, a core part of this work was to build an efficient input pipeline that could handle data augmentation on the fly, during training. In this section we explain how the data generation process described in Section \ref{sec:sig&features} works. The augmentation takes place in two different moments during training: 
+\begin{enumerate}
+	\item Phase 1: this is the phase when random noise samples are extracted, and each sample is shifted. This is performed by the CPU, while the GPU is performing training. 
+	\item Phase 2: this phase is performed inside the model by the GPU, with a series of preprocessing layers. Specifically, several custom preprocessing layers were built:
+	%TODO add descriptions for each of them e default hyperparameters!
+	\begin{enumerate}
+		\item \verb|RandomNoiseAugment|
+		\item \verb|LogMelSpectrogram|
+		\item \verb|MFCC|
+		\item \verb|SpecAugment|
+	\end{enumerate}
+\end{enumerate}
+
+Note that in Phase 1, each operation is performed one sample at a time, while in Phase 2 each operation is performed in parallel on an entire batch of samples: this results in a much more optimized implementation. Given the hardware setup with which the project was carried on, this framework was a necessity: just computing the MFCC for each sample on CPU would cause a performance bottleneck, wasting the computational capabilities of the GPU. In Figure \ref{fig:inputpipeline} we report a detailed diagram, showing all the steps in the input pipeline for the generation of the training set.
+
+\begin{figure}[h]
+	\centering
+	\includegraphics[width=0.99\linewidth]{imgs/input_pipeline_v3.pdf}
+	%TODO: image is still wip
+	\caption{Detailed description of the system that generates the training data. In the cache block, the data that was produced until that moment is saved to file. Each step which is performed before the caching operation happens only one time, during the first iteration of the dataset; on all the successive iterations, the data is read from the cached file. For the validation and test sets, the augmentation is not applied. Furthermore, to ensure complete separation between training and validation/test sets, the noise samples were generated from different portions of the noise files based on whether they were used for training of for validation or testing.}
+	\label{fig:inputpipeline}
+\end{figure}
+
+
+
+
+
+\subsection{Learning Framework}
 \label{sec:learning_framework}
 
-Here you finally describe the learning strategy / algorithm that you conceived and used to solve the problem at stake. A good diagram to exemplify how learning is carried out is often very useful. In this section, you should describe the learning model, its parameters, any optimization over a given parameter set, etc. You can organize this section into \mbox{sub-sections}. You are free to choose the most appropriate structure.
+Descrivere nel dettaglio i modelli
+[...]
 
-\begin{remark}
-Note that the diagram that you put here differs from that of Section~\ref{sec:processing_architecture} as here you show the details of how your learning framework, or the core of it, is built. In Section~\ref{sec:processing_architecture} you instead provide a high-level description of the involved processing blocks, i.e., you describe the {\it processing flow} and the rationale behind it.
-\end{remark}
+Each model was trained for 50 epochs, using early stopping and reduce lr on plateau %TODO: spiegare bene
 
-\noindent \textbf{On math typesetting:} there are many Latex tricks that you should use to produce a high quality technical essay. A few are listed below, in random order:
-\begin{itemize}
-\item \textbf{Vectors and matrices:} $x$ is a scalar, whereas $\bm{x}$ (in bold) is a vector, and $\bm{X}$ is a matrix with elements $\bm{X} = [x_{ij}]$. For bold symbols you may use the \texttt{\textbackslash bm} Latex command, e.g., \texttt{\textbackslash bm(x)}.
-\item \textbf{Operators:} such as $\max$, $\min$, $\arg\!\max$, $\arg\!\min$ and special functions such as $\log(\cdot)$, $\exp(\cdot)$, $\sin(\cdot)$, $\cos(\cdot)$ are obtained through specific latex commands \texttt{\textbackslash min}, \texttt{\textbackslash max}, \texttt{\textbackslash arg\textbackslash!min}, \texttt{\textbackslash arg\textbackslash!max}, \texttt{\textbackslash log}, \texttt{\textbackslash exp}, \texttt{\textbackslash sin}, \texttt{\textbackslash cos}, etc. Use them! $log$, $exp$, $min$, $sin$, $cos$, etc., look ugly.
-\item \textbf{Sets} can be represented through calligraphic fonts, e.g., $\mathcal{S}$, $\mathcal{F}$, $\mathcal{B}$, etc., obtained using the Latex command \texttt{\textbackslash mathcal{\{S\}}}, etc.
-\item \textbf{Equations:} for a single equation use the \texttt{equation} Latex environment. Example: 
-\begin{equation}
-\label{eq:sigmoid}
-\sigma(x) = \frac{1}{1+e^{-x}}.
-\end{equation} 
-Now, using round brackets $($ and $)$ we get
-\begin{equation}
-\label{eq:sigmoid_comma}
-\sigma(x) = (\frac{1}{1+e^{-x}}),
-\end{equation} 
-but this looks ugly, you should use ``\texttt{\textbackslash left (}'' for ``$($'' and ``\texttt{\textbackslash right )}'' for ``$)$'', obtaining
-\begin{equation}
-\sigma(x) = \left ( \frac{1}{1+e^{-x}} \right ).
-\end{equation} 
-\item \textbf{Punctuation:} Displayed equations are usually considered to be part of the text and, in turn, they will get the very same punctuation as if they were inline with the text (and part of the sentence). If the sentence ends with a displayed equation, the equation gets a period ``.'' right after it, see Eq.~(\ref{eq:sigmoid}). iI the equation is instead part of a running sentence, which is continued after it, then the equation may be ended by a ``,'' as in Eq.~(\ref{eq:sigmoid_comma}). Use the standard grammar rules and your good sense of flow to assess how equations should be punctuated, I usually read through as if they were plain text.
-\end{itemize} 
-
+%Here you finally describe the learning strategy / algorithm that you conceived and used to solve the problem at stake. A good diagram to exemplify how learning is carried out is often very useful. In this section, you should describe the learning model, its parameters, any optimization over a given parameter set, etc. You can organize this section into \mbox{sub-sections}. You are free to choose the most appropriate structure.
+%
+%\begin{remark}
+%Note that the diagram that you put here differs from that of Section~\ref{sec:processing_architecture} as here you show the details of how your learning framework, or the core of it, is built. In Section~\ref{sec:processing_architecture} you instead provide a high-level description of the involved processing blocks, i.e., you describe the {\it processing flow} and the rationale behind it.
+%\end{remark}
+%
+%
+%
