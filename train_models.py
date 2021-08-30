@@ -4,23 +4,57 @@ from models import *
 import tensorflow as tf
 import numpy as np
 import hyperparams
-import itertools  
+from sklearn.metrics import confusion_matrix
 
-_SMOKE_SIZE_ = 3000
-# _SMOKE_SIZE_ = -1
+# _SMOKE_SIZE_ = 20000
+_SMOKE_SIZE_ = -1
 
 ## Define common training objects
-epochs = 5
-# epochs = 50
+epochs = 30
+# epochs = 4
 
 batch_size = 64
-optimizer=tf.keras.optimizers.Adam(learning_rate = 0.001)
-loss = tf.keras.losses.SparseCategoricalCrossentropy(from_logits=True)
-early_stopping = tf.keras.callbacks.EarlyStopping(verbose=1, patience=3,monitor="val_out_layer_loss")
-reduce_lr = tf.keras.callbacks.ReduceLROnPlateau(patience=2, verbose=1,monitor="val_out_layer_loss")
 
-def compile_and_train_model(model, train_dataset, valid_dataset, epochs, optimizer, loss, early_stopping, reduce_lr, train_steps, valid_steps):
-    
+def plot_learning_curves(model, training_data):
+    plt.figure(figsize=(18,7))
+    plt.subplot(1,2,1)
+    plt.plot(range(len(training_data['loss'])), training_data['loss'], label="Training Loss")
+    plt.plot(range(len(training_data['val_out_layer_loss'])), training_data['val_out_layer_loss'], label="Validation Loss")
+    plt.legend(fontsize=16)
+
+    plt.subplot(1,2,2)
+    plt.plot(range(len(training_data['out_layer_accuracy'])), training_data['out_layer_accuracy'], label="Training Accuracy")
+    plt.plot(range(len(training_data['val_out_layer_accuracy'])), training_data['val_out_layer_accuracy'], label="Validation Accuracy")
+
+    plt.legend(fontsize=16)
+    plt.savefig(hyperparams._MODELS_DIR_/current_task/model.name/f'{model.name}_learning.png', dpi=300)
+    # plt.show()
+
+def make_confmatrix(model, test_dataset):
+    y_scores, att_scores = model.predict(test_dataset.batch(batch_size))
+    y_pred = np.array(np.argmax(y_scores, axis=1))
+    y_true = np.array(y_test)
+    # compute test accuracy
+    test_acc = sum(np.equal(y_pred, y_true)) / len(y_true)
+    print(f'Test set accuracy: {test_acc:.3%}')
+
+    confusion_mtx = confusion_matrix(y_true, y_pred, normalize='true') 
+    plt.figure(figsize=(20, 15))
+    sns.heatmap(confusion_mtx, xticklabels=output_classes, yticklabels=output_classes, 
+                annot=True, fmt =".2f")
+    plt.xlabel('Prediction')
+    plt.ylabel('Label')
+    plt.title(f"Model: {model.name}; Task: {current_task}; Accuracy: {round(test_acc*100,2)}%", fontsize=15)
+    plt.savefig(hyperparams._MODELS_DIR_/current_task/model.name/f'{model.name}_conf.png', dpi=300)
+    # plt.show()
+    return y_scores, att_scores, test_acc
+
+def compile_and_train_model(model, train_dataset, valid_dataset, epochs, train_steps, valid_steps):
+    optimizer=tf.keras.optimizers.Adam(learning_rate = 0.001)
+    loss = tf.keras.losses.SparseCategoricalCrossentropy(from_logits=True)
+    early_stopping = tf.keras.callbacks.EarlyStopping(verbose=1, patience=3,monitor="val_out_layer_loss")
+    reduce_lr = tf.keras.callbacks.ReduceLROnPlateau(patience=2, verbose=1,monitor="val_out_layer_loss")
+        
     model.compile(
         optimizer=optimizer,
         loss={'out_layer':loss},
@@ -65,58 +99,70 @@ for current_task in hyperparams._TASKS_:
     for ft_type in feature_types:
         
         # # define models
-        att_rnn = simple_attention_rnn(
-            train_dataset,
-            output_classes,
-            model_suffix=f"{ft_type}",
-            mfccs=True if ft_type == 'mfccs' else False)
+        # att_rnn = simple_attention_rnn(
+        #     train_dataset,
+        #     output_classes,
+        #     model_suffix=f"{ft_type}",
+        #     mfccs=True if ft_type == 'mfccs' else False)
 
-        all_models.append(att_rnn)
+        # all_models.append(att_rnn)
 
-        andreade_original = attention_rnn_andreade(
-            train_dataset, 
-            output_classes, 
-            model_suffix=f"{ft_type}",
-            mfccs= True if ft_type=='mfccs' else False)
+        # andreade_original = attention_rnn_andreade(
+        #     train_dataset, 
+        #     output_classes, 
+        #     model_suffix=f"{ft_type}",
+        #     mfccs= True if ft_type=='mfccs' else False)
         
-        all_models.append(andreade_original)
+        # all_models.append(andreade_original)
         
         andreade_queries = attention_rnn_andreade_seq_query(
             train_dataset,
             output_classes,
-            model_suffix = f"{ft_type}",
+            model_suffix = f"{ft_type}_2rnn_layers",
             mfccs=True if ft_type=='mfccs' else False)
 
         all_models.append(andreade_queries)
 
-        for n_res_layers in [3,4,5]:
-            resnet_andr = resnet_andreade(
-                train_dataset,
-                output_classes,
-                model_suffix=f"{ft_type}_{n_res_layers}_layers", 
-                n_res_blocks=n_res_layers,
-                mfccs=True if ft_type =='mfccs' else False)
+        # for n_res_layers in [2,3,4,5]:
+        #     resnet_andr = resnet_andreade(
+        #         train_dataset,
+        #         output_classes,
+        #         model_suffix=f"{ft_type}_{n_res_layers}_layers", 
+        #         n_res_blocks=n_res_layers,
+        #         mfccs=True if ft_type =='mfccs' else False)
             
-            all_models.append(resnet_andr)
+        #     all_models.append(resnet_andr)
 
-        seq_q_no_cnn = andreade_seq_query_no_cnn(
-                        train_dataset,
-            output_classes,
-            model_suffix = f"{ft_type}",
-            mfccs=True if ft_type=='mfccs' else False)
+        # seq_q_no_cnn = andreade_seq_query_no_cnn(
+        #                 train_dataset,
+        #     output_classes,
+        #     model_suffix = f"{ft_type}",
+        #     mfccs=True if ft_type=='mfccs' else False)
         
-        all_models.append(seq_q_no_cnn)
+        # all_models.append(seq_q_no_cnn)
 
-        #grid search on number of heads for MHA
+        # #grid search on number of heads for MHA
+        # for n_heads in [2,3,4,5]:
+        #     andreade_mha = mha_andreade(
+        #         train_dataset,
+        #         output_classes,
+        #         model_suffix=f"{ft_type}_{n_heads}heads",
+        #         mfccs=True if ft_type=='mfccs' else False,
+        #         n_heads=n_heads)
+
+        #     all_models.append(andreade_mha)
+        
+        #grid search on number of heads for MHA seq query
         for n_heads in [2,3,4,5]:
-            andreade_mha = mha_andreade(
+            seq_query_mha = seq_query_mha_andreade(
                 train_dataset,
                 output_classes,
-                model_suffix=f"{ft_type}_{n_heads}heads",
+                model_suffix=f"{ft_type}_{n_heads}heads_2rnn_layers",
                 mfccs=True if ft_type=='mfccs' else False,
                 n_heads=n_heads)
 
-            all_models.append(andreade_mha)
+            all_models.append(seq_query_mha)
+
 
         ## KWT Test different  n_heads-------------------
 
@@ -143,14 +189,12 @@ for current_task in hyperparams._TASKS_:
             train_dataset, 
             valid_dataset,
             epochs=epochs,
-            optimizer=optimizer,
-            loss=loss,
-            early_stopping=early_stopping,
-            reduce_lr = reduce_lr,
             train_steps=train_steps,
             valid_steps=valid_steps)
         
         save_weights_and_results(trained_model, history, current_task)
+        plot_learning_curves(trained_model, history.history)
+        make_confmatrix(trained_model, test_dataset)
 
         
 

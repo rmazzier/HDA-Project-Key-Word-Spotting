@@ -3,6 +3,7 @@
 \citation{dnns2014chen}
 \citation{convnns2015sainath}
 \citation{streamingkws2020Rybakov}
+\citation{dnns2014chen}
 \citation{deepreslearning2018tang}
 \citation{convnns2015sainath}
 \citation{mittermaier2020small}
@@ -15,53 +16,40 @@
 \citation{Devlin2019BERTPO}
 \citation{gdpr2017}
 \citation{attention2018andreade}
-\citation{streamingkws2020Rybakov}
-\citation{kwtransformer2021berg}
-\citation{vit2020Dosovitskiy}
+\citation{attentionisall2017vaswani}
+\citation{attentionisall2017vaswani}
 \citation{mfccs1980davis}
 \citation{dnns2014chen}
 \citation{convnns2015sainath}
 \citation{kim2021broadcasted}
-\citation{attention2018andreade}
-\citation{hochreiter1997long}
-\citation{streamingkws2020Rybakov}
-\citation{Cho2014gru}
-\citation{attentionisall2017vaswani}
-\citation{kwtransformer2021berg}
-\citation{vit2020Dosovitskiy}
-\citation{speechdataset2018warden}
 \providecommand \oddpage@label [2]{}
 \@writefile{toc}{\contentsline {section}{\numberline {I}Introduction}{1}\protected@file@percent }
 \newlabel{sec:introduction}{{I}{1}}
 \@writefile{toc}{\contentsline {section}{\numberline {II}Related Work}{1}\protected@file@percent }
 \newlabel{sec:related_work}{{II}{1}}
 \@writefile{toc}{\contentsline {subsection}{\numberline {\mbox  {II-A}}Foundations and state of the art}{1}\protected@file@percent }
-\@writefile{toc}{\contentsline {subsection}{\numberline {\mbox  {II-B}}Models based on Attention}{1}\protected@file@percent }
+\citation{selfatt2016cheng}
+\citation{luong2015effective}
+\citation{attention2018andreade}
+\citation{hochreiter1997long}
+\citation{streamingkws2020Rybakov}
+\citation{Cho2014gru}
+\citation{streamingkws2020Rybakov}
+\citation{kwtransformer2021berg}
+\citation{vit2020Dosovitskiy}
 \citation{speechdataset2018warden}
 \citation{speechdataset2018warden}
-\citation{park2019specaugment}
-\citation{Abadi2016TensorFlowAS}
+\citation{speechdataset2018warden}
+\@writefile{toc}{\contentsline {subsection}{\numberline {\mbox  {II-B}}Models based on Attention}{2}\protected@file@percent }
 \@writefile{toc}{\contentsline {section}{\numberline {III}Experimental Setup}{2}\protected@file@percent }
 \@writefile{toc}{\contentsline {subsection}{\numberline {\mbox  {III-A}}Signals and Features}{2}\protected@file@percent }
 \newlabel{sec:sig&features}{{\mbox  {III-A}}{2}}
-\@writefile{toc}{\contentsline {subsection}{\numberline {\mbox  {III-B}}Input Pipeline}{2}\protected@file@percent }
-\newlabel{sec:processing_architecture}{{\mbox  {III-B}}{2}}
+\citation{park2019specaugment}
+\citation{Abadi2016TensorFlowAS}
 \bibdata{biblio}
 \bibcite{dnns2014chen}{1}
-\bibcite{convnns2015sainath}{2}
-\bibcite{streamingkws2020Rybakov}{3}
-\bibcite{deepreslearning2018tang}{4}
-\bibcite{mittermaier2020small}{5}
-\bibcite{choi2019temporal}{6}
-\bibcite{attentionisall2017vaswani}{7}
-\bibcite{vit2020Dosovitskiy}{8}
-\bibcite{touvron2021training}{9}
-\bibcite{gulati2020conformer}{10}
-\bibcite{kumar2021colorization}{11}
-\bibcite{Devlin2019BERTPO}{12}
-\bibcite{gdpr2017}{13}
-\bibcite{attention2018andreade}{14}
-\bibcite{kwtransformer2021berg}{15}
+\@writefile{toc}{\contentsline {subsection}{\numberline {\mbox  {III-B}}Input Pipeline}{3}\protected@file@percent }
+\newlabel{sec:processing_architecture}{{\mbox  {III-B}}{3}}
 \@writefile{lof}{\contentsline {figure}{\numberline {1}{\ignorespaces Detailed description of the system that generates the training data. In the cache block, the data that was produced until that moment is saved to file. Each step which is performed before the caching operation happens only one time, during the first iteration of the dataset; on all the successive iterations, the data is read from the cached file. For the validation and test sets, the augmentation is not applied. Furthermore, to ensure complete separation between training and validation/test sets, the noise samples were generated from different portions of the noise files based on whether they were used for training of for validation or testing.\relax }}{3}\protected@file@percent }
 \providecommand*\caption@xref[2]{\@setref\relax\@undefined{#1}}
 \newlabel{fig:inputpipeline}{{1}{3}}
@@ -69,16 +57,41 @@
 \newlabel{sec:learning_framework}{{\mbox  {III-C}}{3}}
 \@writefile{toc}{\contentsline {section}{\numberline {IV}Results}{3}\protected@file@percent }
 \newlabel{sec:results}{{IV}{3}}
-\@writefile{lot}{\contentsline {table}{\numberline {1}{\ignorespaces Table with results\relax }}{3}\protected@file@percent }
-\newlabel{table:results}{{1}{3}}
+\@writefile{toc}{\contentsline {subsection}{\numberline {\mbox  {IV-A}}Attention Plots}{3}\protected@file@percent }
 \@writefile{toc}{\contentsline {section}{\numberline {V}Concluding Remarks}{3}\protected@file@percent }
 \newlabel{sec:conclusions}{{V}{3}}
-\@writefile{toc}{\contentsline {section}{References}{3}\protected@file@percent }
-\bibcite{mfccs1980davis}{16}
-\bibcite{kim2021broadcasted}{17}
-\bibcite{hochreiter1997long}{18}
-\bibcite{Cho2014gru}{19}
-\bibcite{speechdataset2018warden}{20}
-\bibcite{park2019specaugment}{21}
-\bibcite{Abadi2016TensorFlowAS}{22}
+\bibcite{convnns2015sainath}{2}
+\bibcite{streamingkws2020Rybakov}{3}
+\bibcite{deepreslearning2018tang}{4}
+\bibcite{mittermaier2020small}{5}
+\bibcite{choi2019temporal}{6}
+\bibcite{attentionisall2017vaswani}{7}
+\newlabel{fig:sub1}{{2a}{4}}
+\newlabel{sub@fig:sub1}{{a}{4}}
+\newlabel{fig:sub2}{{2b}{4}}
+\newlabel{sub@fig:sub2}{{b}{4}}
+\@writefile{lof}{\contentsline {figure}{\numberline {2}{\ignorespaces A figure with two subfigures\relax }}{4}\protected@file@percent }
+\newlabel{fig:accs_vs_parameters}{{2}{4}}
+\@writefile{lot}{\contentsline {table}{\numberline {1}{\ignorespaces Table with results\relax }}{4}\protected@file@percent }
+\newlabel{table:results}{{1}{4}}
+\@writefile{toc}{\contentsline {section}{References}{4}\protected@file@percent }
+\@writefile{lof}{\contentsline {figure}{\numberline {3}{\ignorespaces Comparison between attention scores from Att-RNN model (left) and MHAtt-RNN with three heads (right), on the words \textit  {off}, \textit  {yes} and \textit  {no}. We can see that Att-RNN has only one head, so one set of attention scores per prediction is computed. MHAtt-RNN instead computes one set of attention weights per head: here we visualize the attention scores for each head. In these examples, we can see how each head learns to pay attention to different phonemes of the same word. In the first example, Att-RNN pays attention only to the first phoneme /{\fontencoding  {T3}\selectfont  o}/, while MHAtt-RNN has two heads paying attention to /o/ and one paying attention to /f/. In the second example, a similar thing happens: Att-RNN pays attention just at the /{\fontencoding  {T3}\selectfont  je}/ while MHAtt-RNN has different heads concentrating both on /{\fontencoding  {T3}\selectfont  je}/ and /{\fontencoding  {T3}\selectfont  s}/. The third example presents a noise at the beginning which is not part of the spoken word: Att-RNN has its attention drawn a bit, while two of three heads from MHAtt-RNN learn to completely ignore it.\relax }}{4}\protected@file@percent }
+\newlabel{fig:att_scores}{{3}{4}}
+\bibcite{vit2020Dosovitskiy}{8}
+\bibcite{touvron2021training}{9}
+\bibcite{gulati2020conformer}{10}
+\bibcite{kumar2021colorization}{11}
+\bibcite{Devlin2019BERTPO}{12}
+\bibcite{gdpr2017}{13}
+\bibcite{attention2018andreade}{14}
+\bibcite{mfccs1980davis}{15}
+\bibcite{kim2021broadcasted}{16}
+\bibcite{selfatt2016cheng}{17}
+\bibcite{luong2015effective}{18}
+\bibcite{hochreiter1997long}{19}
+\bibcite{Cho2014gru}{20}
+\bibcite{kwtransformer2021berg}{21}
+\bibcite{speechdataset2018warden}{22}
+\bibcite{park2019specaugment}{23}
+\bibcite{Abadi2016TensorFlowAS}{24}
 \bibstyle{ieeetr}

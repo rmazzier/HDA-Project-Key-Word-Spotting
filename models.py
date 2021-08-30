@@ -259,7 +259,7 @@ def attention_rnn_andreade_seq_query(ds, output_classes, model_suffix, mfccs=Tru
     # Recurrent Part
     X = layers.Lambda(lambda x : x[...,-1], name="squeeze_channel_dimension")(X)
     X = layers.Bidirectional(layers.GRU(units=64, return_sequences=True), name="BidirectionalGRU")(X)
-    # X = layers.Bidirectional(layers.GRU(units=64, return_sequences=True), name="BidirectionalGRU2")(X)
+    X = layers.Bidirectional(layers.GRU(units=64, return_sequences=True), name="BidirectionalGRU2")(X)
 
     # Self-Attention
 #     Q = layers.Dense(128)(last_out)
@@ -310,6 +310,50 @@ def andreade_seq_query_no_cnn(ds, output_classes, model_suffix, mfccs=True):
     att_model = tf.keras.Model(inputs = [X_input], outputs=[O,att_ws], name = "andreade_seq_query_no_CNN_"+model_suffix)
     return att_model
 
+def seq_query_mha_andreade(ds, output_classes, model_suffix, mfccs=True, n_heads=7, mha_encoding_dim=64, filter_w=5, filter_h=1):
+    for s, _ in ds.take(1):
+        input_shape = s.shape[1:]
+        print('Input shape:', input_shape)
+
+    X_input = tf.keras.Input(input_shape)
+
+    X = RandomNoiseAugment()(X_input)
+    if mfccs:
+        X = MFCC()(X)
+    else:
+        X = LogMelSpectrogram()(X)
+        X = layers.Lambda(lambda x : x[:,:,1:,:], name="remove_energies")(X)
+    
+    X = layers.BatchNormalization(axis=-1)(X)
+    X = SpecAugment()(X)
+    
+    # CNN part
+    X = layers.Conv2D(10, (filter_w, filter_h), padding='same')(X)
+    X = layers.BatchNormalization()(X)
+    X = layers.Activation("relu")(X)
+    X = layers.Conv2D(1, (filter_w, filter_h), padding='same')(X)
+    X = layers.BatchNormalization()(X)
+    X = layers.Activation("relu")(X)
+    
+    # Recurrent Part
+    X = layers.Lambda(lambda x : x[...,-1], name="squeeze_channel_dimension")(X)
+    X = layers.Bidirectional(layers.GRU(units=64, return_sequences=True), name="BidirectionalGRU")(X)
+    X = layers.Bidirectional(layers.GRU(units=64, return_sequences=True), name="BidirectionalGRU2")(X)
+    # last_out = layers.Lambda(lambda x: x[:,-1,:])(X)
+    
+    # Self-Multi-Headed Attention
+    Q = layers.Dense(128)(X)
+    # Q = layers.Lambda(lambda x: tf.expand_dims(x, 1))(Q)
+    weighted_seq, att_ws = layers.MultiHeadAttention(num_heads=n_heads, key_dim=mha_encoding_dim)(Q, X, return_attention_scores=True)
+
+    X = layers.Bidirectional(layers.GRU(units=32), name="BidirectionalGRU3")(weighted_seq)
+    # weighted_seq = layers.Lambda(lambda x: x[:,0,:])(weighted_seq)
+    O = layers.Dense(64, activation='relu')(X)
+    O = layers.Dense(len(output_classes), name="out_layer")(O)
+
+    att_model = tf.keras.Model(inputs = [X_input], outputs=[O,att_ws], name = "seq_query_mha_"+model_suffix)
+    return att_model
+
 
 def mha_andreade(ds, output_classes, model_suffix, mfccs=True, n_heads=7, mha_encoding_dim=64, filter_w=5, filter_h=1):
     for s, _ in ds.take(1):
@@ -339,7 +383,7 @@ def mha_andreade(ds, output_classes, model_suffix, mfccs=True, n_heads=7, mha_en
     # Recurrent Part
     X = layers.Lambda(lambda x : x[...,-1], name="squeeze_channel_dimension")(X)
     X = layers.Bidirectional(layers.GRU(units=64, return_sequences=True), name="BidirectionalGRU")(X)
-    # X = layers.Bidirectional(layers.GRU(units=64, return_sequences=True), name="BidirectionalGRU2")(X)
+    X = layers.Bidirectional(layers.GRU(units=64, return_sequences=True), name="BidirectionalGRU2")(X)
     last_out = layers.Lambda(lambda x: x[:,-1,:])(X)
     
     # Self-Multi-Headed Attention
@@ -348,9 +392,9 @@ def mha_andreade(ds, output_classes, model_suffix, mfccs=True, n_heads=7, mha_en
     Q = layers.Lambda(lambda x: tf.expand_dims(x, 1))(Q)
     weighted_seq, att_ws = layers.MultiHeadAttention(num_heads=n_heads, key_dim=mha_encoding_dim)(Q, X, return_attention_scores=True)
 
-    X = layers.Bidirectional(layers.GRU(units=32), name="BidirectionalGRU3")(weighted_seq)
-
-    O = layers.Dense(64, activation='relu')(X)
+    # X = layers.Bidirectional(layers.GRU(units=32), name="BidirectionalGRU3")(weighted_seq)
+    weighted_seq = layers.Lambda(lambda x: x[:,0,:])(weighted_seq)
+    O = layers.Dense(64, activation='relu')(weighted_seq)
     O = layers.Dense(len(output_classes), name="out_layer")(O)
 
     att_model = tf.keras.Model(inputs = [X_input], outputs=[O,att_ws], name = "mha_andreade_"+model_suffix)

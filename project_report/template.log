@@ -1,4 +1,4 @@
-This is pdfTeX, Version 3.14159265-2.6-1.40.20 (TeX Live 2019/Debian) (preloaded format=pdflatex 2021.7.28)  27 AUG 2021 21:05
+This is pdfTeX, Version 3.14159265-2.6-1.40.20 (TeX Live 2019/Debian) (preloaded format=pdflatex 2021.7.28)  30 AUG 2021 21:27
 entering extended mode
  restricted \write18 enabled.
  %&-line parsing enabled.
@@ -598,6 +598,22 @@ Package: kvsetkeys 2019/12/15 v1.18 Key value parser (HO)
 ))
 \c@dirtytalk@qdepth=\count304
 )
+(/usr/share/texmf/tex/latex/tipa/tipa.sty
+Package: tipa 2002/08/08 TIPA version 1.1
+
+(/usr/share/texlive/texmf-dist/tex/latex/base/fontenc.sty
+Package: fontenc 2020/02/11 v2.0o Standard LaTeX package
+
+(/usr/share/texmf/tex/latex/tipa/t3enc.def
+File: t3enc.def 2001/12/31 T3 encoding
+Now handling font encoding T3 ...
+... no UTF-8 mapping file for font encoding T3
+LaTeX Font Info:    Trying to load font information for OT1+phv on input line 3
+57.
+
+(/usr/share/texlive/texmf-dist/tex/latex/psnfss/ot1phv.fd
+File: ot1phv.fd 2001/06/04 scalable font definitions for OT1/phv.
+))))
 (/usr/share/texlive/texmf-dist/tex/latex/listings/listings.sty
 \lst@mode=\count305
 \lst@gtempboxa=\box64
@@ -653,25 +669,32 @@ File: lstlang3.sty 2019/09/10 1.8c listings language file
 (/usr/share/texlive/texmf-dist/tex/latex/listings/lstmisc.sty
 File: lstmisc.sty 2019/09/10 1.8c (Carsten Heinz)
 )
-** ATTENTION: Overriding command lockouts (line 105).
+** ATTENTION: Overriding command lockouts (line 106).
 \c@remark=\count313
 (./template.aux)
 \openout1 = `template.aux'.
 
-LaTeX Font Info:    Checking defaults for OML/cmm/m/it on input line 111.
-LaTeX Font Info:    ... okay on input line 111.
-LaTeX Font Info:    Checking defaults for OMS/cmsy/m/n on input line 111.
-LaTeX Font Info:    ... okay on input line 111.
-LaTeX Font Info:    Checking defaults for OT1/cmr/m/n on input line 111.
-LaTeX Font Info:    ... okay on input line 111.
-LaTeX Font Info:    Checking defaults for T1/cmr/m/n on input line 111.
-LaTeX Font Info:    ... okay on input line 111.
-LaTeX Font Info:    Checking defaults for TS1/cmr/m/n on input line 111.
-LaTeX Font Info:    ... okay on input line 111.
-LaTeX Font Info:    Checking defaults for OMX/cmex/m/n on input line 111.
-LaTeX Font Info:    ... okay on input line 111.
-LaTeX Font Info:    Checking defaults for U/cmr/m/n on input line 111.
-LaTeX Font Info:    ... okay on input line 111.
+LaTeX Font Info:    Checking defaults for OML/cmm/m/it on input line 112.
+LaTeX Font Info:    ... okay on input line 112.
+LaTeX Font Info:    Checking defaults for OMS/cmsy/m/n on input line 112.
+LaTeX Font Info:    ... okay on input line 112.
+LaTeX Font Info:    Checking defaults for OT1/cmr/m/n on input line 112.
+LaTeX Font Info:    ... okay on input line 112.
+LaTeX Font Info:    Checking defaults for T1/cmr/m/n on input line 112.
+LaTeX Font Info:    ... okay on input line 112.
+LaTeX Font Info:    Checking defaults for TS1/cmr/m/n on input line 112.
+LaTeX Font Info:    ... okay on input line 112.
+LaTeX Font Info:    Checking defaults for OMX/cmex/m/n on input line 112.
+LaTeX Font Info:    ... okay on input line 112.
+LaTeX Font Info:    Checking defaults for U/cmr/m/n on input line 112.
+LaTeX Font Info:    ... okay on input line 112.
+LaTeX Font Info:    Checking defaults for T3/cmr/m/n on input line 112.
+LaTeX Font Info:    Trying to load font information for T3+cmr on input line 11
+2.
+ (/usr/share/texmf/tex/latex/tipa/t3cmr.fd
+File: t3cmr.fd 2001/12/31 TIPA font definitions
+)
+LaTeX Font Info:    ... okay on input line 112.
 
 -- Lines per column: 56 (exact).
 (/usr/share/texlive/texmf-dist/tex/context/base/mkii/supp-pdf.mkii
@@ -701,32 +724,32 @@ Package caption Info: listings package is loaded.
 Package caption Info: End \AtBeginDocument code.
 \c@lstlisting=\count320
 
-Underfull \hbox (badness 1642) in paragraph at lines 120--123
+Underfull \hbox (badness 1642) in paragraph at lines 121--124
 \OT1/ptm/b/n/9 works, Re-cur-rent Neu-ral Net-works, At-ten-tion Mech-a-nism,
  []
 
-(./intro.tex) (./related.tex
-LaTeX Font Info:    Trying to load font information for U+msa on input line 12.
+(./intro.tex
+LaTeX Font Info:    Trying to load font information for U+msa on input line 21.
 
-
-(/usr/share/texlive/texmf-dist/tex/latex/amsfonts/umsa.fd
+ (/usr/share/texlive/texmf-dist/tex/latex/amsfonts/umsa.fd
 File: umsa.fd 2013/01/14 v3.01 AMS symbols A
 )
-LaTeX Font Info:    Trying to load font information for U+msb on input line 12.
+LaTeX Font Info:    Trying to load font information for U+msb on input line 21.
 
 
 (/usr/share/texlive/texmf-dist/tex/latex/amsfonts/umsb.fd
 File: umsb.fd 2013/01/14 v3.01 AMS symbols B
 )
-LaTeX Font Info:    Trying to load font information for U+rsfs on input line 12
+LaTeX Font Info:    Trying to load font information for U+rsfs on input line 21
 .
 
 (/usr/share/texlive/texmf-dist/tex/latex/jknapltx/ursfs.fd
 File: ursfs.fd 1998/03/24 rsfs font definition file (jk)
-)) [1{/var/lib/texmf/fonts/map/pdftex/updmap/pdftex.map}
+)) (./related.tex
+[1{/var/lib/texmf/fonts/map/pdftex/updmap/pdftex.map}
 
 
-] (./model.tex
+]) (./model.tex
 LaTeX Font Info:    Trying to load font information for OT1+pcr on input line 9
 .
 
@@ -738,13 +761,105 @@ File: imgs/input_pipeline_v3.pdf Graphic file (type pdf)
 <use imgs/input_pipeline_v3.pdf>
 Package pdftex.def Info: imgs/input_pipeline_v3.pdf  used on input line 51.
 (pdftex.def)             Requested size: 248.26675pt x 278.3355pt.
-) (./results.tex) (./conclusions.tex) (./template.bbl
-Underfull \hbox (badness 6236) in paragraph at lines 76--78
+
+
+LaTeX Warning: `h' float specifier changed to `ht'.
+
+) (./results.tex
+<imgs/size_vs_accuracy12.pdf, id=18, 722.7pt x 578.16pt>
+File: imgs/size_vs_accuracy12.pdf Graphic file (type pdf)
+<use imgs/size_vs_accuracy12.pdf>
+Package pdftex.def Info: imgs/size_vs_accuracy12.pdf  used on input line 28.
+(pdftex.def)             Requested size: 258.0pt x 206.3995pt.
+<imgs/size_vs_accuracy35.pdf, id=19, 722.7pt x 578.16pt>
+File: imgs/size_vs_accuracy35.pdf Graphic file (type pdf)
+<use imgs/size_vs_accuracy35.pdf>
+Package pdftex.def Info: imgs/size_vs_accuracy35.pdf  used on input line 34.
+(pdftex.def)             Requested size: 258.0pt x 206.3995pt.
+<imgs/att_scores12_23_andreade.pdf, id=20, 569.72847pt x 244.35605pt>
+File: imgs/att_scores12_23_andreade.pdf Graphic file (type pdf)
+<use imgs/att_scores12_23_andreade.pdf>
+Package pdftex.def Info: imgs/att_scores12_23_andreade.pdf  used on input line 
+78.
+(pdftex.def)             Requested size: 112.84712pt x 48.3968pt.
+<imgs/att_scores12_23.pdf, id=21, 569.72847pt x 244.35605pt>
+File: imgs/att_scores12_23.pdf Graphic file (type pdf)
+<use imgs/att_scores12_23.pdf>
+Package pdftex.def Info: imgs/att_scores12_23.pdf  used on input line 79.
+(pdftex.def)             Requested size: 112.84712pt x 48.3968pt.
+<imgs/att_scores12_42_andreade.pdf, id=22, 569.72847pt x 244.35605pt>
+File: imgs/att_scores12_42_andreade.pdf Graphic file (type pdf)
+<use imgs/att_scores12_42_andreade.pdf>
+Package pdftex.def Info: imgs/att_scores12_42_andreade.pdf  used on input line 
+80.
+(pdftex.def)             Requested size: 112.84712pt x 48.3968pt.
+<imgs/att_scores12_42.pdf, id=23, 569.72847pt x 244.35605pt>
+File: imgs/att_scores12_42.pdf Graphic file (type pdf)
+<use imgs/att_scores12_42.pdf>
+Package pdftex.def Info: imgs/att_scores12_42.pdf  used on input line 81.
+(pdftex.def)             Requested size: 112.84712pt x 48.3968pt.
+<imgs/att_scores12_72_andreade.pdf, id=24, 569.72847pt x 244.35605pt>
+File: imgs/att_scores12_72_andreade.pdf Graphic file (type pdf)
+<use imgs/att_scores12_72_andreade.pdf>
+Package pdftex.def Info: imgs/att_scores12_72_andreade.pdf  used on input line 
+82.
+(pdftex.def)             Requested size: 112.84712pt x 48.3968pt.
+<imgs/att_scores12_72.pdf, id=25, 569.72847pt x 244.35605pt>
+File: imgs/att_scores12_72.pdf Graphic file (type pdf)
+<use imgs/att_scores12_72.pdf>
+Package pdftex.def Info: imgs/att_scores12_72.pdf  used on input line 83.
+(pdftex.def)             Requested size: 112.84712pt x 48.3968pt.
+LaTeX Font Info:    Trying to load font information for T3+ptm on input line 85
+.
+ (/usr/share/texmf/tex/latex/tipa/t3ptm.fd
+File: t3ptm.fd 2001/12/31 TIPA font definitions
+)
+
+LaTeX Warning: `!h' float specifier changed to `!ht'.
+
+) (./conclusions.tex) (./template.bbl [3 <./imgs/input_pipeline_v3.pdf>]
+Underfull \vbox (badness 10000) has occurred while \output is active []
+
+ [4 <./imgs/size_vs_accuracy12.pdf> <./imgs/size_vs_accuracy35.pdf
+
+pdfTeX warning: /usr/bin/pdflatex (file ./imgs/size_vs_accuracy35.pdf): PDF inc
+lusion: multiple pdfs with page group included in a single page
+> <./imgs/att_scores12_23_andreade.pdf
+
+pdfTeX warning: /usr/bin/pdflatex (file ./imgs/att_scores12_23_andreade.pdf): P
+DF inclusion: multiple pdfs with page group included in a single page
+> <./imgs/att_scores12_23.pdf
+
+pdfTeX warning: /usr/bin/pdflatex (file ./imgs/att_scores12_23.pdf): PDF inclus
+ion: multiple pdfs with page group included in a single page
+> <./imgs/att_scores12_42_andreade.pdf
+
+pdfTeX warning: /usr/bin/pdflatex (file ./imgs/att_scores12_42_andreade.pdf): P
+DF inclusion: multiple pdfs with page group included in a single page
+> <./imgs/att_scores12_42.pdf
+
+pdfTeX warning: /usr/bin/pdflatex (file ./imgs/att_scores12_42.pdf): PDF inclus
+ion: multiple pdfs with page group included in a single page
+> <./imgs/att_scores12_72_andreade.pdf
+
+pdfTeX warning: /usr/bin/pdflatex (file ./imgs/att_scores12_72_andreade.pdf): P
+DF inclusion: multiple pdfs with page group included in a single page
+> <./imgs/att_scores12_72.pdf
+
+pdfTeX warning: /usr/bin/pdflatex (file ./imgs/att_scores12_72.pdf): PDF inclus
+ion: multiple pdfs with page group included in a single page
+>]
+Underfull \hbox (badness 4403) in paragraph at lines 90--93
+[]\OT1/ptm/m/n/8 M.-T. Lu-ong, H. Pham, and C. D. Man-ning, ``Ef-fec-tive ap-
+ []
+
+
+Underfull \hbox (badness 6236) in paragraph at lines 104--106
 \OT1/ptm/m/n/8 A self-attention model for key-word spot-ting,'' \OT1/ptm/m/it/8
  arXiv preprint
  []
 
-[3 <./imgs/input_pipeline_v3.pdf>])
+)
 
 ** Conference Paper **
 Before submitting the final camera ready copy, remember to:
@@ -756,30 +871,32 @@ Before submitting the final camera ready copy, remember to:
  uses only Type 1 fonts and that every step in the generation
  process uses the appropriate paper size.
 
-[4
+[5
 
 ] (./template.aux) ) 
 Here is how much of TeX's memory you used:
- 10920 strings out of 483065
- 163885 string characters out of 5963550
- 649210 words of memory out of 5000000
- 25700 multiletter control sequences out of 15000+600000
- 577355 words of font info for 119 fonts, out of 8000000 for 9000
+ 12083 strings out of 483065
+ 178319 string characters out of 5963550
+ 659093 words of memory out of 5000000
+ 26832 multiletter control sequences out of 15000+600000
+ 580027 words of font info for 123 fonts, out of 8000000 for 9000
  81 hyphenation exceptions out of 8191
- 59i,12n,122p,2569b,349s stack positions out of 5000i,500n,10000p,200000b,80000s
+ 59i,12n,122p,2302b,549s stack positions out of 5000i,500n,10000p,200000b,80000s
 {/usr/share/texlive/texmf-dist/fonts/enc/dvips/base/8r.enc}
 </usr/share/texlive/texmf-dist/fonts/type1/public/amsfonts/cm/cmbx10.pfb></usr/
 share/texlive/texmf-dist/fonts/type1/public/amsfonts/cm/cmmi10.pfb></usr/share/
 texlive/texmf-dist/fonts/type1/public/amsfonts/cm/cmr10.pfb></usr/share/texlive
-/texmf-dist/fonts/type1/public/amsfonts/cm/cmsy7.pfb></usr/share/texlive/texmf-
-dist/fonts/type1/urw/courier/ucrr8a.pfb></usr/share/texlive/texmf-dist/fonts/ty
-pe1/urw/times/utmb8a.pfb></usr/share/texlive/texmf-dist/fonts/type1/urw/times/u
-tmbi8a.pfb></usr/share/texlive/texmf-dist/fonts/type1/urw/times/utmr8a.pfb></us
-r/share/texlive/texmf-dist/fonts/type1/urw/times/utmri8a.pfb>
-Output written on template.pdf (4 pages, 583998 bytes).
+/texmf-dist/fonts/type1/public/amsfonts/cm/cmsy10.pfb></usr/share/texlive/texmf
+-dist/fonts/type1/public/amsfonts/cm/cmsy7.pfb></usr/share/texlive/texmf-dist/f
+onts/type1/urw/courier/ucrr8a.pfb></usr/share/texlive/texmf-dist/fonts/type1/ur
+w/times/utmb8a.pfb></usr/share/texlive/texmf-dist/fonts/type1/urw/times/utmbi8a
+.pfb></usr/share/texlive/texmf-dist/fonts/type1/urw/times/utmr8a.pfb></usr/shar
+e/texlive/texmf-dist/fonts/type1/urw/times/utmri8a.pfb></usr/share/texmf/fonts/
+type1/fkr/tipa/xipa10.pfb>
+Output written on template.pdf (5 pages, 1115837 bytes).
 PDF statistics:
- 136 PDF objects out of 1000 (max. 8388607)
- 88 compressed objects within 1 object stream
+ 385 PDF objects out of 1000 (max. 8388607)
+ 137 compressed objects within 2 object streams
  0 named destinations out of 1000 (max. 500000)
- 6 words of extra memory for PDF output out of 10000 (max. 10000000)
+ 46 words of extra memory for PDF output out of 10000 (max. 10000000)
 

@@ -18,6 +18,27 @@ In Table \ref{table:results} we report the different accuracies...
 %\begin{remark}
 %If your model has hyper-parameters, show selected results for several values of these. Usually, tables are a good approach to concisely visualize the performance as hyper-parameters change. It is also good to show the results for different flavors of the learning architecture, i.e., how architectural choices affect the overall performance. An example is the use of CNN only or CNN+RNN, or using inception for CNNs, dropout for better generalization or attention models. So you may obtain different models that solve the same problem, e.g., CNN, CNN+RNN, CNN+inception, etc.
 %\end{remark}
+
+In Figure \ref{fig:accs_vs_parameters} we plot the test set accuracy with their number of parameters, both for the 12KWS and 35KWS tasks.
+
+\begin{figure*}
+	\centering
+	\begin{subfigure}{.5\textwidth}
+		\centering
+		\includegraphics[width=\linewidth]{imgs/size_vs_accuracy12.pdf}
+		\caption{A subfigure}
+		\label{fig:sub1}
+	\end{subfigure}%
+	\begin{subfigure}{.5\textwidth}
+		\centering
+		\includegraphics[width=\linewidth]{imgs/size_vs_accuracy35.pdf}
+		\caption{A subfigure}
+		\label{fig:sub2}
+	\end{subfigure}
+	\caption{A figure with two subfigures}
+	\label{fig:accs_vs_parameters}
+\end{figure*}
+
 \begin{table}
 	\caption{Table with results}
 \begin{tabular}{lccc}
@@ -47,3 +68,21 @@ In Table \ref{table:results} we report the different accuracies...
 	\label{table:results}
 \end{tabular}
 \end{table}
+
+\subsection{Attention Plots}
+We can plot the attention scores for our models to see which portions of the audio files were catching the attention of the model... In Figure \ref{fig:att_scores} we can make a comparison between multi head and non multi head...
+
+\begin{figure}[h!]
+	\centering
+	\begin{tabular}{cc}
+		\includegraphics[width = 0.45\linewidth]{imgs/att_scores12_23_andreade.pdf} &
+		\includegraphics[width = 0.45\linewidth]{imgs/att_scores12_23.pdf}\\
+		\includegraphics[width = 0.45\linewidth]{imgs/att_scores12_42_andreade.pdf} &
+		\includegraphics[width = 0.45\linewidth]{imgs/att_scores12_42.pdf}\\
+		\includegraphics[width = 0.45\linewidth]{imgs/att_scores12_72_andreade.pdf} &
+		\includegraphics[width = 0.45\linewidth]{imgs/att_scores12_72.pdf}
+	\end{tabular}
+	\caption{Comparison between attention scores from  Att-RNN model (left) and MHAtt-RNN with three heads (right), on the words \textit{off}, \textit{yes} and \textit{no}. We can see that Att-RNN has only one head, so one set of attention scores per prediction is computed. MHAtt-RNN instead computes one set of attention weights per head: here we visualize the attention scores for each head. In these examples, we can see how each head learns to pay attention to different phonemes of the same word. In the first example, Att-RNN pays attention only to the first phoneme /\textipa{o}/, while MHAtt-RNN has two heads paying attention to /o/ and one paying attention to /f/. In the second example, a similar thing happens: Att-RNN pays attention just at the /\textipa{je}/ while MHAtt-RNN has different heads concentrating both on /\textipa{je}/ and /\textipa{s}/. The third example presents a noise at the beginning which is not part of the spoken word: Att-RNN has its attention drawn a bit, while two of three heads from MHAtt-RNN learn to completely ignore it.}
+	\label{fig:att_scores}
+\end{figure}
+

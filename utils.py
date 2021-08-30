@@ -99,3 +99,4 @@ def save_weights_and_results(model, history, current_task):
     
 def get_n_of_trainable_variables(model):
     return np.sum([np.prod(v.get_shape().as_list()) for v in model.trainable_variables])
+
