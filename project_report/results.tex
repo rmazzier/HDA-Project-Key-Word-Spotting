@@ -40,39 +40,38 @@ In Figure \ref{fig:accs_vs_parameters} we plot the test set accuracy with their 
 \end{figure*}
 
 \begin{table}
+
 	\caption{Table with results}
-\begin{tabular}{lccc}
-	
+
+\begin{tabular}{lccc}	
 	\hline 
-	Model & Param. & Mult. & Acc. \\
+	Model & Param. & Acc. 12kw & Acc. 35kw \\
 	\hline \hline
 	
-	res8-narrow[7] & $20 \mathrm{~K}$ & $5.65 \mathrm{M}$ & $90.1 \%$ \\
-	res15-narrow[7] & $43 \mathrm{~K}$ & $160 \mathrm{M}$ & $94.0 \%$ \\
-	res8[7] & $111 \mathrm{~K}$ & $30 \mathrm{M}$ & $94.1 \%$ \\
-	res15[7] & $239 \mathrm{~K}$ & $894 \mathrm{M}$ & $95.8 \%$ \\
+	\rule{0pt}{3ex}SimpleAtt & $84 \mathrm{~K}$ & $92.9 \%$ & $92.8 \%$ \\
+	Att-RNN & $180 \mathrm{~K}$& $94.7 \%$& $95.2 \%$ \\
 	\hline 
-	DS-CNN-S[5] & $24 \mathrm{~K}$ & $5.4 \mathrm{M}$ & $94.4 \%$ \\
-	DS-CNN-M[5] & $140 \mathrm{~K}$ & $19.8 \mathrm{M}$ & $94.9 \%$ \\
-	DS-CNN-L[5] & $420 \mathrm{~K}$ & $56.9 \mathrm{M}$ & $95.4 \%$ \\
-	\hline TC-ResNet8[8] & $66 \mathrm{~K}$ & $1.12 \mathrm{M}$ & $96.1 \%$ \\
-	TC-ResNet8-1.5[8] & $145 \mathrm{~K}$ & $2.20 \mathrm{M}$ & $96.2 \%$ \\
-	TC-ResNet14[8] & $137 \mathrm{~K}$ & $2.02 \mathrm{M}$ & $96.2 \%$ \\
-	TC-ResNet14-1.5[8] & $305 \mathrm{~K}$ & $4.13 \mathrm{M}$ & $\mathbf{9 6 . 6 \%}$ \\
-	\hline TENet6-narrow & $\mathbf{1 7 K}$ & $\mathbf{5 5 3 K}$ & $96.0 \%$ \\
-	TENet12-narrow & $31 \mathrm{~K}$ & $895 \mathrm{~K}$ & $96.3 \%$ \\
-	TENet6 & $54 \mathrm{~K}$ & $1.68 \mathrm{M}$ & $96.4 \%$ \\
-	TENet12 & $100 \mathrm{~K}$ & $2.90 \mathrm{M}$ & $\mathbf{9 6 . 6 \%}$ \\
+	\rule{0pt}{3ex}SQAtt-RNN & $169 \mathrm{~K}$  & $94.9 \%$& $94.6 \%$ \\
+	SQAtt-noCNN & $169 \mathrm{~K}$ & $94.8 \%$& $94.8 \%$ \\
+	\hline \rule{0pt}{3ex}MHAtt-RNN2 & $208 \mathrm{~K}$ & $95.1 \%$& $94.8 \%$ \\
+	MHAtt-RNN3 & $241 \mathrm{~K}$ & $95.2 \%$ & $95.3 \%$\\
+	MHAtt-RNN4 & $274 \mathrm{~K}$ & $ 94.4\%$& $95.3 \%$ \\
+	MHAtt-RNN5 & $307 \mathrm{~K}$ & $ 95.5\%$& $95.1 \%$ \\
+	\hline \rule{0pt}{3ex}SQMHAtt-RNN2 &$235 \mathrm{~K}$ & $95.3 \%$& $\mathbf{95.4} \%$ \\
+	SQMHAtt-RNN3 &$268 \mathrm{~K}$ & $95.4 \%$& $94.4 \%$ \\
+	SQMHAtt-RNN4& $301 \mathrm{~K}$ & $94.7 \%$& $94.3 \%$ \\
+	SQMHAtt-RNN5& $334 \mathrm{~K}$ & $\mathbf{95.7 \%}$& $95.0 \%$ \\
+	\hline \rule{0pt}{3ex}Res-AttRNN3 &$182 \mathrm{~K}$ & $95.1\%$& $94.6 \%$ \\
+	Res-AttRNN4& $183 \mathrm{~K}$ & $94.4 \%$& $94.7 \%$ \\
+	Res-AttRNN5& $184 \mathrm{~K}$ & $94.0\%$& $94.8 \%$ \\
 	\hline
 	
 	\label{table:results}
 \end{tabular}
 \end{table}
-
 \subsection{Attention Plots}
-We can plot the attention scores for our models to see which portions of the audio files were catching the attention of the model... In Figure \ref{fig:att_scores} we can make a comparison between multi head and non multi head...
-
-\begin{figure}[h!]
+As already mentioned, a really convenient feature of models based on attention is that it is easy to interpret them. Specifcally, we can plot the attention scores for our models to see which portions of the audio files were more important for the model in order to perform inference. In Figure \ref{fig:att_scores} we visualize log attention weights for Att-RNN and MHAtt-RNN3 models. 
+\begin{figure}
 	\centering
 	\begin{tabular}{cc}
 		\includegraphics[width = 0.45\linewidth]{imgs/att_scores12_23_andreade.pdf} &
@@ -82,7 +81,9 @@ We can plot the attention scores for our models to see which portions of the aud
 		\includegraphics[width = 0.45\linewidth]{imgs/att_scores12_72_andreade.pdf} &
 		\includegraphics[width = 0.45\linewidth]{imgs/att_scores12_72.pdf}
 	\end{tabular}
-	\caption{Comparison between attention scores from  Att-RNN model (left) and MHAtt-RNN with three heads (right), on the words \textit{off}, \textit{yes} and \textit{no}. We can see that Att-RNN has only one head, so one set of attention scores per prediction is computed. MHAtt-RNN instead computes one set of attention weights per head: here we visualize the attention scores for each head. In these examples, we can see how each head learns to pay attention to different phonemes of the same word. In the first example, Att-RNN pays attention only to the first phoneme /\textipa{o}/, while MHAtt-RNN has two heads paying attention to /o/ and one paying attention to /f/. In the second example, a similar thing happens: Att-RNN pays attention just at the /\textipa{je}/ while MHAtt-RNN has different heads concentrating both on /\textipa{je}/ and /\textipa{s}/. The third example presents a noise at the beginning which is not part of the spoken word: Att-RNN has its attention drawn a bit, while two of three heads from MHAtt-RNN learn to completely ignore it.}
+	\caption{Comparison between attention scores from  Att-RNN model (left) and MHAtt-RNN3 (right), on the words \textit{off}, \textit{yes} and \textit{no}. }
 	\label{fig:att_scores}
 \end{figure}
+We can see that Att-RNN has only one head, so one set of attention scores per prediction is computed. MHAtt-RNN instead computes one set of attention weights per head: here we visualize the attention scores for each head. In these examples, we can see how each head learns to pay attention to different phonemes of the same word. In the first example, Att-RNN pays attention only to the first phoneme /\textipa{o}/, while MHAtt-RNN has two heads paying attention to /o/ and one paying attention to /f/. In the second example, a similar thing happens: Att-RNN pays attention just at the phoneme /\textipa{je}/ while MHAtt-RNN has different heads concentrating both on /\textipa{je}/ and /\textipa{s}/. The third example presents a noise at the beginning which is not part of the spoken word: Att-RNN has its attention drawn a bit, while two of three heads from MHAtt-RNN learn to completely ignore it.
+
 

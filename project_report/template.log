@@ -1,4 +1,4 @@
-This is pdfTeX, Version 3.14159265-2.6-1.40.20 (TeX Live 2019/Debian) (preloaded format=pdflatex 2021.7.28)  30 AUG 2021 21:27
+This is pdfTeX, Version 3.14159265-2.6-1.40.20 (TeX Live 2019/Debian) (preloaded format=pdflatex 2021.7.28)  31 AUG 2021 17:53
 entering extended mode
  restricted \write18 enabled.
  %&-line parsing enabled.
@@ -614,6 +614,20 @@ LaTeX Font Info:    Trying to load font information for OT1+phv on input line 3
 (/usr/share/texlive/texmf-dist/tex/latex/psnfss/ot1phv.fd
 File: ot1phv.fd 2001/06/04 scalable font definitions for OT1/phv.
 ))))
+(/usr/share/texlive/texmf-dist/tex/latex/psnfss/pifont.sty
+Package: pifont 2005/04/12 PSNFSS-v9.2a Pi font support (SPQR) 
+LaTeX Font Info:    Trying to load font information for U+pzd on input line 63.
+
+
+(/usr/share/texlive/texmf-dist/tex/latex/psnfss/upzd.fd
+File: upzd.fd 2001/06/04 font definitions for U/pzd.
+)
+LaTeX Font Info:    Trying to load font information for U+psy on input line 64.
+
+
+(/usr/share/texlive/texmf-dist/tex/latex/psnfss/upsy.fd
+File: upsy.fd 2001/06/04 font definitions for U/psy.
+))
 (/usr/share/texlive/texmf-dist/tex/latex/listings/listings.sty
 \lst@mode=\count305
 \lst@gtempboxa=\box64
@@ -639,6 +653,132 @@ File: listings.cfg 2019/09/10 1.8c listings configuration
 ))
 Package: listings 2019/09/10 1.8c (Carsten Heinz)
 
+(/usr/share/texlive/texmf-dist/tex/latex/natbib/natbib.sty
+Package: natbib 2010/09/13 8.31b (PWD, AO)
+
+
+Package natbib Warning: The `cite' package should not be used
+(natbib)                with natbib. Use option `sort' instead.
+
+\bibhang=\skip74
+\bibsep=\skip75
+LaTeX Info: Redefining \cite on input line 694.
+LaTeX Info: Redefining \citenum on input line 708.
+\c@NAT@ctr=\count313
+) (/usr/share/texlive/texmf-dist/tex/latex/hyperref/hyperref.sty
+Package: hyperref 2020/01/14 v7.00d Hypertext links for LaTeX
+
+(/usr/share/texlive/texmf-dist/tex/generic/iftex/iftex.sty
+Package: iftex 2019/11/07 v1.0c TeX engine tests
+)
+(/usr/share/texlive/texmf-dist/tex/latex/pdftexcmds/pdftexcmds.sty
+Package: pdftexcmds 2019/11/24 v0.31 Utility functions of pdfTeX for LuaTeX (HO
+)
+
+(/usr/share/texlive/texmf-dist/tex/generic/infwarerr/infwarerr.sty
+Package: infwarerr 2019/12/03 v1.5 Providing info/warning/error messages (HO)
+)
+Package pdftexcmds Info: \pdf@primitive is available.
+Package pdftexcmds Info: \pdf@ifprimitive is available.
+Package pdftexcmds Info: \pdfdraftmode found.
+)
+(/usr/share/texlive/texmf-dist/tex/generic/kvdefinekeys/kvdefinekeys.sty
+Package: kvdefinekeys 2019-12-19 v1.6 Define keys (HO)
+)
+(/usr/share/texlive/texmf-dist/tex/generic/pdfescape/pdfescape.sty
+Package: pdfescape 2019/12/09 v1.15 Implements pdfTeX's escape features (HO)
+)
+(/usr/share/texlive/texmf-dist/tex/latex/hycolor/hycolor.sty
+Package: hycolor 2020-01-27 v1.10 Color options for hyperref/bookmark (HO)
+)
+(/usr/share/texlive/texmf-dist/tex/latex/letltxmacro/letltxmacro.sty
+Package: letltxmacro 2019/12/03 v1.6 Let assignment for LaTeX macros (HO)
+)
+(/usr/share/texlive/texmf-dist/tex/latex/auxhook/auxhook.sty
+Package: auxhook 2019-12-17 v1.6 Hooks for auxiliary files (HO)
+)
+\@linkdim=\dimen284
+\Hy@linkcounter=\count314
+\Hy@pagecounter=\count315
+
+(/usr/share/texlive/texmf-dist/tex/latex/hyperref/pd1enc.def
+File: pd1enc.def 2020/01/14 v7.00d Hyperref: PDFDocEncoding definition (HO)
+Now handling font encoding PD1 ...
+... no UTF-8 mapping file for font encoding PD1
+)
+(/usr/share/texlive/texmf-dist/tex/generic/intcalc/intcalc.sty
+Package: intcalc 2019/12/15 v1.3 Expandable calculations with integers (HO)
+)
+(/usr/share/texlive/texmf-dist/tex/generic/etexcmds/etexcmds.sty
+Package: etexcmds 2019/12/15 v1.7 Avoid name clashes with e-TeX commands (HO)
+)
+\Hy@SavedSpaceFactor=\count316
+\pdfmajorversion=\count317
+Package hyperref Info: Hyper figures OFF on input line 4547.
+Package hyperref Info: Link nesting OFF on input line 4552.
+Package hyperref Info: Hyper index ON on input line 4555.
+Package hyperref Info: Plain pages OFF on input line 4562.
+Package hyperref Info: Backreferencing OFF on input line 4567.
+Package hyperref Info: Implicit mode ON; LaTeX internals redefined.
+Package hyperref Info: Bookmarks ON on input line 4800.
+\c@Hy@tempcnt=\count318
+
+(/usr/share/texlive/texmf-dist/tex/latex/url/url.sty
+\Urlmuskip=\muskip22
+Package: url 2013/09/16  ver 3.4  Verb mode for urls, etc.
+)
+LaTeX Info: Redefining \url on input line 5159.
+\XeTeXLinkMargin=\dimen285
+
+(/usr/share/texlive/texmf-dist/tex/generic/bitset/bitset.sty
+Package: bitset 2019/12/09 v1.3 Handle bit-vector datatype (HO)
+
+(/usr/share/texlive/texmf-dist/tex/generic/bigintcalc/bigintcalc.sty
+Package: bigintcalc 2019/12/15 v1.5 Expandable calculations on big integers (HO
+)
+))
+\Fld@menulength=\count319
+\Field@Width=\dimen286
+\Fld@charsize=\dimen287
+Package hyperref Info: Hyper figures OFF on input line 6430.
+Package hyperref Info: Link nesting OFF on input line 6435.
+Package hyperref Info: Hyper index ON on input line 6438.
+Package hyperref Info: backreferencing OFF on input line 6445.
+Package hyperref Info: Link coloring OFF on input line 6450.
+Package hyperref Info: Link coloring with OCG OFF on input line 6455.
+Package hyperref Info: PDF/A mode OFF on input line 6460.
+LaTeX Info: Redefining \ref on input line 6500.
+LaTeX Info: Redefining \pageref on input line 6504.
+
+(/usr/share/texlive/texmf-dist/tex/generic/atbegshi/atbegshi.sty
+Package: atbegshi 2019/12/05 v1.19 At begin shipout hook (HO)
+)
+\Hy@abspage=\count320
+\c@Item=\count321
+\c@Hfootnote=\count322
+)
+Package hyperref Info: Driver (autodetected): hpdftex.
+
+(/usr/share/texlive/texmf-dist/tex/latex/hyperref/hpdftex.def
+File: hpdftex.def 2020/01/14 v7.00d Hyperref driver for pdfTeX
+
+(/usr/share/texlive/texmf-dist/tex/latex/atveryend/atveryend.sty
+Package: atveryend 2019-12-11 v1.11 Hooks at the very end of document (HO)
+)
+\Fld@listcount=\count323
+\c@bookmark@seq@number=\count324
+
+(/usr/share/texlive/texmf-dist/tex/latex/rerunfilecheck/rerunfilecheck.sty
+Package: rerunfilecheck 2019/12/05 v1.9 Rerun checks for auxiliary files (HO)
+
+(/usr/share/texlive/texmf-dist/tex/generic/uniquecounter/uniquecounter.sty
+Package: uniquecounter 2019/12/15 v1.4 Provide unlimited unique counter (HO)
+)
+Package uniquecounter Info: New unique counter `rerunfilecheck' on input line 2
+86.
+)
+\Hy@SectionHShift=\skip76
+)
 (/usr/share/texlive/texmf-dist/tex/latex/listings/lstlang1.sty
 File: lstlang1.sty 2019/09/10 1.8c listings language file
 )
@@ -669,46 +809,48 @@ File: lstlang3.sty 2019/09/10 1.8c listings language file
 (/usr/share/texlive/texmf-dist/tex/latex/listings/lstmisc.sty
 File: lstmisc.sty 2019/09/10 1.8c (Carsten Heinz)
 )
-** ATTENTION: Overriding command lockouts (line 106).
-\c@remark=\count313
+** ATTENTION: Overriding command lockouts (line 108).
+\c@remark=\count325
 (./template.aux)
 \openout1 = `template.aux'.
 
-LaTeX Font Info:    Checking defaults for OML/cmm/m/it on input line 112.
-LaTeX Font Info:    ... okay on input line 112.
-LaTeX Font Info:    Checking defaults for OMS/cmsy/m/n on input line 112.
-LaTeX Font Info:    ... okay on input line 112.
-LaTeX Font Info:    Checking defaults for OT1/cmr/m/n on input line 112.
-LaTeX Font Info:    ... okay on input line 112.
-LaTeX Font Info:    Checking defaults for T1/cmr/m/n on input line 112.
-LaTeX Font Info:    ... okay on input line 112.
-LaTeX Font Info:    Checking defaults for TS1/cmr/m/n on input line 112.
-LaTeX Font Info:    ... okay on input line 112.
-LaTeX Font Info:    Checking defaults for OMX/cmex/m/n on input line 112.
-LaTeX Font Info:    ... okay on input line 112.
-LaTeX Font Info:    Checking defaults for U/cmr/m/n on input line 112.
-LaTeX Font Info:    ... okay on input line 112.
-LaTeX Font Info:    Checking defaults for T3/cmr/m/n on input line 112.
+LaTeX Font Info:    Checking defaults for OML/cmm/m/it on input line 114.
+LaTeX Font Info:    ... okay on input line 114.
+LaTeX Font Info:    Checking defaults for OMS/cmsy/m/n on input line 114.
+LaTeX Font Info:    ... okay on input line 114.
+LaTeX Font Info:    Checking defaults for OT1/cmr/m/n on input line 114.
+LaTeX Font Info:    ... okay on input line 114.
+LaTeX Font Info:    Checking defaults for T1/cmr/m/n on input line 114.
+LaTeX Font Info:    ... okay on input line 114.
+LaTeX Font Info:    Checking defaults for TS1/cmr/m/n on input line 114.
+LaTeX Font Info:    ... okay on input line 114.
+LaTeX Font Info:    Checking defaults for OMX/cmex/m/n on input line 114.
+LaTeX Font Info:    ... okay on input line 114.
+LaTeX Font Info:    Checking defaults for U/cmr/m/n on input line 114.
+LaTeX Font Info:    ... okay on input line 114.
+LaTeX Font Info:    Checking defaults for T3/cmr/m/n on input line 114.
 LaTeX Font Info:    Trying to load font information for T3+cmr on input line 11
-2.
+4.
  (/usr/share/texmf/tex/latex/tipa/t3cmr.fd
 File: t3cmr.fd 2001/12/31 TIPA font definitions
 )
-LaTeX Font Info:    ... okay on input line 112.
+LaTeX Font Info:    ... okay on input line 114.
+LaTeX Font Info:    Checking defaults for PD1/pdf/m/n on input line 114.
+LaTeX Font Info:    ... okay on input line 114.
 
 -- Lines per column: 56 (exact).
 (/usr/share/texlive/texmf-dist/tex/context/base/mkii/supp-pdf.mkii
 [Loading MPS to PDF converter (version 2006.09.02).]
-\scratchcounter=\count314
-\scratchdimen=\dimen284
+\scratchcounter=\count326
+\scratchdimen=\dimen288
 \scratchbox=\box66
-\nofMPsegments=\count315
-\nofMParguments=\count316
+\nofMPsegments=\count327
+\nofMParguments=\count328
 \everyMPshowfont=\toks34
-\MPscratchCnt=\count317
-\MPscratchDim=\dimen285
-\MPnumerator=\count318
-\makeMPintoPDFobject=\count319
+\MPscratchCnt=\count329
+\MPscratchDim=\dimen289
+\MPnumerator=\count330
+\makeMPintoPDFobject=\count331
 \everyMPtoPDFconversion=\toks35
 ) (/usr/share/texlive/texmf-dist/tex/latex/epstopdf-pkg/epstopdf-base.sty
 Package: epstopdf-base 2020-01-24 v2.11 Base part for package epstopdf
@@ -720,11 +862,34 @@ File: epstopdf-sys.cfg 2010/07/13 v1.3 Configuration of (r)epstopdf for TeX Liv
 e
 ))
 Package caption Info: Begin \AtBeginDocument code.
+Package caption Info: hyperref package is loaded.
 Package caption Info: listings package is loaded.
 Package caption Info: End \AtBeginDocument code.
-\c@lstlisting=\count320
+\c@lstlisting=\count332
+\AtBeginShipoutBox=\box67
+Package hyperref Info: Link coloring OFF on input line 114.
 
-Underfull \hbox (badness 1642) in paragraph at lines 121--124
+(/usr/share/texlive/texmf-dist/tex/latex/hyperref/nameref.sty
+Package: nameref 2019/09/16 v2.46 Cross-referencing by name of section
+
+(/usr/share/texlive/texmf-dist/tex/latex/refcount/refcount.sty
+Package: refcount 2019/12/15 v3.6 Data extraction from label references (HO)
+)
+(/usr/share/texlive/texmf-dist/tex/generic/gettitlestring/gettitlestring.sty
+Package: gettitlestring 2019/12/15 v1.6 Cleanup title references (HO)
+)
+\c@section@level=\count333
+)
+LaTeX Info: Redefining \ref on input line 114.
+LaTeX Info: Redefining \pageref on input line 114.
+LaTeX Info: Redefining \nameref on input line 114.
+
+(./template.out) (./template.out)
+\@outlinefile=\write3
+\openout3 = `template.out'.
+
+
+Underfull \hbox (badness 1642) in paragraph at lines 123--126
 \OT1/ptm/b/n/9 works, Re-cur-rent Neu-ral Net-works, At-ten-tion Mech-a-nism,
  []
 
@@ -745,7 +910,13 @@ LaTeX Font Info:    Trying to load font information for U+rsfs on input line 21
 
 (/usr/share/texlive/texmf-dist/tex/latex/jknapltx/ursfs.fd
 File: ursfs.fd 1998/03/24 rsfs font definition file (jk)
-)) (./related.tex
+)
+<imgs/models_overview.pdf, id=80, 497.94029pt x 162.6075pt>
+File: imgs/models_overview.pdf Graphic file (type pdf)
+<use imgs/models_overview.pdf>
+Package pdftex.def Info: imgs/models_overview.pdf  used on input line 31.
+(pdftex.def)             Requested size: 516.0pt x 168.50488pt.
+) (./related.tex
 [1{/var/lib/texmf/fonts/map/pdftex/updmap/pdftex.map}
 
 
@@ -755,72 +926,82 @@ LaTeX Font Info:    Trying to load font information for OT1+pcr on input line 9
 
 (/usr/share/texlive/texmf-dist/tex/latex/psnfss/ot1pcr.fd
 File: ot1pcr.fd 2001/06/04 font definitions for OT1/pcr.
-) [2]
-<imgs/input_pipeline_v3.pdf, id=17, 646.33469pt x 724.62718pt>
+)
+Underfull \vbox (badness 10000) has occurred while \output is active []
+
+ [2 <./imgs/models_overview.pdf>]
+<imgs/input_pipeline_v3.pdf, id=158, 646.33469pt x 724.62718pt>
 File: imgs/input_pipeline_v3.pdf Graphic file (type pdf)
 <use imgs/input_pipeline_v3.pdf>
 Package pdftex.def Info: imgs/input_pipeline_v3.pdf  used on input line 51.
 (pdftex.def)             Requested size: 248.26675pt x 278.3355pt.
+ [3]
+Overfull \hbox (7.6729pt too wide) in paragraph at lines 72--81
+[][] 
+ []
 
 
-LaTeX Warning: `h' float specifier changed to `ht'.
+Overfull \hbox (13.63275pt too wide) in paragraph at lines 88--99
+[][] 
+ []
+
+
+Overfull \hbox (4.66585pt too wide) in paragraph at lines 107--119
+[][] 
+ []
 
 ) (./results.tex
-<imgs/size_vs_accuracy12.pdf, id=18, 722.7pt x 578.16pt>
+<imgs/size_vs_accuracy12.pdf, id=188, 722.7pt x 578.16pt>
 File: imgs/size_vs_accuracy12.pdf Graphic file (type pdf)
 <use imgs/size_vs_accuracy12.pdf>
 Package pdftex.def Info: imgs/size_vs_accuracy12.pdf  used on input line 28.
 (pdftex.def)             Requested size: 258.0pt x 206.3995pt.
-<imgs/size_vs_accuracy35.pdf, id=19, 722.7pt x 578.16pt>
+<imgs/size_vs_accuracy35.pdf, id=189, 722.7pt x 578.16pt>
 File: imgs/size_vs_accuracy35.pdf Graphic file (type pdf)
 <use imgs/size_vs_accuracy35.pdf>
 Package pdftex.def Info: imgs/size_vs_accuracy35.pdf  used on input line 34.
 (pdftex.def)             Requested size: 258.0pt x 206.3995pt.
-<imgs/att_scores12_23_andreade.pdf, id=20, 569.72847pt x 244.35605pt>
+<imgs/att_scores12_23_andreade.pdf, id=191, 569.72847pt x 244.35605pt>
 File: imgs/att_scores12_23_andreade.pdf Graphic file (type pdf)
 <use imgs/att_scores12_23_andreade.pdf>
 Package pdftex.def Info: imgs/att_scores12_23_andreade.pdf  used on input line 
-78.
+77.
 (pdftex.def)             Requested size: 112.84712pt x 48.3968pt.
-<imgs/att_scores12_23.pdf, id=21, 569.72847pt x 244.35605pt>
+<imgs/att_scores12_23.pdf, id=192, 569.72847pt x 244.35605pt>
 File: imgs/att_scores12_23.pdf Graphic file (type pdf)
 <use imgs/att_scores12_23.pdf>
-Package pdftex.def Info: imgs/att_scores12_23.pdf  used on input line 79.
+Package pdftex.def Info: imgs/att_scores12_23.pdf  used on input line 78.
 (pdftex.def)             Requested size: 112.84712pt x 48.3968pt.
-<imgs/att_scores12_42_andreade.pdf, id=22, 569.72847pt x 244.35605pt>
+<imgs/att_scores12_42_andreade.pdf, id=193, 569.72847pt x 244.35605pt>
 File: imgs/att_scores12_42_andreade.pdf Graphic file (type pdf)
 <use imgs/att_scores12_42_andreade.pdf>
 Package pdftex.def Info: imgs/att_scores12_42_andreade.pdf  used on input line 
-80.
+79.
 (pdftex.def)             Requested size: 112.84712pt x 48.3968pt.
-<imgs/att_scores12_42.pdf, id=23, 569.72847pt x 244.35605pt>
+<imgs/att_scores12_42.pdf, id=194, 569.72847pt x 244.35605pt>
 File: imgs/att_scores12_42.pdf Graphic file (type pdf)
 <use imgs/att_scores12_42.pdf>
-Package pdftex.def Info: imgs/att_scores12_42.pdf  used on input line 81.
+Package pdftex.def Info: imgs/att_scores12_42.pdf  used on input line 80.
 (pdftex.def)             Requested size: 112.84712pt x 48.3968pt.
-<imgs/att_scores12_72_andreade.pdf, id=24, 569.72847pt x 244.35605pt>
+<imgs/att_scores12_72_andreade.pdf, id=195, 569.72847pt x 244.35605pt>
 File: imgs/att_scores12_72_andreade.pdf Graphic file (type pdf)
 <use imgs/att_scores12_72_andreade.pdf>
 Package pdftex.def Info: imgs/att_scores12_72_andreade.pdf  used on input line 
-82.
+81.
 (pdftex.def)             Requested size: 112.84712pt x 48.3968pt.
-<imgs/att_scores12_72.pdf, id=25, 569.72847pt x 244.35605pt>
+<imgs/att_scores12_72.pdf, id=196, 569.72847pt x 244.35605pt>
 File: imgs/att_scores12_72.pdf Graphic file (type pdf)
 <use imgs/att_scores12_72.pdf>
-Package pdftex.def Info: imgs/att_scores12_72.pdf  used on input line 83.
+Package pdftex.def Info: imgs/att_scores12_72.pdf  used on input line 82.
 (pdftex.def)             Requested size: 112.84712pt x 48.3968pt.
-LaTeX Font Info:    Trying to load font information for T3+ptm on input line 85
+LaTeX Font Info:    Trying to load font information for T3+ptm on input line 87
 .
  (/usr/share/texmf/tex/latex/tipa/t3ptm.fd
 File: t3ptm.fd 2001/12/31 TIPA font definitions
-)
-
-LaTeX Warning: `!h' float specifier changed to `!ht'.
-
-) (./conclusions.tex) (./template.bbl [3 <./imgs/input_pipeline_v3.pdf>]
+) [4 <./imgs/input_pipeline_v3.pdf>]) (./conclusions.tex
 Underfull \vbox (badness 10000) has occurred while \output is active []
 
- [4 <./imgs/size_vs_accuracy12.pdf> <./imgs/size_vs_accuracy35.pdf
+ [5 <./imgs/size_vs_accuracy12.pdf> <./imgs/size_vs_accuracy35.pdf
 
 pdfTeX warning: /usr/bin/pdflatex (file ./imgs/size_vs_accuracy35.pdf): PDF inc
 lusion: multiple pdfs with page group included in a single page
@@ -848,15 +1029,19 @@ DF inclusion: multiple pdfs with page group included in a single page
 
 pdfTeX warning: /usr/bin/pdflatex (file ./imgs/att_scores12_72.pdf): PDF inclus
 ion: multiple pdfs with page group included in a single page
->]
-Underfull \hbox (badness 4403) in paragraph at lines 90--93
-[]\OT1/ptm/m/n/8 M.-T. Lu-ong, H. Pham, and C. D. Man-ning, ``Ef-fec-tive ap-
+>]) (./template.bbl
+Underfull \hbox (badness 2856) in paragraph at lines 23--28
+[]\OT1/ptm/m/n/10 S. Mit-ter-maier, L. K[]urzinger, B. Wasch-neck, and
  []
 
 
-Underfull \hbox (badness 6236) in paragraph at lines 104--106
-\OT1/ptm/m/n/8 A self-attention model for key-word spot-ting,'' \OT1/ptm/m/it/8
- arXiv preprint
+Underfull \hbox (badness 1681) in paragraph at lines 35--38
+[]\OT1/ptm/m/n/10 A. Vaswani, N. Shazeer, N. Par-mar, J. Uszko-r-eit,
+ []
+
+
+Underfull \hbox (badness 10000) in paragraph at lines 108--110
+[]\OT1/ptm/m/n/10 P. War-den, ``Speech com-mands: A dataset for
  []
 
 )
@@ -871,32 +1056,38 @@ Before submitting the final camera ready copy, remember to:
  uses only Type 1 fonts and that every step in the generation
  process uses the appropriate paper size.
 
-[5
-
-] (./template.aux) ) 
+Package atveryend Info: Empty hook `BeforeClearDocument' on input line 142.
+[6]
+Package atveryend Info: Empty hook `AfterLastShipout' on input line 142.
+ (./template.aux)
+Package atveryend Info: Executing hook `AtVeryEndDocument' on input line 142.
+Package atveryend Info: Executing hook `AtEndAfterFileList' on input line 142.
+Package rerunfilecheck Info: File `template.out' has not changed.
+(rerunfilecheck)             Checksum: 2142D469E9DFA38ACF092956E2BEF0A6;867.
+ ) 
 Here is how much of TeX's memory you used:
- 12083 strings out of 483065
- 178319 string characters out of 5963550
- 659093 words of memory out of 5000000
- 26832 multiletter control sequences out of 15000+600000
- 580027 words of font info for 123 fonts, out of 8000000 for 9000
+ 16137 strings out of 483065
+ 242070 string characters out of 5963550
+ 752640 words of memory out of 5000000
+ 30708 multiletter control sequences out of 15000+600000
+ 581813 words of font info for 126 fonts, out of 8000000 for 9000
  81 hyphenation exceptions out of 8191
- 59i,12n,122p,2302b,549s stack positions out of 5000i,500n,10000p,200000b,80000s
-{/usr/share/texlive/texmf-dist/fonts/enc/dvips/base/8r.enc}
-</usr/share/texlive/texmf-dist/fonts/type1/public/amsfonts/cm/cmbx10.pfb></usr/
-share/texlive/texmf-dist/fonts/type1/public/amsfonts/cm/cmmi10.pfb></usr/share/
-texlive/texmf-dist/fonts/type1/public/amsfonts/cm/cmr10.pfb></usr/share/texlive
-/texmf-dist/fonts/type1/public/amsfonts/cm/cmsy10.pfb></usr/share/texlive/texmf
--dist/fonts/type1/public/amsfonts/cm/cmsy7.pfb></usr/share/texlive/texmf-dist/f
-onts/type1/urw/courier/ucrr8a.pfb></usr/share/texlive/texmf-dist/fonts/type1/ur
-w/times/utmb8a.pfb></usr/share/texlive/texmf-dist/fonts/type1/urw/times/utmbi8a
-.pfb></usr/share/texlive/texmf-dist/fonts/type1/urw/times/utmr8a.pfb></usr/shar
-e/texlive/texmf-dist/fonts/type1/urw/times/utmri8a.pfb></usr/share/texmf/fonts/
-type1/fkr/tipa/xipa10.pfb>
-Output written on template.pdf (5 pages, 1115837 bytes).
+ 59i,13n,122p,1690b,557s stack positions out of 5000i,500n,10000p,200000b,80000s
+{/usr/share/texlive/texmf-dist/fonts/enc/dvips/base/8r.enc}</usr/share/texliv
+e/texmf-dist/fonts/type1/public/amsfonts/cm/cmbx10.pfb></usr/share/texlive/texm
+f-dist/fonts/type1/public/amsfonts/cm/cmmi10.pfb></usr/share/texlive/texmf-dist
+/fonts/type1/public/amsfonts/cm/cmr10.pfb></usr/share/texlive/texmf-dist/fonts/
+type1/public/amsfonts/cm/cmsy10.pfb></usr/share/texlive/texmf-dist/fonts/type1/
+public/amsfonts/cm/cmsy7.pfb></usr/share/texlive/texmf-dist/fonts/type1/urw/cou
+rier/ucrr8a.pfb></usr/share/texlive/texmf-dist/fonts/type1/urw/times/utmb8a.pfb
+></usr/share/texlive/texmf-dist/fonts/type1/urw/times/utmbi8a.pfb></usr/share/t
+exlive/texmf-dist/fonts/type1/urw/times/utmr8a.pfb></usr/share/texlive/texmf-di
+st/fonts/type1/urw/times/utmri8a.pfb></usr/share/texmf/fonts/type1/fkr/tipa/xip
+a10.pfb>
+Output written on template.pdf (6 pages, 1183129 bytes).
 PDF statistics:
- 385 PDF objects out of 1000 (max. 8388607)
- 137 compressed objects within 2 object streams
- 0 named destinations out of 1000 (max. 500000)
- 46 words of extra memory for PDF output out of 10000 (max. 10000000)
+ 585 PDF objects out of 1000 (max. 8388607)
+ 331 compressed objects within 4 object streams
+ 69 named destinations out of 1000 (max. 500000)
+ 163 words of extra memory for PDF output out of 10000 (max. 10000000)
 

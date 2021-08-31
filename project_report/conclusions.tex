@@ -4,6 +4,10 @@
 
 Concluding remarks bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla  
 
+This is not a complete way to evaluate a KWS model: one should also make streaming tests and analyzing the false reject rate... Also, for this project the models were trained just one time due to the limited computational capabilites; this fact makes the reported results not too statistically relevant. To perform a more rigorous statistical analysis, one should train the models more times and use an avarage of the test set accuracies among the runs, computing confidence intervals for the final accuracy.
+
+In conclusion, this was a very instructive project to work on: I had the opportunity to study a lot of modern machine learning literature and to understand more complex architectures based on the attention mechanism. I also think that this report \LaTeX template was extremely useful and well done, and it will surely be a very useful tool for the future. Besides the part involving the study of various papers, in my experience the most difficult part of this work was building a working input pipeline, both for technical reasons (due to the limitations of my hardware) and for the difficulty to find information online. While it is true that the Labs were extremely useful and essential, especially on the part regarding the \verb|tf.data.Dataset| API, while working on the project I often came across errors which were really hard to debug mostly because of my unawareness of how Tensorflow really works under the hood (see for example the difference between Graph execution and Eager execution). Besides this aspect, I think that the course gave me strong knowledge foundations in order to build a project like this.
+
 \label{sec:conclusions}
 %
 %\red{This section should take max half a page, I personally find it difficult to come up with really useful observations, I mean ones that bring a new contribution with respect to what you have already expounded in the ``Results'' section. In case you have some serious stuff to write, you may also extend the section to 3/4 of a page :-).}\\
