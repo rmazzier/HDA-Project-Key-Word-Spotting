@@ -387,8 +387,10 @@ def mha_andreade(ds, output_classes, model_suffix, mfccs=True, n_heads=7, mha_en
     last_out = layers.Lambda(lambda x: x[:,-1,:])(X)
     
     # Self-Multi-Headed Attention
-    Q = layers.Dense(128)(last_out)
-    # Q = layers.Dense(128)(X)
+    # Q = layers.Dense(128)(last_out)
+    Q = last_out
+
+
     Q = layers.Lambda(lambda x: tf.expand_dims(x, 1))(Q)
     weighted_seq, att_ws = layers.MultiHeadAttention(num_heads=n_heads, key_dim=mha_encoding_dim)(Q, X, return_attention_scores=True)
 

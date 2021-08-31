@@ -28,7 +28,7 @@ Figure \ref{fig:models_overview} shows a representation of the Att-RNN and one o
 
 \begin{figure*}
 	\centering
-	\includegraphics[width=\linewidth]{imgs/models_overview.pdf}
+	\includegraphics[width=0.9\linewidth]{imgs/models_overview.pdf}
 	\caption{Overview of Att-RNN model (baseline) and SQAtt-RNN. The input $x$ is a matrix, where the $i$-th row is the vector of MFCCs computed for the $i$-th time frame. In both models, the CNN block outputs an image where the number of timesteps is preserved: feature vectors at each timestep are used as the input sequence for the RNN block. In the Att-RNN model, the attention layer returns a single context vector which is used for classification. In SQAtt-RNN, we use the whole sequence coming from the RNN block as query vectors: this results in a new sequence which is supposed to be a representation of the previous one. One last Bidirectional RNN layer scans the sequence and returns a single output vector, which is used for classification.}
 	\label{fig:models_overview}
 \end{figure*}

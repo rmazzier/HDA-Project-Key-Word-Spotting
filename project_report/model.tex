@@ -61,14 +61,15 @@ Note that, in Phase 1, each operation is performed one sample at a time, while i
 \subsection{Learning Framework}
 \label{sec:learning_framework}
 
-We now describe each proposed architecture, mainly using summary tables. Note that each RNN layer is bidirectional, and each CNN layer uses batch normalization before passing through the activation function. Also, the first layers of each model are the preprocessing layers discussed in the previous section; here we don't report them as they are not part of the real model architecture. In the tables we report with $m$ the number of output classes, which differ depending on the type of task. Finally, we denote with \say{Attention} the attention layer used by Att-RNN, while with \say{QAttention} we mean the attention layer introduced for SQAtt-RNN.
+We now describe each proposed architecture, mainly using summary tables. Note that each RNN layer is bidirectional, each CNN layer uses stride $=(1,1)$, padding = \verb|same|, and uses batch normalization before passing through the activation function. Also, the first layers of each model are the preprocessing layers discussed in the previous section; here we don't report them as they are not part of the actual model architecture. In the tables we report with $m$ the number of output classes, which differ depending on the type of task. Finally, we denote with \say{Attention} the attention layer used by Att-RNN, while with \say{QAttention} we mean the attention layer introduced for SQAtt-RNN. For all multi-head attention layers, the projection dimension is set to $64$.
 
 \subsubsection{\textbf{SimpleAtt}}
 We propose this model as a baseline light weight model to see how its performances compare to more complex architectures. It's architecture is shown in Table \ref{tab:simpleatt_architecture}.
 
-\begin{table}[h]
-	\caption{Simple Attention RNN Architecture}
+\begin{table}[h!]
+	\caption{Simple Attention RNN architecture}
 	\label{tab:simpleatt_architecture}
+	\scalebox{0.9}{
 	\begin{tabular}{|c|c|c|c|c|c|c|}
 		\hline
 		layer type & $n$RNN & $n$MLP & $n$F & Fw & Fh & Act.    \\ \hline
@@ -77,14 +78,15 @@ We propose this model as a baseline light weight model to see how its performanc
 		Dense      &      & $128$  &    &    &    & ReLu    \\ \hline
 		Dense      &      & $64$   &    &    &    & ReLu    \\ \hline
 		Dense      &      & $m$  &    &    &    & Softmax \\ \hline
-	\end{tabular}
+	\end{tabular}}
 \end{table}
 \subsubsection{\textbf{Att-RNN}}
 The baseline model, from \cite{attention2018andreade}. Architecture is shown in Table \ref{tab:attrnn_architecture}.
 
-\begin{table}[h]
-	\caption{Att-RNN Architecture}
+\begin{table}[h!]
+	\caption{Att-RNN architecture}
 	\label{tab:attrnn_architecture}
+	\scalebox{0.9}{
 	\begin{tabular}{|c|c|c|c|c|c|c|}
 	\hline
 	layer type & $n$RNN & $n$MLP & $n$F & Fw & Fh & Act.    \\ \hline
@@ -95,15 +97,16 @@ The baseline model, from \cite{attention2018andreade}. Architecture is shown in 
 	Attention  &      &      &    &    &    &         \\ \hline
 	Dense      &      & $64$   &    &    &    & ReLu    \\ \hline
 	Dense      &      & $m$  &    &    &    & Softmax \\ \hline
-\end{tabular}
+\end{tabular}}
 \end{table}
 
 \subsubsection{\textbf{SQAtt-RNN}}
 Simple variation of Att-RNN, where the attention layer is modified in order return a new sequence. The idea is that the new returned sequence will constitute a richer representation of the input sequence. Architecture is shown in Table \ref{tab:sqattrnn_architecture}.
 
-\begin{table}[h]
-		\caption{SQAtt-RNN Architecture}
+\begin{table}[h!]
+		\caption{SQAtt-RNN architecture}
 	\label{tab:sqattrnn_architecture}
+	\scalebox{0.9}{
 	\begin{tabular}{|c|c|c|c|c|c|c|}
 		\hline
 		layer type & nRNN & nMLP & nF & Fw & Fh & Act.    \\ \hline
@@ -115,11 +118,69 @@ Simple variation of Att-RNN, where the attention layer is modified in order retu
 		RNN (GRU)  & 64   &      &    &    &    & tanh    \\ \hline
 		Dense      &      & 64   &    &    &    & ReLu    \\ \hline
 		Dense      &      & $m$  &    &    &    & Softmax \\ \hline
-	\end{tabular}
+	\end{tabular}}
+\end{table}
+
+\subsubsection{\textbf{SQ-noCNN}}
+Simple variation of SQAtt-RNN, where we completely omit the CNN block. This is done to investigate the impact of the initial feature extraction phase performed by the Convolutional layers. In this way, the input to the RNN block is the raw feature matrix.
+
+\subsubsection{\textbf{MHAtt-RNN}}
+Variation of Att-RNN, proposed in \cite{streamingkws2020Rybakov}. We train different versions of this architecture, varying the number of heads. Architecture is shown in Table \ref{tab:mhattrnn_architecture}.
+
+\begin{table}[h!]
+	\centering
+	\caption{MHAtt-RNN$h$ architecture, where $h$ is the number of heads for the MH Attention layer.}
+	\label{tab:mhattrnn_architecture}
+	\scalebox{0.9}{
+	\begin{tabular}{|c|c|c|c|c|c|c|}
+		\hline
+		layer type   & $n$RNN & $n$MLP & $n$F & Fw  & Fh  & Act.     \\ \hline
+		Conv         &        &        & $10$ & $5$ & $1$ & ReLu             \\ \hline
+		Conv         &        &        & $1$  & $5$ & $1$ & ReLu              \\ \hline
+		RNN (GRU)    & $128$  &        &      &     &     & tanh              \\ \hline
+		RNN (GRU)    & $128$  &        &      &     &     & tanh              \\ \hline
+		MHAttention &        &        &      &     &     &               \\ \hline
+
+		Dense        &        & $64$   &      &     &     & ReLu             \\ \hline
+		Dense        &        & $m$    &      &     &     & Softmax          \\ \hline
+	\end{tabular}}
+\end{table}
+
+\subsubsection{\textbf{SQMHAtt-RNN}}
+Variation of MHAtt-RNN, where we use the whole sequence as query vectors in the same way it is done in SQAtt-RNN.
+
+\subsubsection{\textbf{Res-Att}}
+Variation of Att-RNN where we use a deeper CNN block, constituted of residual layers.  We train different versions of this architecture, varying the number of resdual blocks used. The residual block is shown in Figure. We report the whole architecture in Table \ref{tab:resatt_architecture}. 
+
+\begin{figure}
+	\centering
+	\includegraphics[width=0.9\linewidth]{imgs/residual_block.pdf}
+	\label{fig:resblock}
+	\caption{Architecture for the residual block used in the Res-Att model.}
+\end{figure}
+
+\begin{table}[h!]
+	\centering
+	\caption{Res-Att$k$ architecture, where $k$ is the number of residual blocks.}
+	\label{tab:resatt_architecture}
+	\scalebox{0.9}{
+	\begin{tabular}{|c|c|c|c|c|c|c|}
+		\hline
+		layer type            & $n$RNN & $n$MLP & $n$F & Fw  & Fh  & Act.    \\ \hline
+		Conv                  &        &        & $5$  & $5$ & $1$ & ReLu    \\ \hline
+		ResBlock ($\times k$) &        &        &      &     &     &         \\ \hline
+		Conv                  &        &        & $1$  & $5$ & $1$ & ReLu    \\ \hline
+		AvgPool $(2,1)$       &        &        &      &     &     &         \\ \hline
+		RNN (GRU)             & $128$  &        &      &     &     & tanh    \\ \hline
+		RNN (GRU)             & $128$  &        &      &     &     & tanh    \\ \hline
+		Attention             &        &        &      &     &     &         \\ \hline
+		Dense                 &        & $64$   &      &     &     & ReLu    \\ \hline
+		Dense                 &        & $m$    &      &     &     & Softmax \\ \hline
+	\end{tabular}}
 \end{table}
 
 
-Each model was trained for 30 epochs, using early stopping and reduce lr on plateau %TODO: spiegare bene
+Each model was trained for 30 epochs, using the Adam optimizer with a starting learning rate of $0.001$. To learn as much as possible, in the case where after 2 epochs the validation loss didn't improve, the learning rate was reduced of a factor of $0.1$.
 
 %Here you finally describe the learning strategy / algorithm that you conceived and used to solve the problem at stake. A good diagram to exemplify how learning is carried out is often very useful. In this section, you should describe the learning model, its parameters, any optimization over a given parameter set, etc. You can organize this section into \mbox{sub-sections}. You are free to choose the most appropriate structure.
 %

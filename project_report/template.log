@@ -1,4 +1,4 @@
-This is pdfTeX, Version 3.14159265-2.6-1.40.20 (TeX Live 2019/Debian) (preloaded format=pdflatex 2021.7.28)  31 AUG 2021 17:53
+This is pdfTeX, Version 3.14159265-2.6-1.40.20 (TeX Live 2019/Debian) (preloaded format=pdflatex 2021.7.28)  31 AUG 2021 23:09
 entering extended mode
  restricted \write18 enabled.
  %&-line parsing enabled.
@@ -889,7 +889,7 @@ LaTeX Info: Redefining \nameref on input line 114.
 \openout3 = `template.out'.
 
 
-Underfull \hbox (badness 1642) in paragraph at lines 123--126
+Underfull \hbox (badness 1642) in paragraph at lines 124--127
 \OT1/ptm/b/n/9 works, Re-cur-rent Neu-ral Net-works, At-ten-tion Mech-a-nism,
  []
 
@@ -911,105 +911,119 @@ LaTeX Font Info:    Trying to load font information for U+rsfs on input line 21
 (/usr/share/texlive/texmf-dist/tex/latex/jknapltx/ursfs.fd
 File: ursfs.fd 1998/03/24 rsfs font definition file (jk)
 )
-<imgs/models_overview.pdf, id=80, 497.94029pt x 162.6075pt>
+<imgs/models_overview.pdf, id=97, 497.94029pt x 162.6075pt>
 File: imgs/models_overview.pdf Graphic file (type pdf)
 <use imgs/models_overview.pdf>
 Package pdftex.def Info: imgs/models_overview.pdf  used on input line 31.
-(pdftex.def)             Requested size: 516.0pt x 168.50488pt.
+(pdftex.def)             Requested size: 464.39685pt x 151.65265pt.
 ) (./related.tex
 [1{/var/lib/texmf/fonts/map/pdftex/updmap/pdftex.map}
 
 
-]) (./model.tex
+]) [2 <./imgs/models_overview.pdf>] (./model.tex
 LaTeX Font Info:    Trying to load font information for OT1+pcr on input line 9
 .
 
 (/usr/share/texlive/texmf-dist/tex/latex/psnfss/ot1pcr.fd
 File: ot1pcr.fd 2001/06/04 font definitions for OT1/pcr.
-)
-Underfull \vbox (badness 10000) has occurred while \output is active []
-
- [2 <./imgs/models_overview.pdf>]
-<imgs/input_pipeline_v3.pdf, id=158, 646.33469pt x 724.62718pt>
+) [3]
+<imgs/input_pipeline_v3.pdf, id=198, 646.33469pt x 724.62718pt>
 File: imgs/input_pipeline_v3.pdf Graphic file (type pdf)
 <use imgs/input_pipeline_v3.pdf>
 Package pdftex.def Info: imgs/input_pipeline_v3.pdf  used on input line 51.
 (pdftex.def)             Requested size: 248.26675pt x 278.3355pt.
- [3]
-Overfull \hbox (7.6729pt too wide) in paragraph at lines 72--81
-[][] 
- []
 
 
-Overfull \hbox (13.63275pt too wide) in paragraph at lines 88--99
-[][] 
- []
+LaTeX Warning: `!h' float specifier changed to `!ht'.
 
 
-Overfull \hbox (4.66585pt too wide) in paragraph at lines 107--119
-[][] 
- []
+LaTeX Warning: `!h' float specifier changed to `!ht'.
 
+[4 <./imgs/input_pipeline_v3.pdf>]
+<imgs/residual_block.pdf, id=295, 207.65579pt x 116.35469pt>
+File: imgs/residual_block.pdf Graphic file (type pdf)
+<use imgs/residual_block.pdf>
+Package pdftex.def Info: imgs/residual_block.pdf  used on input line 157.
+(pdftex.def)             Requested size: 225.69426pt x 126.47078pt.
 ) (./results.tex
-<imgs/size_vs_accuracy12.pdf, id=188, 722.7pt x 578.16pt>
-File: imgs/size_vs_accuracy12.pdf Graphic file (type pdf)
-<use imgs/size_vs_accuracy12.pdf>
-Package pdftex.def Info: imgs/size_vs_accuracy12.pdf  used on input line 28.
-(pdftex.def)             Requested size: 258.0pt x 206.3995pt.
-<imgs/size_vs_accuracy35.pdf, id=189, 722.7pt x 578.16pt>
-File: imgs/size_vs_accuracy35.pdf Graphic file (type pdf)
-<use imgs/size_vs_accuracy35.pdf>
-Package pdftex.def Info: imgs/size_vs_accuracy35.pdf  used on input line 34.
-(pdftex.def)             Requested size: 258.0pt x 206.3995pt.
-<imgs/att_scores12_23_andreade.pdf, id=191, 569.72847pt x 244.35605pt>
+<imgs/SQMHAtt5_12kws.pdf, id=299, 1445.4pt x 1084.05pt>
+File: imgs/SQMHAtt5_12kws.pdf Graphic file (type pdf)
+<use imgs/SQMHAtt5_12kws.pdf>
+Package pdftex.def Info: imgs/SQMHAtt5_12kws.pdf  used on input line 14.
+(pdftex.def)             Requested size: 412.80157pt x 309.60257pt.
+<imgs/SQMHAtt2_35kws.pdf, id=300, 1445.4pt x 1084.05pt>
+File: imgs/SQMHAtt2_35kws.pdf Graphic file (type pdf)
+<use imgs/SQMHAtt2_35kws.pdf>
+Package pdftex.def Info: imgs/SQMHAtt2_35kws.pdf  used on input line 21.
+(pdftex.def)             Requested size: 412.80157pt x 309.60257pt.
+LaTeX Font Info:    Trying to load font information for T3+ptm on input line 22
+.
+
+(/usr/share/texmf/tex/latex/tipa/t3ptm.fd
+File: t3ptm.fd 2001/12/31 TIPA font definitions
+)
+
+LaTeX Warning: Float too large for page by 52.80518pt on input line 25.
+
+<imgs/att_scores12_23_andreade.pdf, id=303, 569.72847pt x 244.35605pt>
 File: imgs/att_scores12_23_andreade.pdf Graphic file (type pdf)
 <use imgs/att_scores12_23_andreade.pdf>
 Package pdftex.def Info: imgs/att_scores12_23_andreade.pdf  used on input line 
-77.
+32.
 (pdftex.def)             Requested size: 112.84712pt x 48.3968pt.
-<imgs/att_scores12_23.pdf, id=192, 569.72847pt x 244.35605pt>
+<imgs/att_scores12_23.pdf, id=304, 569.72847pt x 244.35605pt>
 File: imgs/att_scores12_23.pdf Graphic file (type pdf)
 <use imgs/att_scores12_23.pdf>
-Package pdftex.def Info: imgs/att_scores12_23.pdf  used on input line 78.
+Package pdftex.def Info: imgs/att_scores12_23.pdf  used on input line 33.
 (pdftex.def)             Requested size: 112.84712pt x 48.3968pt.
-<imgs/att_scores12_42_andreade.pdf, id=193, 569.72847pt x 244.35605pt>
+<imgs/att_scores12_42_andreade.pdf, id=305, 569.72847pt x 244.35605pt>
 File: imgs/att_scores12_42_andreade.pdf Graphic file (type pdf)
 <use imgs/att_scores12_42_andreade.pdf>
 Package pdftex.def Info: imgs/att_scores12_42_andreade.pdf  used on input line 
-79.
+34.
 (pdftex.def)             Requested size: 112.84712pt x 48.3968pt.
-<imgs/att_scores12_42.pdf, id=194, 569.72847pt x 244.35605pt>
+<imgs/att_scores12_42.pdf, id=306, 569.72847pt x 244.35605pt>
 File: imgs/att_scores12_42.pdf Graphic file (type pdf)
 <use imgs/att_scores12_42.pdf>
-Package pdftex.def Info: imgs/att_scores12_42.pdf  used on input line 80.
+Package pdftex.def Info: imgs/att_scores12_42.pdf  used on input line 35.
 (pdftex.def)             Requested size: 112.84712pt x 48.3968pt.
-<imgs/att_scores12_72_andreade.pdf, id=195, 569.72847pt x 244.35605pt>
+<imgs/att_scores12_72_andreade.pdf, id=307, 569.72847pt x 244.35605pt>
 File: imgs/att_scores12_72_andreade.pdf Graphic file (type pdf)
 <use imgs/att_scores12_72_andreade.pdf>
 Package pdftex.def Info: imgs/att_scores12_72_andreade.pdf  used on input line 
-81.
+36.
 (pdftex.def)             Requested size: 112.84712pt x 48.3968pt.
-<imgs/att_scores12_72.pdf, id=196, 569.72847pt x 244.35605pt>
+<imgs/att_scores12_72.pdf, id=308, 569.72847pt x 244.35605pt>
 File: imgs/att_scores12_72.pdf Graphic file (type pdf)
 <use imgs/att_scores12_72.pdf>
-Package pdftex.def Info: imgs/att_scores12_72.pdf  used on input line 82.
+Package pdftex.def Info: imgs/att_scores12_72.pdf  used on input line 37.
 (pdftex.def)             Requested size: 112.84712pt x 48.3968pt.
-LaTeX Font Info:    Trying to load font information for T3+ptm on input line 87
-.
- (/usr/share/texmf/tex/latex/tipa/t3ptm.fd
-File: t3ptm.fd 2001/12/31 TIPA font definitions
-) [4 <./imgs/input_pipeline_v3.pdf>]) (./conclusions.tex
-Underfull \vbox (badness 10000) has occurred while \output is active []
+<imgs/size_vs_accuracy12.pdf, id=309, 722.7pt x 578.16pt>
+File: imgs/size_vs_accuracy12.pdf Graphic file (type pdf)
+<use imgs/size_vs_accuracy12.pdf>
+Package pdftex.def Info: imgs/size_vs_accuracy12.pdf  used on input line 47.
+(pdftex.def)             Requested size: 258.0pt x 206.3995pt.
+<imgs/size_vs_accuracy35.pdf, id=310, 722.7pt x 578.16pt>
+File: imgs/size_vs_accuracy35.pdf Graphic file (type pdf)
+<use imgs/size_vs_accuracy35.pdf>
+Package pdftex.def Info: imgs/size_vs_accuracy35.pdf  used on input line 53.
+(pdftex.def)             Requested size: 258.0pt x 206.3995pt.
+[5 <./imgs/residual_block.pdf>] [6 <./imgs/SQMHAtt5_12kws.pdf> <./imgs/SQMHAtt2
+_35kws.pdf
 
- [5 <./imgs/size_vs_accuracy12.pdf> <./imgs/size_vs_accuracy35.pdf
+pdfTeX warning: /usr/bin/pdflatex (file ./imgs/SQMHAtt2_35kws.pdf): PDF inclusi
+on: multiple pdfs with page group included in a single page
+>]) (./conclusions.tex) (./template.bbl
+Underfull \hbox (badness 2856) in paragraph at lines 23--28
+[]\OT1/ptm/m/n/10 S. Mit-ter-maier, L. K[]urzinger, B. Wasch-neck, and
+ []
 
-pdfTeX warning: /usr/bin/pdflatex (file ./imgs/size_vs_accuracy35.pdf): PDF inc
-lusion: multiple pdfs with page group included in a single page
-> <./imgs/att_scores12_23_andreade.pdf
 
-pdfTeX warning: /usr/bin/pdflatex (file ./imgs/att_scores12_23_andreade.pdf): P
-DF inclusion: multiple pdfs with page group included in a single page
-> <./imgs/att_scores12_23.pdf
+Underfull \hbox (badness 1681) in paragraph at lines 35--38
+[]\OT1/ptm/m/n/10 A. Vaswani, N. Shazeer, N. Par-mar, J. Uszko-r-eit,
+ []
+
+[7 <./imgs/att_scores12_23_andreade.pdf> <./imgs/att_scores12_23.pdf
 
 pdfTeX warning: /usr/bin/pdflatex (file ./imgs/att_scores12_23.pdf): PDF inclus
 ion: multiple pdfs with page group included in a single page
@@ -1029,15 +1043,8 @@ DF inclusion: multiple pdfs with page group included in a single page
 
 pdfTeX warning: /usr/bin/pdflatex (file ./imgs/att_scores12_72.pdf): PDF inclus
 ion: multiple pdfs with page group included in a single page
->]) (./template.bbl
-Underfull \hbox (badness 2856) in paragraph at lines 23--28
-[]\OT1/ptm/m/n/10 S. Mit-ter-maier, L. K[]urzinger, B. Wasch-neck, and
- []
-
-
-Underfull \hbox (badness 1681) in paragraph at lines 35--38
-[]\OT1/ptm/m/n/10 A. Vaswani, N. Shazeer, N. Par-mar, J. Uszko-r-eit,
- []
+>]
+Underfull \vbox (badness 10000) has occurred while \output is active []
 
 
 Underfull \hbox (badness 10000) in paragraph at lines 108--110
@@ -1056,23 +1063,27 @@ Before submitting the final camera ready copy, remember to:
  uses only Type 1 fonts and that every step in the generation
  process uses the appropriate paper size.
 
-Package atveryend Info: Empty hook `BeforeClearDocument' on input line 142.
-[6]
-Package atveryend Info: Empty hook `AfterLastShipout' on input line 142.
+Package atveryend Info: Empty hook `BeforeClearDocument' on input line 143.
+[8 <./imgs/size_vs_accuracy12.pdf> <./imgs/size_vs_accuracy35.pdf
+
+pdfTeX warning: /usr/bin/pdflatex (file ./imgs/size_vs_accuracy35.pdf): PDF inc
+lusion: multiple pdfs with page group included in a single page
+>]
+Package atveryend Info: Empty hook `AfterLastShipout' on input line 143.
  (./template.aux)
-Package atveryend Info: Executing hook `AtVeryEndDocument' on input line 142.
-Package atveryend Info: Executing hook `AtEndAfterFileList' on input line 142.
+Package atveryend Info: Executing hook `AtVeryEndDocument' on input line 143.
+Package atveryend Info: Executing hook `AtEndAfterFileList' on input line 143.
 Package rerunfilecheck Info: File `template.out' has not changed.
-(rerunfilecheck)             Checksum: 2142D469E9DFA38ACF092956E2BEF0A6;867.
+(rerunfilecheck)             Checksum: 3C821F55B1D5D50D4E709BDAFBC8B97F;1142.
  ) 
 Here is how much of TeX's memory you used:
- 16137 strings out of 483065
- 242070 string characters out of 5963550
+ 16174 strings out of 483065
+ 242921 string characters out of 5963550
  752640 words of memory out of 5000000
- 30708 multiletter control sequences out of 15000+600000
- 581813 words of font info for 126 fonts, out of 8000000 for 9000
+ 30731 multiletter control sequences out of 15000+600000
+ 583408 words of font info for 128 fonts, out of 8000000 for 9000
  81 hyphenation exceptions out of 8191
- 59i,13n,122p,1690b,557s stack positions out of 5000i,500n,10000p,200000b,80000s
+ 59i,12n,122p,1690b,623s stack positions out of 5000i,500n,10000p,200000b,80000s
 {/usr/share/texlive/texmf-dist/fonts/enc/dvips/base/8r.enc}</usr/share/texliv
 e/texmf-dist/fonts/type1/public/amsfonts/cm/cmbx10.pfb></usr/share/texlive/texm
 f-dist/fonts/type1/public/amsfonts/cm/cmmi10.pfb></usr/share/texlive/texmf-dist
@@ -1084,10 +1095,10 @@ rier/ucrr8a.pfb></usr/share/texlive/texmf-dist/fonts/type1/urw/times/utmb8a.pfb
 exlive/texmf-dist/fonts/type1/urw/times/utmr8a.pfb></usr/share/texlive/texmf-di
 st/fonts/type1/urw/times/utmri8a.pfb></usr/share/texmf/fonts/type1/fkr/tipa/xip
 a10.pfb>
-Output written on template.pdf (6 pages, 1183129 bytes).
+Output written on template.pdf (8 pages, 1290702 bytes).
 PDF statistics:
- 585 PDF objects out of 1000 (max. 8388607)
- 331 compressed objects within 4 object streams
- 69 named destinations out of 1000 (max. 500000)
- 163 words of extra memory for PDF output out of 10000 (max. 10000000)
+ 753 PDF objects out of 1000 (max. 8388607)
+ 397 compressed objects within 4 object streams
+ 79 named destinations out of 1000 (max. 500000)
+ 210 words of extra memory for PDF output out of 10000 (max. 10000000)
 

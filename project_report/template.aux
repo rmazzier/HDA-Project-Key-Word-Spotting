@@ -17,6 +17,7 @@
 \gdef\HyperFirstAtBeginDocument#1{#1}
 \providecommand\HyField@AuxAddToFields[1]{}
 \providecommand\HyField@AuxAddToCoFields[2]{}
+\citation{attention2018andreade}
 \citation{dnns2014chen}
 \citation{convnns2015sainath}
 \citation{streamingkws2020Rybakov}
@@ -55,12 +56,12 @@
 \citation{kwtransformer2021berg}
 \citation{vit2020Dosovitskiy}
 \citation{speechdataset2018warden}
-\citation{speechdataset2018warden}
-\citation{speechdataset2018warden}
 \@writefile{lof}{\contentsline {figure}{\numberline {1}{\ignorespaces Overview of Att-RNN model (baseline) and SQAtt-RNN. The input $x$ is a matrix, where the $i$-th row is the vector of MFCCs computed for the $i$-th time frame. In both models, the CNN block outputs an image where the number of timesteps is preserved: feature vectors at each timestep are used as the input sequence for the RNN block. In the Att-RNN model, the attention layer returns a single context vector which is used for classification. In SQAtt-RNN, we use the whole sequence coming from the RNN block as query vectors: this results in a new sequence which is supposed to be a representation of the previous one. One last Bidirectional RNN layer scans the sequence and returns a single output vector, which is used for classification.\relax }}{2}{figure.caption.1}\protected@file@percent }
 \providecommand*\caption@xref[2]{\@setref\relax\@undefined{#1}}
 \newlabel{fig:models_overview}{{1}{2}{Overview of Att-RNN model (baseline) and SQAtt-RNN. The input $x$ is a matrix, where the $i$-th row is the vector of MFCCs computed for the $i$-th time frame. In both models, the CNN block outputs an image where the number of timesteps is preserved: feature vectors at each timestep are used as the input sequence for the RNN block. In the Att-RNN model, the attention layer returns a single context vector which is used for classification. In SQAtt-RNN, we use the whole sequence coming from the RNN block as query vectors: this results in a new sequence which is supposed to be a representation of the previous one. One last Bidirectional RNN layer scans the sequence and returns a single output vector, which is used for classification.\relax }{figure.caption.1}{}}
 \@writefile{toc}{\contentsline {subsection}{\numberline {\mbox  {II-B}}Models based on Attention}{2}{subsection.2.2}\protected@file@percent }
+\citation{speechdataset2018warden}
+\citation{speechdataset2018warden}
 \citation{park2019specaugment}
 \citation{Abadi2016TensorFlowAS}
 \@writefile{toc}{\contentsline {section}{\numberline {III}Experimental Setup}{3}{section.3}\protected@file@percent }
@@ -69,33 +70,41 @@
 \@writefile{toc}{\contentsline {subsection}{\numberline {\mbox  {III-B}}Input Pipeline}{3}{subsection.3.2}\protected@file@percent }
 \newlabel{sec:processing_architecture}{{\mbox  {III-B}}{3}{Input Pipeline}{subsection.3.2}{}}
 \citation{attention2018andreade}
+\citation{streamingkws2020Rybakov}
 \@writefile{lof}{\contentsline {figure}{\numberline {2}{\ignorespaces Detailed description of the input pipeline for the training data. In the cache block, the data that was produced until that moment is saved to file. Each step which is performed before the caching operation happens only one time, during the first iteration of the dataset; on all the successive iterations, the data is read from the cached file. Boxes with the red outline denote data augmentation steps\relax }}{4}{figure.caption.2}\protected@file@percent }
 \newlabel{fig:inputpipeline}{{2}{4}{Detailed description of the input pipeline for the training data. In the cache block, the data that was produced until that moment is saved to file. Each step which is performed before the caching operation happens only one time, during the first iteration of the dataset; on all the successive iterations, the data is read from the cached file. Boxes with the red outline denote data augmentation steps\relax }{figure.caption.2}{}}
 \@writefile{toc}{\contentsline {subsection}{\numberline {\mbox  {III-C}}Learning Framework}{4}{subsection.3.3}\protected@file@percent }
 \newlabel{sec:learning_framework}{{\mbox  {III-C}}{4}{Learning Framework}{subsection.3.3}{}}
 \@writefile{toc}{\contentsline {subsubsection}{\numberline {\mbox  {III-C}1}\textbf  {SimpleAtt}}{4}{subsubsection.3.3.1}\protected@file@percent }
-\@writefile{lot}{\contentsline {table}{\numberline {1}{\ignorespaces Simple Attention RNN Architecture\relax }}{4}{table.caption.3}\protected@file@percent }
-\newlabel{tab:simpleatt_architecture}{{1}{4}{Simple Attention RNN Architecture\relax }{table.caption.3}{}}
 \@writefile{toc}{\contentsline {subsubsection}{\numberline {\mbox  {III-C}2}\textbf  {Att-RNN}}{4}{subsubsection.3.3.2}\protected@file@percent }
-\@writefile{lot}{\contentsline {table}{\numberline {2}{\ignorespaces Att-RNN Architecture\relax }}{4}{table.caption.4}\protected@file@percent }
-\newlabel{tab:attrnn_architecture}{{2}{4}{Att-RNN Architecture\relax }{table.caption.4}{}}
 \@writefile{toc}{\contentsline {subsubsection}{\numberline {\mbox  {III-C}3}\textbf  {SQAtt-RNN}}{4}{subsubsection.3.3.3}\protected@file@percent }
-\@writefile{lot}{\contentsline {table}{\numberline {3}{\ignorespaces SQAtt-RNN Architecture\relax }}{4}{table.caption.5}\protected@file@percent }
-\newlabel{tab:sqattrnn_architecture}{{3}{4}{SQAtt-RNN Architecture\relax }{table.caption.5}{}}
-\@writefile{toc}{\contentsline {section}{\numberline {IV}Results}{4}{section.4}\protected@file@percent }
-\newlabel{sec:results}{{IV}{4}{Results}{section.4}{}}
-\@writefile{toc}{\contentsline {subsection}{\numberline {\mbox  {IV-A}}Attention Plots}{4}{subsection.4.1}\protected@file@percent }
-\newlabel{fig:sub1}{{3a}{5}{A subfigure\relax }{figure.caption.6}{}}
-\newlabel{sub@fig:sub1}{{a}{5}{A subfigure\relax }{figure.caption.6}{}}
-\newlabel{fig:sub2}{{3b}{5}{A subfigure\relax }{figure.caption.6}{}}
-\newlabel{sub@fig:sub2}{{b}{5}{A subfigure\relax }{figure.caption.6}{}}
-\@writefile{lof}{\contentsline {figure}{\numberline {3}{\ignorespaces A figure with two subfigures\relax }}{5}{figure.caption.6}\protected@file@percent }
-\newlabel{fig:accs_vs_parameters}{{3}{5}{A figure with two subfigures\relax }{figure.caption.6}{}}
-\@writefile{lot}{\contentsline {table}{\numberline {4}{\ignorespaces Table with results\relax }}{5}{table.caption.7}\protected@file@percent }
-\newlabel{table:results}{{4}{5}{Table with results\relax }{table.caption.7}{}}
-\@writefile{toc}{\contentsline {section}{\numberline {V}Concluding Remarks}{5}{section.5}\protected@file@percent }
-\@writefile{lof}{\contentsline {figure}{\numberline {4}{\ignorespaces Comparison between attention scores from Att-RNN model (left) and MHAtt-RNN3 (right), on the words \textit  {off}, \textit  {yes} and \textit  {no}. \relax }}{5}{figure.caption.8}\protected@file@percent }
-\newlabel{fig:att_scores}{{4}{5}{Comparison between attention scores from Att-RNN model (left) and MHAtt-RNN3 (right), on the words \textit {off}, \textit {yes} and \textit {no}. \relax }{figure.caption.8}{}}
+\@writefile{lot}{\contentsline {table}{\numberline {1}{\ignorespaces Simple Attention RNN architecture\relax }}{4}{table.caption.3}\protected@file@percent }
+\newlabel{tab:simpleatt_architecture}{{1}{4}{Simple Attention RNN architecture\relax }{table.caption.3}{}}
+\@writefile{lot}{\contentsline {table}{\numberline {2}{\ignorespaces Att-RNN architecture\relax }}{4}{table.caption.4}\protected@file@percent }
+\newlabel{tab:attrnn_architecture}{{2}{4}{Att-RNN architecture\relax }{table.caption.4}{}}
+\@writefile{lot}{\contentsline {table}{\numberline {3}{\ignorespaces SQAtt-RNN architecture\relax }}{4}{table.caption.5}\protected@file@percent }
+\newlabel{tab:sqattrnn_architecture}{{3}{4}{SQAtt-RNN architecture\relax }{table.caption.5}{}}
+\@writefile{toc}{\contentsline {subsubsection}{\numberline {\mbox  {III-C}4}\textbf  {SQ-noCNN}}{4}{subsubsection.3.3.4}\protected@file@percent }
+\@writefile{toc}{\contentsline {subsubsection}{\numberline {\mbox  {III-C}5}\textbf  {MHAtt-RNN}}{4}{subsubsection.3.3.5}\protected@file@percent }
+\@writefile{lot}{\contentsline {table}{\numberline {4}{\ignorespaces MHAtt-RNN$h$ architecture, where $h$ is the number of heads for the MH Attention layer.\relax }}{4}{table.caption.6}\protected@file@percent }
+\newlabel{tab:mhattrnn_architecture}{{4}{4}{MHAtt-RNN$h$ architecture, where $h$ is the number of heads for the MH Attention layer.\relax }{table.caption.6}{}}
+\@writefile{toc}{\contentsline {subsubsection}{\numberline {\mbox  {III-C}6}\textbf  {SQMHAtt-RNN}}{4}{subsubsection.3.3.6}\protected@file@percent }
+\citation{streamingkws2020Rybakov}
+\citation{attention2018andreade}
+\citation{attention2018andreade}
+\newlabel{fig:resblock}{{\caption@xref {fig:resblock}{ on input line 158}}{5}{\textbf {Res-Att}}{figure.caption.7}{}}
+\@writefile{lof}{\contentsline {figure}{\numberline {3}{\ignorespaces Architecture for the residual block used in the Res-Att model.\relax }}{5}{figure.caption.7}\protected@file@percent }
+\@writefile{toc}{\contentsline {subsubsection}{\numberline {\mbox  {III-C}7}\textbf  {Res-Att}}{5}{subsubsection.3.3.7}\protected@file@percent }
+\@writefile{lot}{\contentsline {table}{\numberline {5}{\ignorespaces Res-Att$k$ architecture, where $k$ is the number of residual blocks.\relax }}{5}{table.caption.8}\protected@file@percent }
+\newlabel{tab:resatt_architecture}{{5}{5}{Res-Att$k$ architecture, where $k$ is the number of residual blocks.\relax }{table.caption.8}{}}
+\@writefile{toc}{\contentsline {section}{\numberline {IV}Results}{5}{section.4}\protected@file@percent }
+\newlabel{sec:results}{{IV}{5}{Results}{section.4}{}}
+\@writefile{lot}{\contentsline {table}{\numberline {6}{\ignorespaces Results in term of top-1 accuracy for both tasks.\relax }}{5}{table.caption.12}\protected@file@percent }
+\newlabel{table:results}{{6}{5}{Results in term of top-1 accuracy for both tasks.\relax }{table.caption.12}{}}
+\@writefile{toc}{\contentsline {subsection}{\numberline {\mbox  {IV-A}}Attention Plots}{5}{subsection.4.1}\protected@file@percent }
+\citation{dnns2014chen}
+\citation{convnns2015sainath}
+\citation{streamingkws2020Rybakov}
 \bibdata{biblio}
 \bibcite{dnns2014chen}{{1}{}{{}}{{}}}
 \bibcite{convnns2015sainath}{{2}{}{{}}{{}}}
@@ -107,6 +116,10 @@
 \bibcite{vit2020Dosovitskiy}{{8}{}{{}}{{}}}
 \bibcite{touvron2021training}{{9}{}{{}}{{}}}
 \bibcite{gulati2020conformer}{{10}{}{{}}{{}}}
+\@writefile{lof}{\contentsline {figure}{\numberline {5}{\ignorespaces Comparison between attention scores from Att-RNN model (left) and MHAtt-RNN3 (right), on the words \textit  {off}, \textit  {yes} and \textit  {no}. \relax }}{7}{figure.caption.10}\protected@file@percent }
+\newlabel{fig:att_scores}{{5}{7}{Comparison between attention scores from Att-RNN model (left) and MHAtt-RNN3 (right), on the words \textit {off}, \textit {yes} and \textit {no}. \relax }{figure.caption.10}{}}
+\@writefile{toc}{\contentsline {section}{\numberline {V}Concluding Remarks}{7}{section.5}\protected@file@percent }
+\newlabel{sec:conclusions}{{V}{7}{Concluding Remarks}{section.5}{}}
 \bibcite{kumar2021colorization}{{11}{}{{}}{{}}}
 \bibcite{Devlin2019BERTPO}{{12}{}{{}}{{}}}
 \bibcite{gdpr2017}{{13}{}{{}}{{}}}
@@ -123,4 +136,9 @@
 \bibcite{Abadi2016TensorFlowAS}{{24}{}{{}}{{}}}
 \bibstyle{ieeetr}
 \providecommand\NAT@force@numbers{}\NAT@force@numbers
-\newlabel{sec:conclusions}{{V}{6}{Concluding Remarks}{section.5}{}}
+\newlabel{fig:sub1}{{\caption@xref {fig:sub1}{ on input line 49}}{8}{Results}{figure.caption.11}{}}
+\newlabel{sub@fig:sub1}{{}{8}{Results}{figure.caption.11}{}}
+\newlabel{fig:sub2}{{\caption@xref {fig:sub2}{ on input line 55}}{8}{Results}{figure.caption.11}{}}
+\newlabel{sub@fig:sub2}{{}{8}{Results}{figure.caption.11}{}}
+\@writefile{lof}{\contentsline {figure}{\numberline {6}{\ignorespaces Models size vs. test set accuracy, for the 12kws (left) and 35kws task (right).\relax }}{8}{figure.caption.11}\protected@file@percent }
+\newlabel{fig:accs_vs_parameters}{{6}{8}{Models size vs. test set accuracy, for the 12kws (left) and 35kws task (right).\relax }{figure.caption.11}{}}

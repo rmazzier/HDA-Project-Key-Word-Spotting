@@ -1,4 +1,3 @@
-# from tensorflow.python.ops.gen_math_ops import xlogy_eager_fallback
 from utils import save_weights_and_results
 from models import *
 import tensorflow as tf
