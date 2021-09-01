@@ -11,7 +11,7 @@ A detailed report of all the work can be found in the project report, which is p
 
 ## Code Details
 
-In order to run the code, the dataset folder (downloadable [here](http://download.tensorflow.org/data/speech_commands_test_set_v0.02.tar.gz)) must be placed inside the `data` folder, and must have name `speech_commands_v0.02`.
+In order to run the code, the dataset folder (downloadable [here](http://download.tensorflow.org/data/speech_commands_v0.02.tar.gz)) must be placed inside the `data` folder, and must have name `speech_commands_v0.02`.
 
 All proposed models are defined in `models.py`. To train all the models, run the `train_models.py` python script. All the hyperparameters are defined in `hyperparameters.py`.
 
