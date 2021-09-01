@@ -16,6 +16,7 @@ In order to run the code, the dataset folder (downloadable [here](http://downloa
 All proposed models are defined in `models.py`. To train all the models, run the `train_models.py` python script. All the hyperparameters are defined in `hyperparameters.py`.
 
 Two Jupyter Notebooks are provided:
- - `Input Pipeline.ipynb`: contains a demonstration of how the input pipeline for the project works. 
- - `Models Evaluation.ipynb`: here, all the weights from the trained models are loaded, in order to evaluate them. At the end, all the code to produce the plots present in the project report is provided. To run this notebook, the `models` folder must contan the weights of the trained models. To get them, one must train all the models by executing the `train_models.py` file. Alternatively, they can be found [here](https://drive.google.com/file/d/1c74-zhuSnt1hY_qqpew3TAvMFKTK3VdD/view?usp=sharing).
+ - `Input Pipeline.ipynb` [![NBViewer](https://github.com/jupyter/design/blob/master/logos/Badges/nbviewer_badge.svg)](https://nbviewer.jupyter.org/github/rmazzier/HDA-Project-Key-Word-Spotting/blob/main/Input%20Pipeline.ipynb):
+ contains a demonstration of how the input pipeline for the project works. 
+ - `Models Evaluation.ipynb` [![NBViewer](https://github.com/jupyter/design/blob/master/logos/Badges/nbviewer_badge.svg)](https://nbviewer.jupyter.org/github/rmazzier/HDA-Project-Key-Word-Spotting/blob/main/Models%20Evaluation.ipynb): here, all the weights from the trained models are loaded, in order to evaluate them. At the end, all the code to produce the plots present in the project report is provided. To run this notebook, the `models` folder must contan the weights of the trained models. To get them, one must train all the models by executing the `train_models.py` file. Alternatively, they can be found [here](https://drive.google.com/file/d/1c74-zhuSnt1hY_qqpew3TAvMFKTK3VdD/view?usp=sharing).
 
