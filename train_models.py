@@ -5,13 +5,10 @@ import numpy as np
 import hyperparams
 from sklearn.metrics import confusion_matrix
 
-_SMOKE_SIZE_ = 10000
-# _SMOKE_SIZE_ = -1
+_SMOKE_SIZE_ = -1
 
 ## Define common training objects
-# epochs = 30
-epochs = 4
-
+epochs = 30
 batch_size = 64
 
 def plot_learning_curves(model, training_data):
@@ -96,22 +93,22 @@ for current_task in hyperparams._TASKS_:
     feature_types = ['mfccs']
     for ft_type in feature_types:
         
-        # # define models
-        # att_rnn = simple_attention_rnn(
-        #     train_dataset,
-        #     output_classes,
-        #     model_suffix=f"{ft_type}",
-        #     mfccs=True if ft_type == 'mfccs' else False)
+        # define models
+        att_rnn = simple_attention_rnn(
+            train_dataset,
+            output_classes,
+            model_suffix=f"{ft_type}",
+            mfccs=True if ft_type == 'mfccs' else False)
 
-        # all_models.append(att_rnn)
+        all_models.append(att_rnn)
 
-        # andreade_original = attention_rnn_andreade(
-        #     train_dataset, 
-        #     output_classes, 
-        #     model_suffix=f"{ft_type}",
-        #     mfccs= True if ft_type=='mfccs' else False)
+        andreade_original = attention_rnn_andreade(
+            train_dataset, 
+            output_classes, 
+            model_suffix=f"{ft_type}",
+            mfccs= True if ft_type=='mfccs' else False)
         
-        # all_models.append(andreade_original)
+        all_models.append(andreade_original)
         
         andreade_queries = attention_rnn_andreade_seq_query(
             train_dataset,
@@ -175,9 +172,9 @@ for current_task in hyperparams._TASKS_:
             train_steps=train_steps,
             valid_steps=valid_steps)
         
-        # save_weights_and_results(trained_model, history, current_task)
-        # plot_learning_curves(trained_model, history.history)
-        # make_confmatrix(trained_model, test_dataset)
+        save_weights_and_results(trained_model, history, current_task)
+        plot_learning_curves(trained_model, history.history)
+        make_confmatrix(trained_model, test_dataset)
 
         
 

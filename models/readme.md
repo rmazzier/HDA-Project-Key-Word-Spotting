@@ -1,0 +1,1 @@
+In this folder all the trained model weights are stored. Specifically, it must contain two folders: `10kws+U+S` and `35kws`. Those contain the weights for every model, for the respective task.

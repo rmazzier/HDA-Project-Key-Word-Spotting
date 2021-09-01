@@ -492,8 +492,3 @@ def get_noises_tf_dataset():
     noises_ds = noises_ds.map(lambda x: x[:800000])
     noises_ds = noises_ds.batch(6).cache().prefetch(tf.data.experimental.AUTOTUNE)
     return noises_ds
-
-
-if __name__ == "__main__":
-    ex = 'data/speech_commands_v0.02/up/c7aaad67_nohash_2.wav'
-    generate_noise_crop()
