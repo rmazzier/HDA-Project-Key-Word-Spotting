@@ -15,84 +15,6 @@ from metrics import *
 from custom_layers import *
 
 
-# def cnn_trad_fpool3(ds, output_classes, model_suffix):
-#     for s, _ in ds.take(1):
-#         input_shape = s.shape[1:]
-#         print('Input shape:', input_shape)
-
-#     X_input = tf.keras.Input(input_shape)
-#     X = MFCC()(X_input)
-#     X = layers.BatchNormalization(axis=-1)(X)
-#     X = SpecAugment()(X)
-#     X = layers.Conv2D(64, (20, 8), activation='relu')(X)
-#     X = layers.MaxPool2D(pool_size=(1, 3))(X)
-#     X = layers.Conv2D(64, (10, 4), activation='relu')(X)
-#     X = layers.Flatten()(X)
-#     X = layers.Dense(32)(X)
-#     X = layers.Dense(128, activation='relu')(X)
-#     X = layers.Dense(len(output_classes))(X)
-
-#     model = tf.keras.Model(inputs=X_input, outputs=X, name='cnn_trad_fpool3_'+model_suffix)
-#     return model
-
-# def cnn_one_fstride4(ds, output_classes, model_suffix):
-#     for s, _ in ds.take(1):
-#         input_shape = s.shape[1:]
-#         print('Input shape:', input_shape)
-
-#     X_input = tf.keras.Input(input_shape)
-#     X = MFCC()(X_input)
-#     X = layers.BatchNormalization(axis=-1)(X)
-
-#     X = layers.Conv2D(186, (32, 8), strides=(1, 4), activation='relu')(X)
-#     X = layers.Flatten()(X)
-#     X = layers.Dense(32)(X)
-#     X = layers.Dense(128, activation='relu')(X)
-#     X = layers.Dense(128, activation='relu')(X)
-#     X = layers.Dense(len(output_classes))(X)
-
-#     model = tf.keras.Model(inputs=X_input, outputs=X, name="cnn_one_fstride4_"+model_suffix)
-#     return model
-
-def kws_res_net(ds, output_classes, model_suffix, mfccs=True):
-    for s, _ in ds.take(1):
-        input_shape = s.shape[1:]
-        print('Input shape:', input_shape)
-    
-    X_input = tf.keras.Input(input_shape)
-    X = RandomNoiseAugment()(X_input)
-    if mfccs:
-        X = MFCC()(X)
-    else:
-        X = LogMelSpectrogram()(X)
-        X = layers.Lambda(lambda x : x[:,:,1:,:], name="remove_energies")(X)
-    
-    X = layers.BatchNormalization(axis=-1)(X)
-    X = SpecAugment()(X)
-    
-    # Stage 1 
-    X = layers.Conv2D(64, (20,8), name = 'conv1', kernel_initializer = glorot_uniform(seed=0))(X)
-    X = layers.BatchNormalization(axis =-1, name = 'bn_conv1')(X)
-    X = layers.Activation('relu')(X)
-    X = layers.MaxPooling2D((1, 3))(X)
-
-    # Stage 2 
-    X = convolutional_block(X, f1 = 3, f2=3, filters = [64, 64, 64], stage = 2, block='a', s = 2)
-    X = identity_block(X, 3, 3, [64, 64, 64], stage=2, block='b')
-    X = identity_block(X, 3, 3 , [64, 64, 64], stage=2, block='c')
-
-    # AVGPOOL 
-    X = tf.keras.layers.AveragePooling2D()(X)
-
-    # Output layer
-    X = layers.Flatten()(X)
-    X = layers.Dense(len(output_classes), name='out_layer', kernel_initializer = glorot_uniform(seed=0))(X)
-    
-    # Create model
-    model = tf.keras.Model(inputs = X_input, outputs = X, name="kws_res_net"+model_suffix)
-
-    return model
-
 def simple_attention_rnn(ds, output_classes, model_suffix, mfccs=True):
     for s, _ in ds.take(1):
         input_shape = s.shape[1:]
@@ -451,8 +373,4 @@ def KWT(ds,
 
     model = tf.keras.Model(inputs = [X_input], outputs=[O, atts], name="KWT_"+model_suffix)
     return model
-
-
-if __name__ == "__main__":
-    pass
 

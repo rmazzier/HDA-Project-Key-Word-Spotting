@@ -30,12 +30,6 @@ class RandomNoiseAugment(tf.keras.layers.Layer):
         if training:
             b_size = tf.shape(waveforms)[0]
 
-            ## TODO: Right now, i am adding noise over noise... this can be harmful?? or not?
-
-            ## Randomly translate the batch of noises before cropping?
-            # this would misalign the noise files so that when making a random 16000 crop
-            # it would be like taking random 1 second crops from the files
-            
             #crop 1second width
             noises = tf.image.random_crop(self.noises, size=(6,self.sample_rate))
             
@@ -87,8 +81,9 @@ class Spectrogram(tf.keras.layers.Layer):
         ----------
         waveforms : tf.Tensor, shape = (batch_size, n_samples)
             A Batch of mono waveforms.
-        Returns
+        
         -------
+        Returns
         spectrograms : (tf.Tensor), shape = (None, audio_frames, fft_size/2 + 1, ch)
             The corresponding batch of spectrograms.
         """
@@ -113,75 +108,7 @@ class Spectrogram(tf.keras.layers.Layer):
 
         return config
 
-class SpecAugment(tf.keras.layers.Layer):
-    """Custom layer that applies data aumentation according to the SpecAugment policy from: https://arxiv.org/pdf/1904.08779.pdf """
-    def __init__(self, F=hyperparams.F, T=hyperparams.T, **kwargs):
-        super(SpecAugment, self).__init__(**kwargs)
-        self.F = F
-        self.T = T
 
-    def build(self, input_shape):
-        self.non_trainable_weights.append(self.F)
-        self.non_trainable_weights.append(self.T)
-        super(SpecAugment, self).build(input_shape)
-    
-    @tf.function
-    def cutout_single(self, i, inputs,t,f):
-            X = inputs[i,...]
-            ti = t[i]
-            fi = f[i]
-            # if tf.random.uniform([]) < self.p:
-            # f = tf.random.uniform([], minval=0, maxval=self.F, dtype=tf.int32)
-            # t = tf.random.uniform([], minval=0, maxval=self.T, dtype=tf.int32)
-            # X = tf.expand_dims(X,0)
-            n_channels = X.shape[1]
-            n_time_steps = X.shape[0]
-            f0 =  tf.random.uniform([], minval=0, maxval=n_channels-fi, dtype=tf.int32)
-            t0 =  tf.random.uniform([],minval=0, maxval=n_time_steps-ti, dtype=tf.int32)
-            # apply masks in the time and frequency domains
-            # X2 = tfa.image.random_cutout(X, (t, n_channels+2))
-            # X3 = tfa.image.random_cutout(X2, (n_time_steps+2, f))
-
-            ## time mask
-            ones1t = tf.ones((n_channels, t0,1))
-            zerost = tf.zeros((n_channels, ti,1))
-            ones2t = tf.ones((n_channels, n_time_steps - t0 -ti,1))
-            tmask = tf.concat([ones1t, zerost, ones2t], axis=1)
-            tmask = tf.transpose(tmask, [1,0,2])
-            # tmask = tf.expand_dims(tmask,-1)b
-
-            ## frequency mask
-            ones1f = tf.ones((f0, n_time_steps,1))
-            zerosf = tf.zeros((fi, n_time_steps,1))
-            ones2f = tf.ones((n_channels - f0 -fi, n_time_steps,1))
-            fmask = tf.concat([ones1f, zerosf, ones2f], axis=0)
-            fmask = tf.transpose(fmask, [1,0,2])
-            # fmask = tf.expand_dims(fmask,-1)
-
-            # multiply mask
-            X_masked = X * tmask * fmask
-            return X_masked
-            # else:
-            #     return X
-
-    def call(self, inputs, training):
-        if training:
-            f = tf.random.uniform([tf.shape(inputs)[0]], minval=0, maxval=self.F, dtype=tf.int32)
-            t = tf.random.uniform([tf.shape(inputs)[0]], minval=0, maxval=self.T, dtype=tf.int32)
-
-            X4 = tf.map_fn(lambda i: self.cutout_single(i, inputs,t,f), tf.range(tf.shape(inputs)[0]), parallel_iterations=500, fn_output_signature=tf.float32)
-
-            return X4
-        else:
-            return inputs
-
-    def get_config(self):
-        config = {
-            'F': self.F,
-            'T' : self.T
-        }
-        config.update(super(SpecAugment, self).get_config())
-        return config
 
 class LogMelSpectrogram(tf.keras.layers.Layer):
     """Compute log_mel_spectrogram from waveform."""
@@ -265,6 +192,69 @@ class LogMelSpectrogram(tf.keras.layers.Layer):
 
         return config
 
+class SpecAugment(tf.keras.layers.Layer):
+    """Custom layer that applies data aumentation according to the SpecAugment policy from: https://arxiv.org/pdf/1904.08779.pdf """
+    def __init__(self, F=hyperparams.F, T=hyperparams.T, **kwargs):
+        super(SpecAugment, self).__init__(**kwargs)
+        self.F = F
+        self.T = T
+
+    def build(self, input_shape):
+        self.non_trainable_weights.append(self.F)
+        self.non_trainable_weights.append(self.T)
+        super(SpecAugment, self).build(input_shape)
+    
+    @tf.function
+    def cutout_single(self, i, inputs,t,f):
+        X = inputs[i,...]
+        ti = t[i]
+        fi = f[i]
+
+        n_channels = X.shape[1]
+        n_time_steps = X.shape[0]
+        f0 =  tf.random.uniform([], minval=0, maxval=n_channels-fi, dtype=tf.int32)
+        t0 =  tf.random.uniform([],minval=0, maxval=n_time_steps-ti, dtype=tf.int32)
+        # apply masks in the time and frequency domains
+        # X2 = tfa.image.random_cutout(X, (t, n_channels+2))
+        # X3 = tfa.image.random_cutout(X2, (n_time_steps+2, f))
+
+        ## time mask
+        ones1t = tf.ones((n_channels, t0,1))
+        zerost = tf.zeros((n_channels, ti,1))
+        ones2t = tf.ones((n_channels, n_time_steps - t0 -ti,1))
+        tmask = tf.concat([ones1t, zerost, ones2t], axis=1)
+        tmask = tf.transpose(tmask, [1,0,2])
+
+        ## frequency mask
+        ones1f = tf.ones((f0, n_time_steps,1))
+        zerosf = tf.zeros((fi, n_time_steps,1))
+        ones2f = tf.ones((n_channels - f0 -fi, n_time_steps,1))
+        fmask = tf.concat([ones1f, zerosf, ones2f], axis=0)
+        fmask = tf.transpose(fmask, [1,0,2])
+
+        # multiply mask
+        X_masked = X * tmask * fmask
+        return X_masked
+
+
+    def call(self, inputs, training):
+        if training:
+            f = tf.random.uniform([tf.shape(inputs)[0]], minval=0, maxval=self.F, dtype=tf.int32)
+            t = tf.random.uniform([tf.shape(inputs)[0]], minval=0, maxval=self.T, dtype=tf.int32)
+
+            X4 = tf.map_fn(lambda i: self.cutout_single(i, inputs,t,f), tf.range(tf.shape(inputs)[0]), parallel_iterations=500, fn_output_signature=tf.float32)
+
+            return X4
+        else:
+            return inputs
+
+    def get_config(self):
+        config = {
+            'F': self.F,
+            'T' : self.T
+        }
+        config.update(super(SpecAugment, self).get_config())
+        return config
 
 class MFCC(tf.keras.layers.Layer):
     """Compute mfcc from waveform.

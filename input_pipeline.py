@@ -3,13 +3,8 @@ import pathlib
 import numpy as np
 import tensorflow as tf
 from sklearn.model_selection import StratifiedShuffleSplit
-# from custom_layers import *
 from hyperparams import _TASKS_,_DATA_DIR_, _BINARIES_DIR_, _NOISE_DIR_, _SILENCE_CLASS_, _UNKNOWN_CLASS_, CROP_WIDTH, SAMPLE_RATE, _TEST_DATA_DIR_
 
-# # Set seed for experiment reproducibility
-# seed = 42
-# tf.random.set_seed(seed)
-# np.random.seed(seed)
 
 def get_noise_samples_names():
     noise_samples_names = tf.io.gfile.glob(str(_NOISE_DIR_)+'/*')
@@ -142,7 +137,7 @@ def get_train_valid_test_split(filenames, labels, train_percentage, valid_percen
     return X_train, y_train, X_valid, y_valid, X_test, y_test
 
 
-def make_and_save_original_splits(task, return_canonical_test_set=True):
+def make_and_save_original_splits(task):
     """Get the Train Validation Test splits provided by the dataset."""
     assert(task in _TASKS_)
     filenames = get_filenames(_DATA_DIR_)
@@ -229,9 +224,6 @@ def make_and_save_original_splits(task, return_canonical_test_set=True):
         X_test = np.delete(X_test, todel_test)
         y_test = np.delete(y_test, todel_test)
 
-    if return_canonical_test_set and task == "10kws+U+S":
-        X_test, y_test = get_canonical_10kwstask_test_set()
-
     # shuffle
     train_indexes = np.random.permutation(range(len(X_train)))
     valid_indexes = np.random.permutation(range(len(X_valid)))
@@ -283,17 +275,19 @@ def get_test_label_int(audio_file_path):
         elif kw == '_unknown_':
             return np.argmax(_UNKNOWN_CLASS_ == np.array(output_classes))
         return np.argmax(kw == np.array(output_classes))
-def get_canonical_10kwstask_test_set():
-    """Returns the test set provided by the creators of the Google Speech Commands dataset,
-    used for easier reproducibility and comparability of results.
-    It is available at http://download.tensorflow.org/data/speech_commands_test_set_v0.02.tar.gz"""
 
-    X_test = get_filenames(_TEST_DATA_DIR_)
-    y_test = [get_test_label_int(file) for file in X_test]
 
-    X_test = np.array(X_test)
-    y_test = np.array(y_test)
-    return X_test, y_test
+# def get_canonical_10kwstask_test_set():
+#     """Returns the test set provided by the creators of the Google Speech Commands dataset,
+#     used for easier reproducibility and comparability of results.
+#     It is available at http://download.tensorflow.org/data/speech_commands_test_set_v0.02.tar.gz"""
+
+#     X_test = get_filenames(_TEST_DATA_DIR_)
+#     y_test = [get_test_label_int(file) for file in X_test]
+
+#     X_test = np.array(X_test)
+#     y_test = np.array(y_test)
+#     return X_test, y_test
 
 
 

@@ -12,7 +12,6 @@ import numpy as np
 
 
 def show_spectrogram(spectrogram):
-
     plt.figure(figsize=(17, 10))
     plt.subplot(2, 1, 1)
     lr.display.specshow(spectrogram, sr=16000,
@@ -82,17 +81,6 @@ def save_weights_and_results(model, history, current_task):
     #save model weights
     model.save_weights(hyperparams._MODELS_DIR_/current_task/model.name/"weights")
     results={}
-    #save attention scores and predictions
-    # y_scores, att_scores = model.predict(test_dataset.batch(len(X_test)))
-    # y_pred = np.array(np.argmax(y_scores, axis=1))
-    # y_true = np.array(y_test)
-    # compute test accuracy
-    # test_acc = sum(np.equal(y_pred, y_true)) / len(y_true)
-    # print(f'Test set accuracy: {test_acc:.3%}')
-    
-    # results["test_acc"] = test_acc
-    # results["attention_scores"] = att_scores
-    # results["prediction_scores"] = y_scores
     results["train_history"] = history.history
     with open(hyperparams._MODELS_DIR_/current_task/model.name/f'train_history.pkl', 'wb') as outp:
         pickle.dump(results, outp)

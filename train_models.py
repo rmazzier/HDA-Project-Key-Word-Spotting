@@ -5,12 +5,12 @@ import numpy as np
 import hyperparams
 from sklearn.metrics import confusion_matrix
 
-# _SMOKE_SIZE_ = 20000
-_SMOKE_SIZE_ = -1
+_SMOKE_SIZE_ = 10000
+# _SMOKE_SIZE_ = -1
 
 ## Define common training objects
-epochs = 30
-# epochs = 4
+# epochs = 30
+epochs = 4
 
 batch_size = 64
 
@@ -74,7 +74,6 @@ def compile_and_train_model(model, train_dataset, valid_dataset, epochs, train_s
 ## DEFINE ALL MODELS
 ### FOR CYCLE ON TASKS
 for current_task in hyperparams._TASKS_:
-# for current_task in ['35kws']:
 
      ##  List that will contain all the initialized models
     all_models = []
@@ -122,34 +121,34 @@ for current_task in hyperparams._TASKS_:
 
         all_models.append(andreade_queries)
 
-        # for n_res_layers in [2,3,4,5]:
-        #     resnet_andr = resnet_andreade(
-        #         train_dataset,
-        #         output_classes,
-        #         model_suffix=f"{ft_type}_{n_res_layers}_layers", 
-        #         n_res_blocks=n_res_layers,
-        #         mfccs=True if ft_type =='mfccs' else False)
+        for n_res_layers in [2,3,4,5]:
+            resnet_andr = resnet_andreade(
+                train_dataset,
+                output_classes,
+                model_suffix=f"{ft_type}_{n_res_layers}_layers", 
+                n_res_blocks=n_res_layers,
+                mfccs=True if ft_type =='mfccs' else False)
             
-        #     all_models.append(resnet_andr)
+            all_models.append(resnet_andr)
 
-        # seq_q_no_cnn = andreade_seq_query_no_cnn(
-        #                 train_dataset,
-        #     output_classes,
-        #     model_suffix = f"{ft_type}",
-        #     mfccs=True if ft_type=='mfccs' else False)
+        seq_q_no_cnn = andreade_seq_query_no_cnn(
+                        train_dataset,
+            output_classes,
+            model_suffix = f"{ft_type}",
+            mfccs=True if ft_type=='mfccs' else False)
         
-        # all_models.append(seq_q_no_cnn)
+        all_models.append(seq_q_no_cnn)
 
-        # #grid search on number of heads for MHA
-        # for n_heads in [2,3,4,5]:
-        #     andreade_mha = mha_andreade(
-        #         train_dataset,
-        #         output_classes,
-        #         model_suffix=f"{ft_type}_{n_heads}heads",
-        #         mfccs=True if ft_type=='mfccs' else False,
-        #         n_heads=n_heads)
+        #grid search on number of heads for MHA
+        for n_heads in [2,3,4,5]:
+            andreade_mha = mha_andreade(
+                train_dataset,
+                output_classes,
+                model_suffix=f"{ft_type}_{n_heads}heads",
+                mfccs=True if ft_type=='mfccs' else False,
+                n_heads=n_heads)
 
-        #     all_models.append(andreade_mha)
+            all_models.append(andreade_mha)
         
         #grid search on number of heads for MHA seq query
         for n_heads in [2,3,4,5]:
@@ -162,26 +161,11 @@ for current_task in hyperparams._TASKS_:
 
             all_models.append(seq_query_mha)
 
-
-        ## KWT Test different  n_heads-------------------
-
-        # for n_layers in [2,4,6,8]:
-        #     kwt = KWT(train_dataset, 
-        #             model_suffix = f"{ft_type}_{n_layers}layers",
-        #             num_patches=98,
-        #             num_layers=n_layers,
-        #             d_model=192,
-        #             num_heads=3,
-        #             mlp_dim=768,
-        #             output_classes=output_classes)
-        #     all_models.append(kwt)
-        
-
     print([model.name for model in all_models])
 
     for model in all_models:
         print(f"---------- CURRENT TASK: {current_task} ----------")
-        # print(f"----------- TRAINING {model.name} ----------------")
+
         print(model.summary())
         trained_model, history = compile_and_train_model(
             model, 
@@ -191,9 +175,9 @@ for current_task in hyperparams._TASKS_:
             train_steps=train_steps,
             valid_steps=valid_steps)
         
-        save_weights_and_results(trained_model, history, current_task)
-        plot_learning_curves(trained_model, history.history)
-        make_confmatrix(trained_model, test_dataset)
+        # save_weights_and_results(trained_model, history, current_task)
+        # plot_learning_curves(trained_model, history.history)
+        # make_confmatrix(trained_model, test_dataset)
 
         
 

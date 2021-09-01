@@ -1,27 +1,30 @@
-% !TEX root = template.tex
+% !TEX root = project_report.tex
 
 \section{Results}
 \label{sec:results}
 
-Following the main approach in the KWS literature, we evaluate model performance based on the top-1 accuracy score on the test set. In Table \ref{table:results} we report all the results for each model and for each task. Additionally, in Figure \ref{fig:accs_vs_parameters} we provide a plot of each model accuracy against its number of parameters. The SQAtt-RNN provides a comparable accuracy for the 12kws task, while giving slightly worse results for the 35kws task. This suggests that providing a single query vector representative for the whole sequence is more than sufficient when dealing with relatively short sequences. Indeed, the query vector comes from a bidirectional GRU layer, which proved to be really good at capturing the relations between the sequence elements. The models based on multi head attention didn't provide consistent results: specifically, contrary to expectations, increasing the number of heads didn't necessarily increase the performances of the model. Nevertheless, the best scoring models were SQMHAtt-RNN5 for the 12kws task, and SQMHAtt-RNN2 for the 35kws task. While it is true that multi head attention models are heavier in terms of memory footprint with respect to Att-RNN, the ones proposed here still present less parameters than the one proposed in \cite{streamingkws2020Rybakov}, which reported to have around $700$K parameters.
+Following the main approach in the KWS literature, we evaluate model performance based on the top-1 accuracy score on the test set. In Table \ref{table:results} we report all the results for each model and for each task. Additionally, in Figure \ref{fig:accs_vs_parameters} we provide a plot of each model accuracy against its number of parameters. The SQAtt-RNN provides a comparable accuracy for the 12kws task, while giving slightly worse results for the 35kws task. This suggests that providing a single query vector representative for the whole sequence is more than sufficient when dealing with relatively short sequences. Indeed, the query vector comes from a bidirectional GRU layer, which proved to be really effective at capturing the relations between the sequence elements. The models based on multi head attention didn't provide consistent results: specifically, contrary to expectations, increasing the number of heads didn't necessarily increase the performances of the model. Nevertheless, the best scoring models were SQMHAtt-RNN5 for the 12kws task, and SQMHAtt-RNN2 for the 35kws task. While it is true that multi head attention models are heavier in terms of memory footprint with respect to Att-RNN, the ones proposed here still present less parameters than the one proposed in \cite{streamingkws2020Rybakov}, which reported to have around $700$K parameters.
 
-In the same way, also the ResAtt models didn't provide consistent results, and in general seemed to perform worse than the simipler CNN block from Att-RNN. Maybe results in this sense can be improved employing more sophisticated recurrent blocks. Also, by looking at the performances of the SQ-noCNN model, it is interesting to note that for the 12kws task performance is slightly better with respect to Att-RNN, while for the 35kws task they are worse. This could suggest that the feature extraction task performed by the CNN block might be more important when in need to recognize an higher amount of key-words. In Figure We also provide a confusion matrix for the best performing models, for both tasks
+In the same way, also the ResAtt models didn't provide consistent results, and in general seemed to perform worse than the simpler CNN block from Att-RNN. Maybe results in this sense can be improved employing more sophisticated recurrent blocks. Also, by looking at the performances of the SQ-noCNN model, it is interesting to note that, for the 12kws task, accuracy is slightly higher with respect to Att-RNN, while for the 35kws task it is lower. This could suggest that the feature extraction task performed by the CNN block might be more important when in need to recognize an higher amount of key-words. In Figure \ref{fig:confmatrices}, we also provide a confusion matrix for the best performing models, for both tasks.
 
 \begin{figure*}
 	\centering
 	\begin{subfigure}{\textwidth}
 		\centering
-		\includegraphics[width=0.8\linewidth]{imgs/SQMHAtt5_12kws.pdf}
+		\includegraphics[width=0.6\linewidth]{imgs/SQMHAtt5_12kws.pdf}
 		\caption{Confusion matrix of the best performing model for the 12kws task. The words where the model struggle the most are the unknown ones: specifically, known words are often recognized as unknown. Note that this is a desirable situation for a KWS system since we prefer false negatives instead of false positives. Another aspect which should be improved is in the recognition of the word \textit{down}, which is often recognized as \textit{no}.}
 %		\label{fig:sub1}
 	\end{subfigure}
 	\begin{subfigure}{\textwidth}
 		\centering
 
-	\includegraphics[width=0.8\linewidth]{imgs/SQMHAtt2_35kws.pdf}
+	\includegraphics[width=0.65\linewidth]{imgs/SQMHAtt2_35kws.pdf}
 			\caption{Confusion matrix of the best performing model for the 35kws task. In this case, two common mistakes can be distinguished. First, the word \textit{forward} is often confused with the word \textit{four}. This is to be expected, since both present the phoneme /\textipa{fOr}/ at the beginning. A similar common error occurs with the word \textit{tree} which is often confused with \textit{three}. Apart from the obvious similarity between the words, another possible reason for this confusion, as pointed by the authors in \cite{attention2018andreade}, might be due to the inability of non native english speakers to correctly pronounce the phoneme  /\textipa{T}/ in \textit{three}.}
 %	\label{fig:sub1}
 	\end{subfigure}
+
+\caption{Confusion Matrices}
+\label{fig:confmatrices}
 \end{figure*}
 
 
