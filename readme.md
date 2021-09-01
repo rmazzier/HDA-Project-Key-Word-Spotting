@@ -4,7 +4,7 @@ Project repository for the Human Data Analytics course exam, Data Science Master
 
 ## Project Overview
 
-The Keyword Spotting (KWS) task consists in the detection of a certain predetermined set of keywords from a stream of user utterances. Deep learning methods have proved to give highly precise systems, while remaining lightweight and suitable for running in mobile devices.
+The Keyword Spotting (KWS) task consists in the detection of a certain predetermined set of keywords from a stream of user utterances. Deep learning models have proved to give highly accurate results, while remaining lightweight and suitable for running in mobile devices.
 In this project, a variety deep neural architectures for KWS are tested. Specifically, I focused on architectures based on the attention mechanism. All models are trained on the [Google Speech Commands dataset](https://www.tensorflow.org/datasets/catalog/speech_commands?hl=en), on the 12kws task and the 35kws task.
 
 A detailed report of all the work can be found in the project report, which is placed in `project_report/project_report.pdf` .
